@@ -1,0 +1,75 @@
+{
+  "replayHash": "30fff1d7d0dc12b45be3fdf96b9022b8faf6ea71afaa29e36a11b68398edea66",
+  "finalStateHash": "f6fa142aed399bb2f3658230d22b53e322aca3694686ea7a6c5c87ac05b6d85b",
+  "outcome": "death",
+  "terminalStateId": "arrest_death",
+  "simTimeSec": 340,
+  "vitals": {
+    "hr": 11,
+    "sbpMmHg": 54,
+    "dbpMmHg": 52,
+    "spo2": 95,
+    "rrPerMin": 18,
+    "tempC": 36.7
+  },
+  "circulation": "arrest",
+  "neuro": "alert",
+  "flags": [
+    "arrested",
+    "deteriorating",
+    "harmful_given",
+    "monitor_on"
+  ],
+  "disclosedFacts": [],
+  "score": {
+    "total": -20,
+    "critical": -25,
+    "timing": 5,
+    "efficiency": 0,
+    "treatment": 0,
+    "disposition": 0,
+    "missedCriterionIds": [
+      "time_to_ecg",
+      "give_first_line",
+      "rescue_pacing",
+      "consult_appropriately",
+      "appropriate_disposition"
+    ]
+  },
+  "timeline": [
+    {
+      "seq": 0,
+      "simTimeSec": 20,
+      "actionId": "attach_monitor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "2bbb6afcdd4895bd58eb9a894e09e85637d7eeb41635993a71146c343b79e1a9",
+      "afterHash": "7bbf5c18adac98a344e5520a78bf7d8635c0fd1a945764236881d6a1b22867fc"
+    },
+    {
+      "seq": 1,
+      "simTimeSec": 40,
+      "actionId": "give_demo_contraindicated_drug",
+      "classification": "Harmful",
+      "scoreDelta": -25,
+      "triggeredRuleIds": [],
+      "beforeHash": "7bbf5c18adac98a344e5520a78bf7d8635c0fd1a945764236881d6a1b22867fc",
+      "afterHash": "d7070313421ad49f10c3a6d990039985ab4a3cbf487cf78fe6674e69ac041c19"
+    },
+    {
+      "seq": 2,
+      "simTimeSec": 340,
+      "actionId": "__wait__",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [
+        "deterioration_untreated",
+        "arrest_if_ignored"
+      ],
+      "beforeHash": "d7070313421ad49f10c3a6d990039985ab4a3cbf487cf78fe6674e69ac041c19",
+      "afterHash": "f6fa142aed399bb2f3658230d22b53e322aca3694686ea7a6c5c87ac05b6d85b"
+    }
+  ],
+  "rejections": []
+}

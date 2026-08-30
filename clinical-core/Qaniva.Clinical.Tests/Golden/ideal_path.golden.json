@@ -1,0 +1,117 @@
+{
+  "replayHash": "fe2191ff684f062290385fd967b47ebb58ba46932f88cbcebcc98d483d24dfc5",
+  "finalStateHash": "da4a79e32c00933e1f2d486ea1ccfa75555eae9f2eecaf4212565251e3a63b7b",
+  "outcome": "complete",
+  "terminalStateId": "complete",
+  "simTimeSec": 250,
+  "vitals": {
+    "hr": 68,
+    "sbpMmHg": 106,
+    "dbpMmHg": 52,
+    "spo2": 95,
+    "rrPerMin": 18,
+    "tempC": 36.7
+  },
+  "circulation": "normal",
+  "neuro": "alert",
+  "flags": [
+    "atropine_given",
+    "cardiology_consulted",
+    "disposition_selected",
+    "ecg_done",
+    "iv_access",
+    "monitor_on",
+    "stabilized"
+  ],
+  "disclosedFacts": [
+    "ecg_shows_brady",
+    "no_med_allergies",
+    "onset_1h"
+  ],
+  "score": {
+    "total": 80,
+    "critical": 40,
+    "timing": 20,
+    "efficiency": 0,
+    "treatment": 5,
+    "disposition": 15,
+    "missedCriterionIds": [
+      "rescue_pacing"
+    ]
+  },
+  "timeline": [
+    {
+      "seq": 0,
+      "simTimeSec": 20,
+      "actionId": "attach_monitor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "2bbb6afcdd4895bd58eb9a894e09e85637d7eeb41635993a71146c343b79e1a9",
+      "afterHash": "7bbf5c18adac98a344e5520a78bf7d8635c0fd1a945764236881d6a1b22867fc"
+    },
+    {
+      "seq": 1,
+      "simTimeSec": 50,
+      "actionId": "patient_history",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "7bbf5c18adac98a344e5520a78bf7d8635c0fd1a945764236881d6a1b22867fc",
+      "afterHash": "ce8041aef2adea53ed98407d3f2642955340a325071364d784079f272e4d3fc9"
+    },
+    {
+      "seq": 2,
+      "simTimeSec": 110,
+      "actionId": "ecg_12lead",
+      "classification": "Correct",
+      "scoreDelta": 15,
+      "triggeredRuleIds": [],
+      "beforeHash": "ce8041aef2adea53ed98407d3f2642955340a325071364d784079f272e4d3fc9",
+      "afterHash": "03d9748c25e6fe4e1d642de8dfd5cf0a673c7be21b2ac5d714d2673d0b8c58dc"
+    },
+    {
+      "seq": 3,
+      "simTimeSec": 170,
+      "actionId": "iv_access",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "03d9748c25e6fe4e1d642de8dfd5cf0a673c7be21b2ac5d714d2673d0b8c58dc",
+      "afterHash": "be3ea64b5a7fcc1fc2ce160e48558d7d852107622a764050d7a5c1f466b71b53"
+    },
+    {
+      "seq": 4,
+      "simTimeSec": 200,
+      "actionId": "give_atropine",
+      "classification": "Correct",
+      "scoreDelta": 40,
+      "triggeredRuleIds": [
+        "stabilized"
+      ],
+      "beforeHash": "be3ea64b5a7fcc1fc2ce160e48558d7d852107622a764050d7a5c1f466b71b53",
+      "afterHash": "ce07ebe0e2545fe6d0525a7909e2ee19c72a3dae5ccb213496f2ba6e1337a5f0"
+    },
+    {
+      "seq": 5,
+      "simTimeSec": 230,
+      "actionId": "consult_cardiology",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "ce07ebe0e2545fe6d0525a7909e2ee19c72a3dae5ccb213496f2ba6e1337a5f0",
+      "afterHash": "b620838a5f17eea99b754db85a2cc6a51d68ff5ca56d45ba2ca8c59132433c8f"
+    },
+    {
+      "seq": 6,
+      "simTimeSec": 250,
+      "actionId": "disposition_ccu",
+      "classification": "Correct",
+      "scoreDelta": 15,
+      "triggeredRuleIds": [],
+      "beforeHash": "b620838a5f17eea99b754db85a2cc6a51d68ff5ca56d45ba2ca8c59132433c8f",
+      "afterHash": "da4a79e32c00933e1f2d486ea1ccfa75555eae9f2eecaf4212565251e3a63b7b"
+    }
+  ],
+  "rejections": []
+}

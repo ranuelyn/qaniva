@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Qaniva.Clinical.Cli/Qaniva.Clinical.Cli.csproj" />
+  <Project Path="Qaniva.Clinical.Core/Qaniva.Clinical.Core.csproj" />
+  <Project Path="Qaniva.Clinical.Tests/Qaniva.Clinical.Tests.csproj" />
+</Solution>

@@ -1,0 +1,10 @@
+{
+  "caseId": "demo_sync_bradycardia_001",
+  "caseVersion": 1,
+  "seed": 20260830,
+  "steps": [
+    { "action": "attach_monitor" },
+    { "action": "give_demo_contraindicated_drug" },
+    { "waitSec": 300 }
+  ]
+}

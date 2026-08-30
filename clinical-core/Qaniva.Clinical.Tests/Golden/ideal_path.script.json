@@ -1,0 +1,14 @@
+{
+  "caseId": "demo_sync_bradycardia_001",
+  "caseVersion": 1,
+  "seed": 20260830,
+  "steps": [
+    { "action": "attach_monitor" },
+    { "action": "patient_history" },
+    { "action": "ecg_12lead" },
+    { "action": "iv_access" },
+    { "action": "give_atropine", "params": { "dose_mg": "1" } },
+    { "action": "consult_cardiology" },
+    { "action": "disposition_ccu" }
+  ]
+}
