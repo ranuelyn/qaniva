@@ -1,0 +1,17 @@
+{
+  "name": "Qaniva.Presentation",
+  "rootNamespace": "Qaniva.Presentation",
+  "references": [
+    "Qaniva.Simulation.Core",
+    "Qaniva.Bridge"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

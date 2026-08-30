@@ -1,0 +1,23 @@
+{
+  "name": "Qaniva.Bridge",
+  "rootNamespace": "Qaniva.Bridge",
+  "references": [
+    "Qaniva.Simulation.Core",
+    "Newtonsoft.Json"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [
+    {
+      "name": "com.unity.nuget.newtonsoft-json",
+      "expression": "3.0.0",
+      "define": "QANIVA_NEWTONSOFT"
+    }
+  ],
+  "noEngineReferences": false
+}

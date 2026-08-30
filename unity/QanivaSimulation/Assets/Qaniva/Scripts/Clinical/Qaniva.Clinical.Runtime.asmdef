@@ -1,0 +1,20 @@
+{
+  "name": "Qaniva.Clinical.Runtime",
+  "rootNamespace": "Qaniva.Clinical.Runtime",
+  "references": [
+    "Qaniva.Simulation.Core"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "Qaniva.Clinical.Core.dll"
+  ],
+  "autoReferenced": true,
+  "defineConstraints": [
+    "QANIVA_HAS_CLINICAL_CORE"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
