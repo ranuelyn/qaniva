@@ -1,0 +1,81 @@
+# ---------------------------------------------------------------------------
+# Qaniva monorepo .gitignore
+# Keep this file conservative: never ignore source, .meta files, or fixtures.
+# ---------------------------------------------------------------------------
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.shared.json
+
+# --- Node / TypeScript ---
+node_modules/
+.pnpm-store/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+.eslintcache
+.turbo/
+
+# --- Env / secrets (NEVER commit real secrets; .env.example IS committed) ---
+.env
+.env.*
+!.env.example
+*.pem
+*.p8
+*.p12
+*.keystore
+*.jks
+google-services.json
+GoogleService-Info.plist
+
+# --- React Native / Expo (apps/mobile) ---
+apps/mobile/.expo/
+apps/mobile/ios/Pods/
+apps/mobile/ios/build/
+apps/mobile/android/.gradle/
+apps/mobile/android/app/build/
+apps/mobile/android/build/
+apps/mobile/*.jsbundle
+
+# --- .NET (clinical-core) ---
+[Bb]in/
+[Oo]bj/
+*.user
+.vs/
+TestResults/
+
+# --- Unity (unity/QanivaSimulation) ---
+# Only generated/local folders. Assets/, Packages/, ProjectSettings/ ARE tracked.
+unity/QanivaSimulation/[Ll]ibrary/
+unity/QanivaSimulation/[Tt]emp/
+unity/QanivaSimulation/[Oo]bj/
+unity/QanivaSimulation/[Ll]ogs/
+unity/QanivaSimulation/[Bb]uilds/
+unity/QanivaSimulation/[Mm]emoryCaptures/
+unity/QanivaSimulation/[Uu]serSettings/
+unity/QanivaSimulation/[Cc]rashlytics/
+unity/QanivaSimulation/.vsconfig
+unity/QanivaSimulation/*.csproj
+unity/QanivaSimulation/*.sln
+unity/QanivaSimulation/*.unityproj
+unity/QanivaSimulation/*.apk
+unity/QanivaSimulation/*.aab
+unity/QanivaSimulation/*.app
+unity/QanivaSimulation/*.ipa
+# Vendored build artifacts synced by scripts/sync-clinical-core-to-unity.sh
+unity/QanivaSimulation/Assets/Qaniva/Plugins/ClinicalCore/
+unity/QanivaSimulation/Assets/Qaniva/Resources/Qaniva/Cases/
+
+# --- scratch ---
+scratchpad/
+tmp/
+
+# generated protocol description
+packages/contracts/generated/

@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  typescript:
+    name: TypeScript workspace
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.5.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build shared packages
+        run: pnpm -r --filter "./packages/*" run build
+
+      - name: Format check
+        run: pnpm run format:check
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Typecheck
+        run: pnpm -r run typecheck
+
+      - name: Test
+        run: pnpm -r run test
+
+      - name: Validate case fixtures
+        run: pnpm run validate:cases
+
+  clinical-engine:
+    name: Clinical engine (C#)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore
+        working-directory: clinical-core
+
+      - name: Build (warnings are errors)
+        run: dotnet build --no-restore -c Release
+        working-directory: clinical-core
+
+      - name: Format check
+        run: dotnet format --verify-no-changes
+        working-directory: clinical-core
+
+      - name: Test (unit + determinism + golden replay)
+        run: dotnet test --no-build -c Release
+        working-directory: clinical-core
+
+  # ---------------------------------------------------------------------------
+  # Unity CI is NOT run here. EditMode/PlayMode tests and device builds need a
+  # licensed Unity install (and, for builds, more than a hosted runner offers).
+  # Plan: a GameCI job on a self-hosted / licensed runner — tracked as QAN-024
+  # in docs/development/BACKLOG.md. Until then, Unity EditMode tests are run
+  # locally via the Editor's Test Runner (see unity/QanivaSimulation/README.md),
+  # and the RN<->Unity contract is protected by the csharp-parity test in the
+  # TypeScript job above.
+  # ---------------------------------------------------------------------------

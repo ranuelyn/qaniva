@@ -1,0 +1,11 @@
+node_modules
+dist
+build
+coverage
+*.md
+pnpm-lock.yaml
+apps/mobile/ios
+apps/mobile/android
+apps/mobile/.expo
+unity
+clinical-core
