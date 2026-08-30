@@ -1,0 +1,379 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://qaniva.app/schema/case.schema.json",
+  "title": "Qaniva Case Definition",
+  "description": "Data-driven, versioned clinical simulation case. Consumed identically by the C# deterministic engine, the backend, and tooling. Clinical numbers here are NOT authoritative until metadata.clinicalReview.status == 'approved'.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "version",
+    "metadata",
+    "learningObjectives",
+    "presentationProfile",
+    "patient",
+    "initialState",
+    "hiddenFacts",
+    "availableActions",
+    "transitionRules",
+    "scoringCriteria",
+    "terminalStates",
+    "debriefMetadata",
+    "references"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1,
+      "description": "Version of THIS schema. Bump on any breaking schema change."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(_[a-z0-9]+)*$",
+      "description": "Stable case identifier, snake_case, e.g. 'demo_sync_bradycardia_001'."
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Content version of this case. Bump on any change to clinical numbers, actions, rules, or rubric."
+    },
+    "metadata": { "$ref": "#/$defs/metadata" },
+    "learningObjectives": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 3 }
+    },
+    "presentationProfile": { "$ref": "#/$defs/presentationProfile" },
+    "patient": { "$ref": "#/$defs/patient" },
+    "initialState": { "$ref": "#/$defs/patientState" },
+    "hiddenFacts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/hiddenFact" }
+    },
+    "availableActions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/actionDefinition" }
+    },
+    "transitionRules": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/transitionRule" }
+    },
+    "scoringCriteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/scoringCriterion" }
+    },
+    "terminalStates": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/terminalState" }
+    },
+    "debriefMetadata": { "$ref": "#/$defs/debriefMetadata" },
+    "references": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/reference" }
+    }
+  },
+  "$defs": {
+    "conditionExpr": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Mini expression evaluated by the engine. Grammar: comparisons (== != < <= > >=), boolean && || !, parentheses, numeric/string/bool literals, and these read-only accessors: simTimeSec, vitals.<name>, painScore, rhythm, airway, breathing, circulation, neuro, flag('<id>'), disclosed('<id>'), actionCount('<id>'). No assignment, no function calls other than flag()/disclosed()/actionCount()."
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "chiefComplaint",
+        "specialty",
+        "estimatedMinutes",
+        "authors",
+        "clinicalReview",
+        "fictional"
+      ],
+      "properties": {
+        "title": { "type": "string", "minLength": 3 },
+        "chiefComplaint": { "type": "string", "minLength": 3 },
+        "specialty": { "type": "string", "minLength": 2 },
+        "estimatedMinutes": { "type": "integer", "minimum": 1, "maximum": 60 },
+        "authors": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 2 }
+        },
+        "clinicalReview": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "reviewer", "date"],
+          "properties": {
+            "status": { "enum": ["not_reviewed", "in_review", "approved"] },
+            "reviewer": { "type": ["string", "null"] },
+            "date": { "type": ["string", "null"], "format": "date" }
+          }
+        },
+        "fictional": {
+          "type": "boolean",
+          "const": true,
+          "description": "MVP invariant: all cases are fictional/synthetic. Real-patient data is out of scope."
+        }
+      }
+    },
+    "presentationProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roomKey",
+        "patientVariant",
+        "animationStateAtStart",
+        "monitorLayout",
+        "requiredProps",
+        "cameraPreset",
+        "audioProfile"
+      ],
+      "properties": {
+        "roomKey": { "type": "string", "minLength": 1 },
+        "patientVariant": { "type": "string", "minLength": 1 },
+        "animationStateAtStart": { "type": "string", "minLength": 1 },
+        "monitorLayout": { "type": "string", "minLength": 1 },
+        "requiredProps": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "cameraPreset": { "type": "string", "minLength": 1 },
+        "audioProfile": { "type": "string", "minLength": 1 }
+      }
+    },
+    "patient": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["displayName", "ageYears", "sex", "weightKg", "persona", "backgroundFacts"],
+      "properties": {
+        "displayName": { "type": "string", "minLength": 1 },
+        "ageYears": { "type": "integer", "minimum": 0, "maximum": 120 },
+        "sex": { "enum": ["male", "female", "other"] },
+        "weightKg": { "type": "number", "minimum": 1, "maximum": 400 },
+        "persona": { "type": "string", "minLength": 1 },
+        "backgroundFacts": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "patientState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vitals",
+        "rhythm",
+        "airway",
+        "breathing",
+        "circulation",
+        "neuro",
+        "painScore",
+        "flags"
+      ],
+      "properties": {
+        "vitals": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["hr", "sbpMmHg", "dbpMmHg", "spo2", "rrPerMin", "tempC"],
+          "properties": {
+            "hr": { "type": "number", "minimum": 0, "maximum": 300 },
+            "sbpMmHg": { "type": "number", "minimum": 0, "maximum": 320 },
+            "dbpMmHg": { "type": "number", "minimum": 0, "maximum": 260 },
+            "spo2": { "type": "number", "minimum": 0, "maximum": 100 },
+            "rrPerMin": { "type": "number", "minimum": 0, "maximum": 80 },
+            "tempC": { "type": "number", "minimum": 20, "maximum": 45 }
+          }
+        },
+        "rhythm": { "type": "string", "minLength": 1 },
+        "airway": { "enum": ["patent", "at_risk", "obstructed"] },
+        "breathing": { "enum": ["spontaneous", "labored", "assisted", "apneic"] },
+        "circulation": { "enum": ["normal", "poor_perfusion", "shock", "arrest"] },
+        "neuro": { "enum": ["alert", "voice", "pain", "unresponsive"] },
+        "painScore": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "flags": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9_]+$" } }
+      }
+    },
+    "hiddenFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "disclosure", "text"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "disclosure": {
+          "enum": ["on_ask", "on_exam", "on_order_result"],
+          "description": "How this fact becomes disclosed. The Patient AI may only reveal 'on_ask' facts, and only after they are disclosed by the engine."
+        },
+        "text": { "type": "string", "minLength": 1 }
+      }
+    },
+    "actionParam": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "kind"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[a-zA-Z0-9_]+$" },
+        "kind": { "enum": ["enum", "number"] },
+        "options": { "type": "array", "items": { "type": "string" } },
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "unit": { "type": "string" }
+      }
+    },
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["op"],
+      "properties": {
+        "op": {
+          "enum": ["setFlag", "clearFlag", "set", "adjust", "disclose", "setRhythm", "setEnum"]
+        },
+        "flag": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "factId": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "target": {
+          "type": "string",
+          "description": "Dotted path into PatientState for set/adjust/setEnum, e.g. 'vitals.sbpMmHg', 'painScore', 'circulation'."
+        },
+        "value": { "type": ["number", "string", "boolean"] }
+      }
+    },
+    "actionDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "label",
+        "timeCostSec",
+        "visibility",
+        "preconditions",
+        "params",
+        "effects",
+        "criterionIds"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "type": {
+          "enum": [
+            "examine",
+            "order",
+            "medication",
+            "procedure",
+            "consult",
+            "disposition",
+            "communication"
+          ]
+        },
+        "label": { "type": "string", "minLength": 1 },
+        "timeCostSec": { "type": "integer", "minimum": 0, "maximum": 3600 },
+        "visibility": { "enum": ["always", "when"] },
+        "visibleWhen": { "oneOf": [{ "$ref": "#/$defs/conditionExpr" }, { "type": "null" }] },
+        "preconditions": { "type": "array", "items": { "$ref": "#/$defs/conditionExpr" } },
+        "params": { "type": "array", "items": { "$ref": "#/$defs/actionParam" } },
+        "effects": { "type": "array", "items": { "$ref": "#/$defs/effect" } },
+        "resultTemplateId": { "type": ["string", "null"] },
+        "criterionIds": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z0-9_]+$" }
+        },
+        "repeatable": { "type": "boolean", "default": false }
+      }
+    },
+    "transitionRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "when", "priority", "effects"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "when": { "$ref": "#/$defs/conditionExpr" },
+        "priority": {
+          "type": "integer",
+          "description": "Higher priority rules evaluated first within a single tick."
+        },
+        "once": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, the rule fires at most once per attempt."
+        },
+        "delaySec": { "type": "integer", "minimum": 0, "default": 0 },
+        "effects": { "type": "array", "items": { "$ref": "#/$defs/effect" } },
+        "presentationCue": { "type": ["string", "null"] },
+        "terminalState": {
+          "type": ["string", "null"],
+          "description": "If set, matches a terminalStates[].id and ends the attempt."
+        }
+      }
+    },
+    "scoringCriterion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "criticality", "acceptedActions", "points", "rationale"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "label": { "type": "string", "minLength": 1 },
+        "criticality": { "enum": ["critical", "major", "minor"] },
+        "acceptedActions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+          "description": "Action ids that satisfy this criterion. Must exist in availableActions."
+        },
+        "timingWindow": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fullCreditBeforeSec", "zeroCreditAfterSec"],
+          "properties": {
+            "fullCreditBeforeSec": { "type": "integer", "minimum": 0 },
+            "zeroCreditAfterSec": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "stateConstraints": { "type": "array", "items": { "$ref": "#/$defs/conditionExpr" } },
+        "points": { "type": "number", "minimum": 0 },
+        "category": {
+          "enum": ["critical", "timing", "efficiency", "treatment", "disposition"],
+          "default": "treatment"
+        },
+        "harmful": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, performing an acceptedAction SUBTRACTS points (contraindicated action)."
+        },
+        "rationale": { "type": "string", "minLength": 1 },
+        "evidenceRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "terminalState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "when", "outcome", "label"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "when": { "$ref": "#/$defs/conditionExpr" },
+        "outcome": { "enum": ["complete", "discharge", "admit", "death", "aborted"] },
+        "label": { "type": "string", "minLength": 1 }
+      }
+    },
+    "debriefMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "keyTeachingPoints", "commonErrors"],
+      "properties": {
+        "summary": { "type": "string", "minLength": 1 },
+        "keyTeachingPoints": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "commonErrors": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "citation"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "citation": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" }
+      }
+    }
+  }
+}

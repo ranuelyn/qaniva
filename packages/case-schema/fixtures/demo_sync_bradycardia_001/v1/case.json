@@ -1,0 +1,363 @@
+{
+  "schemaVersion": 1,
+  "id": "demo_sync_bradycardia_001",
+  "version": 1,
+  "metadata": {
+    "title": "FICTIONAL DEMO — Adult with a slow pulse and dizziness",
+    "chiefComplaint": "Feeling dizzy and weak for the last hour",
+    "specialty": "emergency_medicine",
+    "estimatedMinutes": 8,
+    "authors": ["qaniva-foundation"],
+    "clinicalReview": { "status": "not_reviewed", "reviewer": null, "date": null },
+    "fictional": true
+  },
+  "learningObjectives": [
+    "Practise the engine's examine / order / treat / disposition loop",
+    "Experience a timed deterioration rule and its debrief explanation",
+    "See how a contraindicated action is scored as harmful"
+  ],
+  "presentationProfile": {
+    "roomKey": "ed_resus_v1",
+    "patientVariant": "adult_neutral_v1",
+    "animationStateAtStart": "distress_mild",
+    "monitorLayout": "ed_standard",
+    "requiredProps": ["iv_pole", "crash_cart", "defib_pads"],
+    "cameraPreset": "bedside_01",
+    "audioProfile": "room_ambience_low"
+  },
+  "patient": {
+    "displayName": "Demo Patient A",
+    "ageYears": 58,
+    "sex": "male",
+    "weightKg": 82,
+    "persona": "anxious but cooperative, answers briefly",
+    "backgroundFacts": ["Walked into triage, then felt too weak to stand", "No chest pain reported"]
+  },
+  "initialState": {
+    "vitals": { "hr": 38, "sbpMmHg": 84, "dbpMmHg": 52, "spo2": 95, "rrPerMin": 18, "tempC": 36.7 },
+    "rhythm": "demo_bradycardia",
+    "airway": "patent",
+    "breathing": "spontaneous",
+    "circulation": "poor_perfusion",
+    "neuro": "alert",
+    "painScore": 1,
+    "flags": []
+  },
+  "hiddenFacts": [
+    {
+      "id": "onset_1h",
+      "disclosure": "on_ask",
+      "text": "The patient says the symptoms started about an hour ago."
+    },
+    {
+      "id": "no_med_allergies",
+      "disclosure": "on_ask",
+      "text": "The patient reports no known medication allergies."
+    },
+    {
+      "id": "ecg_shows_brady",
+      "disclosure": "on_order_result",
+      "text": "The ECG shows a slow rate with no acute ischemic changes (fictional demo content)."
+    }
+  ],
+  "availableActions": [
+    {
+      "id": "attach_monitor",
+      "type": "examine",
+      "label": "Attach cardiac monitor",
+      "timeCostSec": 20,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "monitor_on" }],
+      "resultTemplateId": "monitor_attached",
+      "criterionIds": ["time_to_monitor"]
+    },
+    {
+      "id": "patient_history",
+      "type": "communication",
+      "label": "Take a focused history",
+      "timeCostSec": 30,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [
+        { "op": "disclose", "factId": "onset_1h" },
+        { "op": "disclose", "factId": "no_med_allergies" }
+      ],
+      "resultTemplateId": null,
+      "criterionIds": []
+    },
+    {
+      "id": "ecg_12lead",
+      "type": "order",
+      "label": "Order a 12-lead ECG",
+      "timeCostSec": 60,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [
+        { "op": "setFlag", "flag": "ecg_done" },
+        { "op": "disclose", "factId": "ecg_shows_brady" }
+      ],
+      "resultTemplateId": "ecg_result_brady",
+      "criterionIds": ["time_to_ecg"]
+    },
+    {
+      "id": "iv_access",
+      "type": "procedure",
+      "label": "Obtain IV access",
+      "timeCostSec": 60,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "iv_access" }],
+      "resultTemplateId": null,
+      "criterionIds": []
+    },
+    {
+      "id": "give_atropine",
+      "type": "medication",
+      "label": "Give first-line demo drug",
+      "timeCostSec": 30,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": ["flag('iv_access')"],
+      "params": [{ "name": "dose_mg", "kind": "number", "min": 0.5, "max": 3, "unit": "mg" }],
+      "effects": [
+        { "op": "adjust", "target": "vitals.hr", "value": 30 },
+        { "op": "adjust", "target": "vitals.sbpMmHg", "value": 22 },
+        { "op": "setEnum", "target": "circulation", "value": "normal" },
+        { "op": "setFlag", "flag": "atropine_given" }
+      ],
+      "resultTemplateId": "first_line_effect",
+      "criterionIds": ["give_first_line"]
+    },
+    {
+      "id": "transcutaneous_pacing",
+      "type": "procedure",
+      "label": "Start transcutaneous pacing",
+      "timeCostSec": 90,
+      "visibility": "when",
+      "visibleWhen": "flag('atropine_given') || simTimeSec >= 180",
+      "preconditions": ["flag('monitor_on')"],
+      "params": [],
+      "effects": [
+        { "op": "adjust", "target": "vitals.hr", "value": 35 },
+        { "op": "adjust", "target": "vitals.sbpMmHg", "value": 18 },
+        { "op": "setEnum", "target": "circulation", "value": "normal" },
+        { "op": "setFlag", "flag": "pacing_started" }
+      ],
+      "resultTemplateId": "pacing_effect",
+      "criterionIds": ["rescue_pacing"]
+    },
+    {
+      "id": "give_demo_contraindicated_drug",
+      "type": "medication",
+      "label": "Give demo contraindicated drug",
+      "timeCostSec": 20,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [
+        { "op": "adjust", "target": "vitals.hr", "value": -12 },
+        { "op": "adjust", "target": "vitals.sbpMmHg", "value": -10 },
+        { "op": "setFlag", "flag": "harmful_given" }
+      ],
+      "resultTemplateId": "harmful_effect",
+      "criterionIds": ["avoid_contraindicated"]
+    },
+    {
+      "id": "consult_cardiology",
+      "type": "consult",
+      "label": "Consult cardiology",
+      "timeCostSec": 30,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": ["flag('ecg_done')"],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "cardiology_consulted" }],
+      "resultTemplateId": null,
+      "criterionIds": ["consult_appropriately"]
+    },
+    {
+      "id": "disposition_ccu",
+      "type": "disposition",
+      "label": "Admit to coronary care unit",
+      "timeCostSec": 20,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": ["flag('atropine_given') || flag('pacing_started')"],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "disposition_selected" }],
+      "resultTemplateId": null,
+      "criterionIds": ["appropriate_disposition"]
+    }
+  ],
+  "transitionRules": [
+    {
+      "id": "deterioration_untreated",
+      "when": "simTimeSec >= 300 && !flag('atropine_given') && !flag('pacing_started')",
+      "priority": 100,
+      "once": true,
+      "delaySec": 0,
+      "effects": [
+        { "op": "adjust", "target": "vitals.hr", "value": -15 },
+        { "op": "adjust", "target": "vitals.sbpMmHg", "value": -20 },
+        { "op": "setEnum", "target": "circulation", "value": "shock" },
+        { "op": "setFlag", "flag": "deteriorating" }
+      ],
+      "presentationCue": "distress_severe",
+      "terminalState": null
+    },
+    {
+      "id": "stabilized",
+      "when": "flag('atropine_given') || flag('pacing_started')",
+      "priority": 50,
+      "once": true,
+      "delaySec": 0,
+      "effects": [{ "op": "setFlag", "flag": "stabilized" }],
+      "presentationCue": "recovery",
+      "terminalState": null
+    },
+    {
+      "id": "arrest_if_ignored",
+      "when": "vitals.hr <= 20",
+      "priority": 200,
+      "once": true,
+      "delaySec": 0,
+      "effects": [
+        { "op": "setEnum", "target": "circulation", "value": "arrest" },
+        { "op": "setFlag", "flag": "arrested" }
+      ],
+      "presentationCue": "arrest",
+      "terminalState": "arrest_death"
+    }
+  ],
+  "scoringCriteria": [
+    {
+      "id": "time_to_monitor",
+      "label": "Attached a cardiac monitor early",
+      "criticality": "minor",
+      "acceptedActions": ["attach_monitor"],
+      "timingWindow": { "fullCreditBeforeSec": 60, "zeroCreditAfterSec": 240 },
+      "stateConstraints": [],
+      "points": 5,
+      "category": "timing",
+      "harmful": false,
+      "rationale": "Early monitoring is expected for an unstable rhythm (demo).",
+      "evidenceRefs": []
+    },
+    {
+      "id": "time_to_ecg",
+      "label": "Obtained a 12-lead ECG promptly",
+      "criticality": "major",
+      "acceptedActions": ["ecg_12lead"],
+      "timingWindow": { "fullCreditBeforeSec": 120, "zeroCreditAfterSec": 360 },
+      "stateConstraints": [],
+      "points": 15,
+      "category": "timing",
+      "harmful": false,
+      "rationale": "The ECG drives downstream decisions (demo).",
+      "evidenceRefs": []
+    },
+    {
+      "id": "give_first_line",
+      "label": "Gave the first-line demo drug",
+      "criticality": "critical",
+      "acceptedActions": ["give_atropine"],
+      "stateConstraints": [],
+      "points": 40,
+      "category": "critical",
+      "harmful": false,
+      "rationale": "First-line pharmacologic treatment for the demo scenario.",
+      "evidenceRefs": []
+    },
+    {
+      "id": "rescue_pacing",
+      "label": "Escalated to pacing when appropriate",
+      "criticality": "major",
+      "acceptedActions": ["transcutaneous_pacing"],
+      "stateConstraints": [],
+      "points": 15,
+      "category": "treatment",
+      "harmful": false,
+      "rationale": "Escalation path when the first-line drug is insufficient (demo).",
+      "evidenceRefs": []
+    },
+    {
+      "id": "consult_appropriately",
+      "label": "Involved cardiology",
+      "criticality": "minor",
+      "acceptedActions": ["consult_cardiology"],
+      "stateConstraints": [],
+      "points": 5,
+      "category": "treatment",
+      "harmful": false,
+      "rationale": "Specialist involvement for ongoing management (demo).",
+      "evidenceRefs": []
+    },
+    {
+      "id": "appropriate_disposition",
+      "label": "Chose an appropriate disposition",
+      "criticality": "major",
+      "acceptedActions": ["disposition_ccu"],
+      "stateConstraints": [],
+      "points": 15,
+      "category": "disposition",
+      "harmful": false,
+      "rationale": "Monitored bed for an unstable rhythm (demo).",
+      "evidenceRefs": []
+    },
+    {
+      "id": "avoid_contraindicated",
+      "label": "Avoided the contraindicated demo drug",
+      "criticality": "critical",
+      "acceptedActions": ["give_demo_contraindicated_drug"],
+      "stateConstraints": [],
+      "points": 25,
+      "category": "critical",
+      "harmful": true,
+      "rationale": "This fictional agent worsens the demo patient; giving it is penalized.",
+      "evidenceRefs": []
+    }
+  ],
+  "terminalStates": [
+    {
+      "id": "complete",
+      "when": "flag('disposition_selected')",
+      "outcome": "complete",
+      "label": "Case complete — patient dispositioned"
+    },
+    {
+      "id": "arrest_death",
+      "when": "flag('arrested')",
+      "outcome": "death",
+      "label": "The demo patient deteriorated to arrest"
+    }
+  ],
+  "debriefMetadata": {
+    "summary": "A fictional teaching scenario used to exercise the deterministic engine end to end.",
+    "keyTeachingPoints": [
+      "Recognise instability early and monitor",
+      "Treat before the timed deterioration rule fires at 5 minutes",
+      "Escalate to pacing if the first-line drug is not enough"
+    ],
+    "commonErrors": [
+      "Spending too long on history before treating",
+      "Giving the contraindicated demo drug",
+      "Choosing disposition before stabilising the patient"
+    ]
+  },
+  "references": [
+    {
+      "label": "Demo content notice",
+      "citation": "Internal Qaniva foundation demo case. Not derived from any clinical guideline and not clinically reviewed."
+    }
+  ]
+}
