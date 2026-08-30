@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "Qaniva",
+    "slug": "qaniva",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "qaniva",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "app.qaniva.mobile",
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "app.qaniva.mobile"
+    },
+    "plugins": ["expo-status-bar"],
+    "extra": {
+      "note": "Requires an Expo Development Build (custom native code) for the Unity embed — Expo Go is not a target. See docs/architecture/rn-unity-boundary.md."
+    }
+  }
+}
