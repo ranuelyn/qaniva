@@ -9,6 +9,9 @@ using Qaniva.Clinical.Core.Model;
 using Qaniva.Clinical.Core.Replay;
 using Qaniva.Clinical.Core.Serialization;
 using Qaniva.Simulation.Core;
+// Inside namespace Qaniva.Clinical.Runtime the bare name "Simulation" resolves to
+// the sibling namespace Qaniva.Simulation, not the engine class — alias it.
+using EngineSimulation = Qaniva.Clinical.Core.Engine.Simulation;
 
 namespace Qaniva.Clinical.Runtime
 {
@@ -20,7 +23,7 @@ namespace Qaniva.Clinical.Runtime
     public sealed class ClinicalRuntime : IClinicalRuntime
     {
         private CaseDefinition _case;
-        private Simulation _sim;
+        private EngineSimulation _sim;
         private readonly List<string> _appliedActionIds = new List<string>();
         private ulong _seed;
 
@@ -30,7 +33,7 @@ namespace Qaniva.Clinical.Runtime
         {
             _case = CaseLoader.FromJson(caseJson);
             _seed = seed;
-            _sim = new Simulation(_case, seed);
+            _sim = new EngineSimulation(_case, seed);
             _appliedActionIds.Clear();
         }
 
