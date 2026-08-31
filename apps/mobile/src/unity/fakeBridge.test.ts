@@ -15,6 +15,7 @@ function startMessage(seed: number) {
       locale: 'en',
       difficulty: 'standard' as const,
       seed,
+      mode: 'interactive' as const,
     },
   };
 }

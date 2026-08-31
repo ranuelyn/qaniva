@@ -15,6 +15,8 @@ export type RootStackParamList = {
     attemptId: string;
     seed: number;
     title: string;
+    /** Runtime mode; omitted (= 'interactive') for every user launch. */
+    mode?: string;
   };
   Results: { caseId: string; title: string; summary: AttemptSummary };
 };

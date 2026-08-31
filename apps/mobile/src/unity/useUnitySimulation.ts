@@ -3,12 +3,13 @@ import {
   PROTOCOL_VERSION,
   type AttemptSummary,
   type RnToUnityMessage,
+  type SimulationMode,
   type UnityToRnMessage,
 } from '@qaniva/contracts';
 import type { UnityBridgeTransport } from './fakeBridge';
 import { selectUnityTransport, type TransportKind } from './transport';
 
-export type SimulationPhase = 'idle' | 'starting' | 'ready' | 'completed' | 'failed';
+export type SimulationPhase = 'idle' | 'starting' | 'ready' | 'completed' | 'failed' | 'exited';
 
 export interface SimulationLaunch {
   caseId: string;
@@ -17,6 +18,8 @@ export interface SimulationLaunch {
   seed: number;
   locale?: string;
   difficulty?: 'standard' | 'hard';
+  /** Runtime mode; omit for normal interactive play. E2E modes are test-only. */
+  mode?: SimulationMode;
 }
 
 interface UseUnitySimulationResult {
@@ -72,7 +75,7 @@ export function useUnitySimulation(
           setPhase('failed');
           break;
         case 'EXIT_REQUESTED':
-          setPhase('idle');
+          setPhase('exited');
           break;
       }
     });
@@ -99,6 +102,7 @@ export function useUnitySimulation(
           locale: launch.locale ?? 'en',
           difficulty: launch.difficulty ?? 'standard',
           seed: launch.seed,
+          mode: launch.mode ?? 'interactive',
         },
       };
       bridge.send(message);

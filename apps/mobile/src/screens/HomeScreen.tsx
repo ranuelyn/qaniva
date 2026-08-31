@@ -9,6 +9,17 @@ import type { ScreenProps } from '@/navigation/types';
  * nothing about the interactive flow.
  */
 const E2E_AUTOSTART_CASE = process.env.EXPO_PUBLIC_E2E_AUTOSTART ?? '';
+/**
+ * Which e2e driver the Unity side arms: 'ui' walks the REAL interactive UI
+ * (default — proves the interactive path), 'autoplay' drives the runtime
+ * directly (bridge/lifecycle regression only).
+ */
+const E2E_MODE =
+  process.env.EXPO_PUBLIC_E2E_MODE === 'autoplay'
+    ? 'e2e_autoplay'
+    : process.env.EXPO_PUBLIC_E2E_MODE === 'interactive'
+      ? 'interactive' // navigate in headlessly but drive nothing (idle-UI proof)
+      : 'e2e_ui';
 /** Up to 2 runs so the scripted proof also exercises RN->Unity->RN->Unity->RN. */
 const E2E_MAX_RUNS = 2;
 
@@ -27,6 +38,7 @@ export function HomeScreen({ navigation }: ScreenProps<'Home'>) {
         attemptId: `22222222-2222-4222-8222-22222222222${runs.current}`,
         seed: 20260830,
         title: `E2E run ${runs.current}`,
+        mode: E2E_MODE,
       });
     };
     // The initial mount also emits 'focus', so the listener alone covers both
