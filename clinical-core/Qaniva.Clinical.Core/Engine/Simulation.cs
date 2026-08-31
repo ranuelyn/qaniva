@@ -249,30 +249,69 @@ public sealed class Simulation
             score.Total);
     }
 
+    /// <summary>
+    /// Canonical hidden / visible+disabled / enabled projection for every action,
+    /// in case-definition order. Empty once the simulation is terminated. UI layers
+    /// render this; they never re-derive visibility or precondition logic.
+    /// </summary>
+    public IReadOnlyList<ActionAvailability> GetActionAvailability()
+    {
+        if (IsTerminated)
+        {
+            return Array.Empty<ActionAvailability>();
+        }
+
+        var result = new List<ActionAvailability>(_case.AvailableActions.Count);
+        foreach (var action in _case.AvailableActions)
+        {
+            result.Add(ComputeAvailability(action));
+        }
+        return result;
+    }
+
     // --- internals ----------------------------------------------------
 
-    private bool IsActionOfferable(ActionDefinition action)
+    private ActionAvailability ComputeAvailability(ActionDefinition action)
     {
-        if (!action.Repeatable && _state.ActionCount(action.Id) > 0)
-        {
-            return false;
-        }
+        bool visible = true;
         if (action.Visibility == "when")
         {
-            if (string.IsNullOrEmpty(action.VisibleWhen) ||
-                !ExpressionEvaluator.EvaluateBool(action.VisibleWhen!, _state))
-            {
-                return false;
-            }
+            visible = !string.IsNullOrEmpty(action.VisibleWhen)
+                && ExpressionEvaluator.EvaluateBool(action.VisibleWhen!, _state);
         }
+
+        if (!visible)
+        {
+            return new ActionAvailability(action.Id, action.Label, action.Type,
+                visible: false, enabled: false, disabledReason: null);
+        }
+
+        if (!action.Repeatable && _state.ActionCount(action.Id) > 0)
+        {
+            return new ActionAvailability(action.Id, action.Label, action.Type,
+                visible: true, enabled: false, disabledReason: "already performed");
+        }
+
         foreach (var precondition in action.Preconditions)
         {
             if (!ExpressionEvaluator.EvaluateBool(precondition, _state))
             {
-                return false;
+                return new ActionAvailability(action.Id, action.Label, action.Type,
+                    visible: true, enabled: false,
+                    disabledReason: $"requires: {precondition}");
             }
         }
-        return true;
+
+        return new ActionAvailability(action.Id, action.Label, action.Type,
+            visible: true, enabled: true, disabledReason: null);
+    }
+
+    private bool IsActionOfferable(ActionDefinition action)
+    {
+        // Single source: offerable == Visible && Enabled in the same projection
+        // the UI renders, so the two views can never disagree.
+        var availability = ComputeAvailability(action);
+        return availability.Visible && availability.Enabled;
     }
 
     private IReadOnlyList<string> RunRulePass()
