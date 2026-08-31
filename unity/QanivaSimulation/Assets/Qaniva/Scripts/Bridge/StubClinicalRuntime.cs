@@ -62,6 +62,15 @@ namespace Qaniva.Bridge
 
         public IReadOnlyList<TimelineEntryView> GetTimeline() => new List<TimelineEntryView>(_timeline);
 
+        public PresentationProfileView GetPresentationProfile() => new PresentationProfileView
+        {
+            RoomKey = "ed_resus_v1",
+            PatientVariant = "adult_neutral_v1",
+            AnimationStateAtStart = "distress_mild",
+            MonitorLayout = "ed_standard",
+            CameraPreset = "bedside_01",
+        };
+
         public ActionOutcomeView ApplyAction(string actionId, IReadOnlyDictionary<string, string> parameters)
         {
             if (IsTerminated)

@@ -57,6 +57,17 @@ namespace Qaniva.Clinical.Runtime
                 DisabledReason = a.DisabledReason,
             }).ToList();
 
+        public PresentationProfileView GetPresentationProfile() => _case == null
+            ? null
+            : new PresentationProfileView
+            {
+                RoomKey = _case.PresentationProfile.RoomKey,
+                PatientVariant = _case.PresentationProfile.PatientVariant,
+                AnimationStateAtStart = _case.PresentationProfile.AnimationStateAtStart,
+                MonitorLayout = _case.PresentationProfile.MonitorLayout,
+                CameraPreset = _case.PresentationProfile.CameraPreset,
+            };
+
         public IReadOnlyList<TimelineEntryView> GetTimeline() =>
             _sim.Timeline.Events.Select(e => new TimelineEntryView
             {

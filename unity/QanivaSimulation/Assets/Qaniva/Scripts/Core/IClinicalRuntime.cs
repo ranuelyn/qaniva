@@ -29,6 +29,12 @@ namespace Qaniva.Simulation.Core
         /// <summary>The canonical attempt timeline so far (engine-owned history).</summary>
         IReadOnlyList<TimelineEntryView> GetTimeline();
 
+        /// <summary>
+        /// The loaded case's presentation metadata (environment/patient/camera
+        /// selection). Null until a case is loaded.
+        /// </summary>
+        PresentationProfileView GetPresentationProfile();
+
         ActionOutcomeView ApplyAction(string actionId, IReadOnlyDictionary<string, string> parameters);
 
         SimulationSnapshotView AdvanceTime(int seconds);

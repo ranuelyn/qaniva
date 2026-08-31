@@ -64,6 +64,22 @@ namespace Qaniva.Simulation.Core
     }
 
     /// <summary>
+    /// The case's presentation metadata (authored in case.json `presentationProfile`,
+    /// parsed by the engine, passed through untouched). This is the ONLY channel by
+    /// which a case selects its 3D presentation — environment, patient visual,
+    /// camera — so a new case never needs a new Unity scene.
+    /// </summary>
+    [Serializable]
+    public sealed class PresentationProfileView
+    {
+        public string RoomKey = "";
+        public string PatientVariant = "";
+        public string AnimationStateAtStart = "";
+        public string MonitorLayout = "";
+        public string CameraPreset = "";
+    }
+
+    /// <summary>
     /// Canonical hidden / visible+disabled / enabled projection of one action,
     /// computed by the engine (never by UI). Visible==false means do not render;
     /// Visible &amp;&amp; !Enabled means render greyed with DisabledReason.

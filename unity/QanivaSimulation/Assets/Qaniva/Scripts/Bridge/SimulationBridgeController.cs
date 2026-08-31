@@ -185,6 +185,10 @@ namespace Qaniva.Bridge
         public IReadOnlyList<TimelineEntryView> GetTimeline() =>
             _runtime?.GetTimeline() ?? new List<TimelineEntryView>();
 
+        /// <summary>The loaded case's presentation metadata (null before load).</summary>
+        public PresentationProfileView GetPresentationProfile() =>
+            _runtime?.GetPresentationProfile();
+
         public ActionOutcomeView SubmitPlayerAction(string actionId, IReadOnlyDictionary<string, string> parameters = null)
         {
             if (_paused || _runtime == null || _runtime.IsTerminated)
