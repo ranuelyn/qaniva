@@ -10,6 +10,25 @@ Engine · BE Backend · CNT Clinical Content · QA QA/Skeptic · REL Release.
 
 ---
 
+## Integration risks discovered during the proof sprint (2026-08-31)
+
+- **START delivery race** — Unity's runtime boots after `runEmbedded` returns;
+  early `sendMessageToGO` is dropped silently. Mitigated: host retries START until
+  any Unity message arrives; Unity treats duplicate START for the in-flight
+  attempt as a retry (re-announces READY). Keep this invariant when adding
+  messages.
+- **Unity simulator exports are x64-only** — the export script swaps in Unity's
+  shipped universal `UnityRuntime`/`baselib` sim variants and overrides `ARCHS`;
+  revisit if Unity exposes a public simulator-arch setting.
+- **dlsym symbols must be pinned** — anything the host resolves from
+  UnityFramework needs `__attribute__((used, visibility("default")))` or the
+  linker dead-strips it.
+- **Stale framework risk** — Unity-side changes require re-running
+  `scripts/export-unity-ios.sh`; the app otherwise runs an old simulation binary
+  silently. (Documented in local-development.md; consider a build-stamp check.)
+- **`IntegrationAutoPlayer` must die with QAN-006** — it exists only so the proof
+  can complete a case without an action UI.
+
 ## Already delivered by the foundation
 
 RN shell + navigation; deterministic engine skeleton + tests + golden replay;
@@ -23,15 +42,17 @@ tests); ADRs 001–007; docs; CI for the TS workspace + engine.
 
 ## P0 — unblock the first vertical slice
 
-| ID | Title | Owner | Purpose | Acceptance criteria | Depends on |
+| ID | Title | Owner | Status | Evidence / acceptance criteria | Depends on |
 | --- | --- | --- | --- | --- | --- |
-| QAN-001 | Generate Unity `ProjectSettings` + `.meta` and commit | UNI | Make the Unity project openable from a clean clone | Project opens in `6000.0.x` with no console errors; `ProjectSettings/*` and `Assets/**/*.meta` committed | — |
-| QAN-002 | Bootstrap + ED_Resus scenes, patient/monitor prefabs | UNI | The blockout room the sim renders into | Scenes in Build Settings; `PatientRig`/`VitalMonitor` prefabs wired to the presentation adapters; runs in the Editor | QAN-001 |
-| QAN-003 | Wire `ClinicalRuntime` end to end in Unity | UNI+ENG | Real engine drives the scene | With `QANIVA_HAS_CLINICAL_CORE` set, EditMode test drives the demo case START→COMPLETED through `ClinicalRuntime` (not the stub) | QAN-001, sync script |
-| QAN-004 | Native "Unity as a Library" embed (iOS + Android) | MOB+UNI | The real bridge transport | `START→READY→COMPLETED` verified on a real iOS device and a real Android device; lifecycle/orientation/audio/memory/back checked; `NativeUnityBridge` implemented both platforms | QAN-002 |
-| QAN-005 | Swap `useUnitySimulation` to the native transport behind a flag | MOB | Use the real bridge in the app, keep the fake for tests | App uses native transport on device; `FakeUnityBridge` still used in `vitest`; no calling-code change | QAN-004 |
-| QAN-006 | In-simulation action UI in Unity (5 main actions) | UNI | Player can actually act | Action drawer calls `SubmitPlayerAction`; rejects show feedback; available actions come from `GetAvailableActionIds` | QAN-003 |
-| QAN-007 | Attempt event-log upload from the client | MOB+BE | Persist the full timeline (bridge carries only the summary) | Client posts events to `POST /attempts/:id/events` during/after a run; backend stores count now, full rows after QAN-010 | — |
+| QAN-001 | Real Unity project initialization | UNI | **DONE** (2026-08-31) | Opened + compiled in Unity 6000.5.10f1 batchmode, exit 0, zero compile errors (three real errors found & fixed). `ProjectSettings/*`, `.meta`, migrated `Packages/manifest.json` + lock committed. URP pipeline asset created and assigned (Graphics + Quality). | — |
+| QAN-002 | ED_Resus room, patient/monitor prefabs | UNI | OPEN | Real blockout room replaces the generated minimal scene; `PatientRig`/`VitalMonitor` prefabs wired to the presentation adapters. | QAN-001 |
+| QAN-003 | Real `ClinicalRuntime` inside Unity | UNI+ENG | **DONE** (2026-08-31) | `QANIVA_HAS_CLINICAL_CORE` persisted in ProjectSettings; EditMode `RealClinicalRuntimeTests` (4 tests) run the demo ideal path through the real `Qaniva.Clinical.Core.dll` to the committed golden (complete / 80 / `fe2191ff…`), assert cross-run determinism and rejected-action state invariance. 13/13 EditMode green. | — |
+| QAN-004 | Native "Unity as a Library" embed | MOB+UNI | **PARTIAL — iOS simulator DONE; device + Android OPEN** | Full round trip verified live on iPhone 16 Pro **simulator**: RN → `QanivaUnityBridge` (runtime-loaded UnityFramework, dlsym handler) → real engine → `SIMULATION_READY`/`SIMULATION_COMPLETED` → RN Results rendering the golden payload. Lifecycle RN→Unity→RN→Unity→RN verified (initialise-once runtime, both runs deterministic-identical). NOT yet: physical-device run (device offline/signing), orientation/audio/memory soak, Android transport. | QAN-001 |
+| QAN-005 | Native transport selection in RN | MOB | **DONE** (2026-08-31) | `selectUnityTransport()` uses the native module when present (verified on simulator); `FakeUnityBridge` only without the module, with console warning + on-screen badge; screens unchanged between transports; vitest keeps using the fake. | QAN-004 |
+| QAN-006 | In-simulation action UI in Unity (5 main actions) | UNI | OPEN | Action drawer calls `SubmitPlayerAction`; rejects show feedback; actions from `GetAvailableActionIds`. **Must remove `IntegrationAutoPlayer` + the `QANIVA_INTEGRATION_AUTOPLAY` define.** | QAN-003 |
+| QAN-007 | Attempt event-log upload from the client | MOB+BE | OPEN | Client posts events to `POST /attempts/:id/events` during/after a run. | — |
+| QAN-008 | iOS **device** run + lifecycle hardening (from QAN-004) | MOB+UNI | OPEN | Round trip on a physical iPhone (needs the device connected + signing); orientation, audio focus, memory/thermal soak, background/foreground transitions. | QAN-004 |
+| QAN-009 | Android Unity-as-a-Library transport | MOB+UNI | OPEN | Mirror of ADR-008 on Android: `UnityPlayer` host + `UnitySendMessage` in / Java plugin out; round trip on emulator + device. | QAN-004 |
 
 ## P1 — demoable beta
 
@@ -51,7 +72,7 @@ tests); ADRs 001–007; docs; CI for the TS workspace + engine.
 | QAN-021 | Mobile device performance pass | UNI+QA | Stable 30 FPS mid-tier | Frame budget report from a real iOS + Android device; baked lighting; asset budget respected | QAN-020 |
 | QAN-022 | Case media pipeline (ECG/image/audio) | UNI+BE | Orders return artifacts | A `resultTemplateId` can reference bundled media; served via object storage; shown in Unity | QAN-011 |
 | QAN-023 | Counterfactual golden fixtures per case | QA+ENG | Regression coverage for wrong/delayed/harmful paths | Each shipped case has all 6 golden-path scripts + golden files in CI | QAN-012 |
-| QAN-024 | Unity CI (License-gated build + EditMode tests) | REL | Automate what the foundation can't | GameCI (or equivalent) job builds the project and runs EditMode tests on a self-hosted/licensed runner; documented, not a broken stub | QAN-001 |
+| QAN-024 | Unity CI (license-gated EditMode + export) | REL | Automate what local runs proved | Learned 2026-08-31: `Unity -batchmode -runTests -testPlatform EditMode` works headlessly on macOS arm64 and licensing auto-provisions from a signed-in Hub account; a runner needs the ~5GB editor + 2.4GB iOS support + a licensed Unity account (secret) + macOS for the iOS export. Add a GameCI/self-hosted mac job running EditMode + (nightly) the SIM=1 export; never a stub job. | QAN-001 |
 | QAN-025 | EAS build + TestFlight/Play internal pipeline | REL | Get a link into testers' hands | `eas build` for iOS + Android with the Unity library; TestFlight external + Play internal tracks configured | QAN-004 |
 
 ## P2 — after user signal

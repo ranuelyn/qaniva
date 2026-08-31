@@ -54,6 +54,23 @@ fi
 echo "==> building UnityFramework.framework"
 DERIVED="$PROJECT/build/DerivedData"
 if [ "${SIM:-0}" = "1" ]; then
+  # Unity's simulator export copies the x64-only prebuilt UnityRuntime/baselib
+  # variants and pins ARCHS=x86_64; no public PlayerSettings API selects the
+  # arm64 sim variants in 6000.5. Swap in Unity's own shipped universal
+  # (x64+arm64) variants so the framework links for Apple Silicon simulators.
+  # $UNITY_BIN = <editor>/Unity.app/Contents/MacOS/Unity -> <editor>/PlaybackEngines/iOSSupport
+  IOS_SUPPORT="$(cd "$(dirname "$UNITY_BIN")/../../.." && pwd)/PlaybackEngines/iOSSupport"
+  UNIV_RT="$IOS_SUPPORT/Trampoline/Frameworks/UnityRuntime-sim-x64arm64/UnityRuntime.framework"
+  UNIV_BL="$IOS_SUPPORT/Trampoline/Libraries/baselib-sim-x64arm64.a"
+  if [ -d "$UNIV_RT" ] && [ -f "$UNIV_BL" ]; then
+    echo "==> swapping in universal (x64+arm64) UnityRuntime + baselib simulator variants"
+    rm -rf "$EXPORT_DIR/Frameworks/UnityRuntime.framework"
+    cp -R "$UNIV_RT" "$EXPORT_DIR/Frameworks/UnityRuntime.framework"
+    cp "$UNIV_BL" "$EXPORT_DIR/Libraries/baselib.a"
+  else
+    echo "warning: universal simulator variants not found under $IOS_SUPPORT — arm64 sim link may fail" >&2
+  fi
+
   # Unity pins ARCHS=x86_64 for simulator exports; its IL2CPP build script honours
   # an ARCHS override, so build for the host architecture (arm64 on Apple Silicon).
   HOST_ARCH="$(uname -m)"

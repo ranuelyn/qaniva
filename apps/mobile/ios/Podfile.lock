@@ -42,6 +42,7 @@ PODS:
   - hermes-engine (0.76.3):
     - hermes-engine/Pre-built (= 0.76.3)
   - hermes-engine/Pre-built (0.76.3)
+  - QanivaUnityFramework (0.1.0)
   - QanivaUnityHost (0.1.0):
     - React-Core
   - RCT-Folly (2024.01.01.00):
@@ -1674,6 +1675,7 @@ DEPENDENCIES:
   - "fmt (from `../../../node_modules/.pnpm/react-native@0.76.3_@babel+core@7.29.7_@babel+preset-env@7.29.7_@babel+core@7.29.7__@types+react@18.3.31_react@18.3.1/node_modules/react-native/third-party-podspecs/fmt.podspec`)"
   - "glog (from `../../../node_modules/.pnpm/react-native@0.76.3_@babel+core@7.29.7_@babel+preset-env@7.29.7_@babel+core@7.29.7__@types+react@18.3.31_react@18.3.1/node_modules/react-native/third-party-podspecs/glog.podspec`)"
   - "hermes-engine (from `../../../node_modules/.pnpm/react-native@0.76.3_@babel+core@7.29.7_@babel+preset-env@7.29.7_@babel+core@7.29.7__@types+react@18.3.31_react@18.3.1/node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)"
+  - QanivaUnityFramework (from `../unity-frameworks`)
   - QanivaUnityHost (from `../modules/unity-host`)
   - "RCT-Folly (from `../../../node_modules/.pnpm/react-native@0.76.3_@babel+core@7.29.7_@babel+preset-env@7.29.7_@babel+core@7.29.7__@types+react@18.3.31_react@18.3.1/node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)"
   - "RCT-Folly/Fabric (from `../../../node_modules/.pnpm/react-native@0.76.3_@babel+core@7.29.7_@babel+preset-env@7.29.7_@babel+core@7.29.7__@types+react@18.3.31_react@18.3.1/node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)"
@@ -1769,6 +1771,8 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../../../node_modules/.pnpm/react-native@0.76.3_@babel+core@7.29.7_@babel+preset-env@7.29.7_@babel+core@7.29.7__@types+react@18.3.31_react@18.3.1/node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2024-11-12-RNv0.76.2-5b4aa20c719830dcf5684832b89a6edb95ac3d64
+  QanivaUnityFramework:
+    :path: "../unity-frameworks"
   QanivaUnityHost:
     :path: "../modules/unity-host"
   RCT-Folly:
@@ -1904,6 +1908,7 @@ SPEC CHECKSUMS:
   fmt: 10c6e61f4be25dc963c36bd73fc7b1705fe975be
   glog: 08b301085f15bcbb6ff8632a8ebaf239aae04e6a
   hermes-engine: 0555a84ea495e8e3b4bde71b597cd87fbb382888
+  QanivaUnityFramework: 447e1cbeb5c1ff962829fd1e22c4b894d62b721e
   QanivaUnityHost: 7959bd838319263b7ea5d53cfdbdc62bc6fdbcc3
   RCT-Folly: bf5c0376ffe4dd2cf438dcf86db385df9fdce648
   RCTDeprecation: 2c5e1000b04ab70b53956aa498bf7442c3c6e497

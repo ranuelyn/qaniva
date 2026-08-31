@@ -74,11 +74,20 @@ jobs:
         working-directory: clinical-core
 
   # ---------------------------------------------------------------------------
-  # Unity CI is NOT run here. EditMode/PlayMode tests and device builds need a
-  # licensed Unity install (and, for builds, more than a hosted runner offers).
-  # Plan: a GameCI job on a self-hosted / licensed runner — tracked as QAN-024
-  # in docs/development/BACKLOG.md. Until then, Unity EditMode tests are run
-  # locally via the Editor's Test Runner (see unity/QanivaSimulation/README.md),
-  # and the RN<->Unity contract is protected by the csharp-parity test in the
-  # TypeScript job above.
+  # Unity CI is NOT run here (deliberately — no flaky stub jobs). What a real job
+  # needs, learned from the 2026-08-31 integration sprint where everything below
+  # was executed locally and passed (13/13 EditMode incl. real-engine golden):
+  #   - Unity 6000.5.10f1 editor (~5.1GB) + iOS Build Support (~2.4GB)
+  #   - a licensed Unity account: licensing auto-provisions from a signed-in Hub
+  #     session; a runner needs UNITY_EMAIL/UNITY_PASSWORD/UNITY_LICENSE secrets
+  #     (GameCI pattern) or a pre-activated self-hosted macOS runner
+  #   - headless commands (documented in unity/QanivaSimulation/README.md):
+  #       Unity -batchmode -runTests -testPlatform EditMode ...
+  #       scripts/export-unity-ios.sh  (macOS + Xcode required)
+  # Tracked as QAN-024. Until then the RN<->Unity contract is protected in the
+  # TypeScript job above (csharp-parity + csharp-structural-parity), and Unity
+  # EditMode tests run locally.
+  #
+  # The RN iOS host build (xcodebuild, no Unity needed) also requires a macOS
+  # runner and is likewise deferred to QAN-024/QAN-025.
   # ---------------------------------------------------------------------------

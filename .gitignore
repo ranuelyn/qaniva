@@ -84,3 +84,4 @@ packages/contracts/generated/
 unity/QanivaSimulation/build/
 apps/mobile/unity-frameworks/ios/
 apps/mobile/ios/.xcode.env.local
+unity-editmode-results.xml
