@@ -133,6 +133,14 @@ Lessons from the first real implementation (stemi, 2026-08-31):
 - One summary/contract change ripples: zod schema → C# DTO mirror → parity
   tests → API test fixture → RN fake bridge. Run the whole TS CI, not one
   package.
+- Implementation checklist additions (learned from case #2, anaphylaxis —
+  which needed ZERO new engine/schema/Unity capability): add the case to the
+  RN bundled catalog + briefing (drift-guarded by `catalog.test.ts`), add its
+  ideal path to the e2e driver table, and author `transitionRules[].debriefText`
+  causality lines for every clinically meaningful rule. A route/choice learning
+  objective can usually be two labeled actions — reach for QAN-006b parameters
+  only for numeric titration. For case #2+ the compact dossier/blueprint format
+  (see `docs/clinical/cases/anaphylaxis/`) is sufficient.
 
 ### 6 TECHNICAL_QA
 

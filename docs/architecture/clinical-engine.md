@@ -64,7 +64,14 @@ at load (CaseLoader) and in `@qaniva/case-schema` semantics. Legacy cases
 without a `resultTemplates` array keep free-form ids (explicit compatibility
 rule). A diagnostic asset with
 `provenance.clinicalStatus: placeholder_replacement_required` is not
-clinically valid — the honesty is machine-checkable.
+clinically valid — the honesty is machine-checkable, and the engine passes the
+status through `ActionResult` so the Unity viewer shows a persistent
+"NOT a verified diagnostic tracing" note for any non-verified asset.
+
+Transition rules may carry an optional learner-facing `debriefText` — the
+authored causality line surfaced when the rule fires (timeline `stateChanges`
+in the AttemptSummary). Presentation metadata like `presentationCue`: it never
+affects state, scoring, hashes or goldens.
 
 ## Scoring / debrief outputs
 
@@ -75,8 +82,11 @@ e.g. only while hypotensive); constraint-free harmful criteria stay
 unconditional. Terminal outcomes:
 `complete | partial | deteriorated | discharge | admit | death | aborted`
 (generic vocabulary — no disease semantics in the enum). The AttemptSummary
-sent to RN carries `criteria[]` + the case's `debrief{}` metadata so the
-Results screen renders a timing-aware debrief without recomputing anything.
+sent to RN carries `criteria[]` (now incl. per-criterion `evidenceRefs` and
+`acceptedActionLabels` for alternatives), the timeline with per-step
+`stateChanges` causality texts, the case's `debrief{}` metadata and its
+`references[]` — the Results screen renders a timing-aware, evidence-traceable
+debrief without recomputing anything.
 
 ## Determinism rules (enforced by review + tests)
 
