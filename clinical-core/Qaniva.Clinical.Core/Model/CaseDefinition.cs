@@ -23,7 +23,31 @@ public sealed class CaseDefinition
     public List<ScoringCriterion> ScoringCriteria { get; set; } = new();
     public List<TerminalState> TerminalStates { get; set; } = new();
     public DebriefMetadata DebriefMetadata { get; set; } = new();
+    public List<ResultTemplate> ResultTemplates { get; set; } = new();
+    public List<ResultAsset> ResultAssets { get; set; } = new();
     public List<CaseReference> References { get; set; } = new();
+}
+
+/// <summary>Learner-facing result text for an action (resolved via ResultTemplateId).</summary>
+public sealed class ResultTemplate
+{
+    public string Id { get; set; } = "";
+    public string Text { get; set; } = "";
+    /// <summary>Optional ResultAsset id the learner can open (e.g. an ECG tracing).</summary>
+    public string? AssetId { get; set; }
+}
+
+/// <summary>
+/// A visual artifact an investigation result can reference (ECG now; X-ray/CT/
+/// ultrasound later). Generic by design — the engine only passes the id through;
+/// presentation layers resolve it to bundled media.
+/// </summary>
+public sealed class ResultAsset
+{
+    public string Id { get; set; } = "";
+    /// <summary>image (only kind for now)</summary>
+    public string Kind { get; set; } = "image";
+    public string Label { get; set; } = "";
 }
 
 public sealed class CaseMetadata

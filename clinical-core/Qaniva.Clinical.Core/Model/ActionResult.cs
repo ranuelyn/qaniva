@@ -10,13 +10,21 @@ public sealed class ActionResult
         string? rejectionReason,
         AttemptEvent? evt,
         bool terminated,
-        IReadOnlyList<string>? presentationCues)
+        IReadOnlyList<string>? presentationCues,
+        string? resultText = null,
+        string? resultAssetId = null,
+        string? resultAssetLabel = null,
+        IReadOnlyList<DisclosedFact>? newlyDisclosedFacts = null)
     {
         Accepted = accepted;
         RejectionReason = rejectionReason;
         Event = evt;
         Terminated = terminated;
         PresentationCues = presentationCues ?? new List<string>();
+        ResultText = resultText;
+        ResultAssetId = resultAssetId;
+        ResultAssetLabel = resultAssetLabel;
+        NewlyDisclosedFacts = newlyDisclosedFacts ?? new List<DisclosedFact>();
     }
 
     public bool Accepted { get; }
@@ -33,8 +41,40 @@ public sealed class ActionResult
     /// <summary>Presentation cues raised by rules that fired during this step.</summary>
     public IReadOnlyList<string> PresentationCues { get; }
 
+    /// <summary>Resolved result-template text for the action (null when the action has none).</summary>
+    public string? ResultText { get; }
+
+    /// <summary>ResultAsset id the learner may open for this result (e.g. an ECG image), or null.</summary>
+    public string? ResultAssetId { get; }
+
+    /// <summary>Learner-facing label of that asset (from the case's resultAssets), or null.</summary>
+    public string? ResultAssetLabel { get; }
+
+    /// <summary>Facts whose disclosure was caused by this step (action or triggered rules), in disclosure order.</summary>
+    public IReadOnlyList<DisclosedFact> NewlyDisclosedFacts { get; }
+
     public static ActionResult Rejected(string reason) => new(false, reason, null, false, null);
 
-    public static ActionResult Ok(AttemptEvent evt, bool terminated, IReadOnlyList<string>? presentationCues = null) =>
-        new(true, null, evt, terminated, presentationCues);
+    public static ActionResult Ok(
+        AttemptEvent evt,
+        bool terminated,
+        IReadOnlyList<string>? presentationCues = null,
+        string? resultText = null,
+        string? resultAssetId = null,
+        string? resultAssetLabel = null,
+        IReadOnlyList<DisclosedFact>? newlyDisclosedFacts = null) =>
+        new(true, null, evt, terminated, presentationCues, resultText, resultAssetId, resultAssetLabel, newlyDisclosedFacts);
+}
+
+/// <summary>A hidden fact that became disclosed, with its learner-facing text.</summary>
+public sealed class DisclosedFact
+{
+    public DisclosedFact(string id, string text)
+    {
+        Id = id;
+        Text = text;
+    }
+
+    public string Id { get; }
+    public string Text { get; }
 }

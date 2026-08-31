@@ -125,6 +125,7 @@ public sealed class Simulation
         }
 
         var beforeHash = Hashing.StateHash(_state);
+        var disclosedBefore = new SortedSet<string>(_state.DisclosedFacts, StringComparer.Ordinal);
 
         _state.SimTimeSec += action.TimeCostSec;
         _state.IncrementActionCount(actionId);
@@ -146,7 +147,44 @@ public sealed class Simulation
             scoring.Delta,
             scoring.Classification);
 
-        return ActionResult.Ok(evt, terminated, CollectCues(fired));
+        var template = ResolveResultTemplate(action);
+        string? assetLabel = template?.AssetId is { } assetId
+            ? _case.ResultAssets.FirstOrDefault(a => a.Id == assetId)?.Label
+            : null;
+        return ActionResult.Ok(
+            evt,
+            terminated,
+            CollectCues(fired),
+            template?.Text,
+            template?.AssetId,
+            assetLabel,
+            CollectNewDisclosures(disclosedBefore));
+    }
+
+    /// <summary>Resolves the action's result template from case data (presentation text only —
+    /// never state). Null when the action has no template or the case has no template list.</summary>
+    private ResultTemplate? ResolveResultTemplate(ActionDefinition action)
+    {
+        if (string.IsNullOrEmpty(action.ResultTemplateId) || _case.ResultTemplates.Count == 0)
+        {
+            return null;
+        }
+        return _case.ResultTemplates.FirstOrDefault(t => t.Id == action.ResultTemplateId);
+    }
+
+    private IReadOnlyList<DisclosedFact> CollectNewDisclosures(SortedSet<string> disclosedBefore)
+    {
+        var fresh = new List<DisclosedFact>();
+        foreach (var factId in _state.DisclosedFacts) // SortedSet — deterministic order
+        {
+            if (disclosedBefore.Contains(factId))
+            {
+                continue;
+            }
+            var fact = _case.HiddenFacts.FirstOrDefault(f => f.Id == factId);
+            fresh.Add(new DisclosedFact(factId, fact?.Text ?? ""));
+        }
+        return fresh;
     }
 
     /// <summary>Advance the simulated clock with no player action (pure time passage).</summary>
@@ -162,6 +200,7 @@ public sealed class Simulation
         }
 
         var beforeHash = Hashing.StateHash(_state);
+        var disclosedBefore = new SortedSet<string>(_state.DisclosedFacts, StringComparer.Ordinal);
         _state.SimTimeSec += seconds;
         var fired = RunRulePass();
         var afterHash = Hashing.StateHash(_state);
@@ -177,7 +216,9 @@ public sealed class Simulation
             0,
             EntryClassification.Neutral);
 
-        return ActionResult.Ok(evt, terminated, CollectCues(fired));
+        return ActionResult.Ok(
+            evt, terminated, CollectCues(fired),
+            newlyDisclosedFacts: CollectNewDisclosures(disclosedBefore));
     }
 
     public SimulationSnapshot Snapshot()
@@ -212,6 +253,9 @@ public sealed class Simulation
     }
 
     public AttemptScore Score() => _scoring.BuildFinalScore();
+
+    /// <summary>Per-criterion outcomes for the debrief (case-definition order, deterministic).</summary>
+    public IReadOnlyList<CriterionResult> CriterionResults() => _scoring.BuildCriterionResults();
 
     /// <summary>
     /// Structured facts for the debrief. Deterministic — the LLM only narrates these,

@@ -74,6 +74,31 @@ public static class CaseLoader
         {
             throw new CaseLoadException("MVP invariant violated: metadata.fictional must be true.");
         }
+        if (c.ResultTemplates.Count > 0)
+        {
+            // When the case declares result templates, every referenced id must
+            // resolve — a broken reference must fail at load, not render as a
+            // silently missing result. (Legacy cases without the array keep
+            // free-form ids; @qaniva/case-schema mirrors this rule.)
+            foreach (var action in c.AvailableActions)
+            {
+                if (!string.IsNullOrEmpty(action.ResultTemplateId)
+                    && !c.ResultTemplates.Exists(t => t.Id == action.ResultTemplateId))
+                {
+                    throw new CaseLoadException(
+                        $"Action \"{action.Id}\" references unknown result template \"{action.ResultTemplateId}\".");
+                }
+            }
+            foreach (var template in c.ResultTemplates)
+            {
+                if (!string.IsNullOrEmpty(template.AssetId)
+                    && !c.ResultAssets.Exists(a => a.Id == template.AssetId))
+                {
+                    throw new CaseLoadException(
+                        $"Result template \"{template.Id}\" references unknown result asset \"{template.AssetId}\".");
+                }
+            }
+        }
     }
 }
 

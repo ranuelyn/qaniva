@@ -44,6 +44,14 @@ public sealed class ScoringEngine
 
             if (criterion.Harmful)
             {
+                // A harmful criterion with state constraints only counts when the
+                // constraints hold at (post-)action time — e.g. "nitrate is harmful
+                // only while hypotensive". Constraint-free harmful criteria are
+                // unconditional, exactly as before.
+                if (!StateConstraintsMet(criterion, postState))
+                {
+                    continue;
+                }
                 if (!outcome.Credited)
                 {
                     outcome.Credited = true;
@@ -71,6 +79,7 @@ public sealed class ScoringEngine
             outcome.Credited = true;
             outcome.CreditedAtSec = simTimeSec;
             outcome.AwardedPoints = awarded;
+            outcome.TimingMultiplier = multiplier;
             delta += awarded;
 
             if (classification != EntryClassification.Harmful)
@@ -134,6 +143,47 @@ public sealed class ScoringEngine
             missed);
     }
 
+    /// <summary>
+    /// Per-criterion debrief facts, in case-definition order. Deterministic — the
+    /// debrief/results layers render these, never recompute them. Classifications:
+    /// non-harmful: correct | delayed (timing window partially missed) | missed;
+    /// harmful: harmful (performed) | avoided (not performed).
+    /// </summary>
+    public IReadOnlyList<CriterionResult> BuildCriterionResults()
+    {
+        var results = new List<CriterionResult>(_case.ScoringCriteria.Count);
+        foreach (var criterion in _case.ScoringCriteria)
+        {
+            var outcome = _outcomes[criterion.Id];
+            string classification;
+            if (criterion.Harmful)
+            {
+                classification = outcome.Credited ? "harmful" : "avoided";
+            }
+            else if (!outcome.Credited)
+            {
+                classification = "missed";
+            }
+            else
+            {
+                classification = outcome.TimingMultiplier >= 0.999 ? "correct" : "delayed";
+            }
+
+            results.Add(new CriterionResult(
+                criterion.Id,
+                criterion.Label,
+                criterion.Category,
+                criterion.Criticality,
+                criterion.Harmful,
+                classification,
+                outcome.Credited,
+                outcome.Credited ? outcome.CreditedAtSec : -1,
+                outcome.Credited ? outcome.AwardedPoints : 0,
+                criterion.Harmful ? -criterion.Points : criterion.Points));
+        }
+        return results;
+    }
+
     private bool StateConstraintsMet(ScoringCriterion criterion, PatientState state)
     {
         foreach (var expr in criterion.StateConstraints)
@@ -176,7 +226,50 @@ public sealed class ScoringEngine
         public bool Credited { get; set; }
         public int CreditedAtSec { get; set; }
         public double AwardedPoints { get; set; }
+        public double TimingMultiplier { get; set; } = 1.0;
     }
+}
+
+/// <summary>One rubric criterion's final, deterministic outcome for the debrief.</summary>
+public sealed class CriterionResult
+{
+    public CriterionResult(
+        string id,
+        string label,
+        string category,
+        string criticality,
+        bool harmful,
+        string classification,
+        bool credited,
+        int creditedAtSec,
+        double awardedPoints,
+        double maxPoints)
+    {
+        Id = id;
+        Label = label;
+        Category = category;
+        Criticality = criticality;
+        Harmful = harmful;
+        Classification = classification;
+        Credited = credited;
+        CreditedAtSec = creditedAtSec;
+        AwardedPoints = awardedPoints;
+        MaxPoints = maxPoints;
+    }
+
+    public string Id { get; }
+    public string Label { get; }
+    public string Category { get; }
+    public string Criticality { get; }
+    public bool Harmful { get; }
+    /// <summary>correct | delayed | missed | harmful | avoided</summary>
+    public string Classification { get; }
+    public bool Credited { get; }
+    /// <summary>-1 when never credited.</summary>
+    public int CreditedAtSec { get; }
+    public double AwardedPoints { get; }
+    /// <summary>Positive max for scored criteria; negative magnitude for harmful penalties.</summary>
+    public double MaxPoints { get; }
 }
 
 public readonly struct ActionScoring
