@@ -21,37 +21,27 @@ namespace Qaniva.EditorTools
         public const string ClinicalCoreDefine = "QANIVA_HAS_CLINICAL_CORE";
 
         /// <summary>
-        /// Creates the minimal integration scene (camera + light + dark background)
-        /// and registers it in Build Settings. The bridge + HUD self-bootstrap at
-        /// runtime, so the scene needs no wiring. Idempotent.
+        /// Creates the Bootstrap scene and registers it in Build Settings. The scene
+        /// is intentionally near-empty: the ED environment (room, lights, composed
+        /// camera) comes from the case-selected environment prefab at runtime
+        /// (EnvironmentBootstrap); here we only set hospital-appropriate ambient
+        /// lighting and a dark fallback camera (disabled once the environment
+        /// camera spawns; keeps rendering honest if a presentation profile fails).
+        /// Idempotent.
         /// </summary>
         public static void CreateMinimalScene()
         {
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            var cameraGo = new GameObject("Main Camera");
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
+            RenderSettings.ambientLight = new Color(0.30f, 0.32f, 0.35f);
+
+            var cameraGo = new GameObject("FallbackCamera");
             var camera = cameraGo.AddComponent<Camera>();
             camera.clearFlags = CameraClearFlags.SolidColor;
-            camera.backgroundColor = new Color(0.06f, 0.07f, 0.09f);
+            camera.backgroundColor = new Color(0.05f, 0.06f, 0.08f);
             cameraGo.tag = "MainCamera";
             cameraGo.transform.position = new Vector3(0f, 1.2f, -3f);
-
-            var lightGo = new GameObject("Directional Light");
-            var light = lightGo.AddComponent<Light>();
-            light.type = LightType.Directional;
-            lightGo.transform.rotation = Quaternion.Euler(50f, -30f, 0f);
-
-            // Primitive placeholder "patient on a bed" — integration proof only.
-            var bed = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            bed.name = "Bed (placeholder)";
-            bed.transform.position = new Vector3(0f, 0.25f, 0f);
-            bed.transform.localScale = new Vector3(0.9f, 0.5f, 2f);
-
-            var patient = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-            patient.name = "Patient (placeholder)";
-            patient.transform.position = new Vector3(0f, 0.75f, 0f);
-            patient.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-            patient.transform.localScale = new Vector3(0.35f, 0.8f, 0.35f);
 
             Directory.CreateDirectory(Path.GetDirectoryName(BootstrapScenePath)!);
             EditorSceneManager.SaveScene(scene, BootstrapScenePath);
@@ -81,8 +71,23 @@ namespace Qaniva.EditorTools
             }
             GraphicsSettings.defaultRenderPipeline = existing;
             QualitySettings.renderPipeline = existing;
+
+            // Mobile presentation profile (evidence-based, not blanket-disabled):
+            // one soft-shadowed key light close to the bed => short shadow distance
+            // + modest map; HDR off (no HDR content). MSAA is OFF for now: with
+            // this URP version the simulator Metal path floods
+            // "RenderPass: Attachment 0 was created with 1 samples but 4 samples
+            // were requested" every frame when MSAA>1 (observed live on the
+            // iPhone 16 Pro simulator) — re-enable after verifying on device.
+            existing.shadowDistance = 12f;
+            existing.mainLightShadowmapResolution = 1024;
+            existing.msaaSampleCount = 1;
+            existing.supportsHDR = false;
+            existing.renderScale = 1.0f;
+            EditorUtility.SetDirty(existing);
+
             AssetDatabase.SaveAssets();
-            Debug.Log("[QanivaBuild] URP pipeline asset assigned (graphics + quality settings)");
+            Debug.Log("[QanivaBuild] URP pipeline asset assigned + mobile profile applied");
         }
 
         /// <summary>

@@ -3,7 +3,9 @@
   "rootNamespace": "Qaniva.EditorTools",
   "references": [
     "Unity.RenderPipelines.Universal.Runtime",
-    "Unity.RenderPipelines.Core.Runtime"
+    "Unity.RenderPipelines.Core.Runtime",
+    "Qaniva.Presentation",
+    "Qaniva.Simulation.Core"
   ],
   "includePlatforms": ["Editor"],
   "excludePlatforms": [],
