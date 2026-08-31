@@ -79,3 +79,8 @@ tmp/
 
 # generated protocol description
 packages/contracts/generated/
+
+# --- Unity iOS export + vendored framework (build artifacts, regenerate via scripts/export-unity-ios.sh) ---
+unity/QanivaSimulation/build/
+apps/mobile/unity-frameworks/ios/
+apps/mobile/ios/.xcode.env.local

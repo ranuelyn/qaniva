@@ -42,6 +42,9 @@ export function SimulationScreen({ navigation, route }: ScreenProps<'Simulation'
             {sim.phase === 'ready' && 'Running the simulation…'}
             {sim.phase === 'idle' && 'Preparing…'}
           </Body>
+          {sim.transportKind === 'fake' && (
+            <Body muted>⚠ FAKE BRIDGE (dev build without Unity runtime)</Body>
+          )}
         </>
       )}
     </Screen>

@@ -40,8 +40,17 @@ pnpm --filter @qaniva/api start:dev      # http://localhost:3000/health
 pnpm --filter @qaniva/mobile start        # Expo dev server (needs a dev build, not Expo Go)
 ```
 
-The mobile flow (Home → Cases → Briefing → Simulation → Results) runs today against
-a deterministic **fake** Unity bridge; the native embed is QAN-004.
+`apps/mobile/ios/` is a committed bare-workflow project (ADR-008). To build it:
+
+```bash
+cd apps/mobile/ios && LANG=en_US.UTF-8 pod install
+xcodebuild -workspace Qaniva.xcworkspace -scheme Qaniva -configuration Debug \
+  -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+```
+
+Without the Unity export the app runs with the labelled **fake** bridge. To embed
+the real Unity runtime: `scripts/export-unity-ios.sh` (needs Unity 6 + iOS Build
+Support), then `pod install` again — see `docs/architecture/rn-unity-boundary.md`.
 
 ## Open the Unity project
 

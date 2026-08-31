@@ -5,7 +5,8 @@ import {
   type RnToUnityMessage,
   type UnityToRnMessage,
 } from '@qaniva/contracts';
-import { FakeUnityBridge, type UnityBridgeTransport } from './fakeBridge';
+import type { UnityBridgeTransport } from './fakeBridge';
+import { selectUnityTransport, type TransportKind } from './transport';
 
 export type SimulationPhase = 'idle' | 'starting' | 'ready' | 'completed' | 'failed';
 
@@ -22,6 +23,8 @@ interface UseUnitySimulationResult {
   phase: SimulationPhase;
   summary: AttemptSummary | null;
   error: string | null;
+  /** 'native' = real Unity-as-a-Library; 'fake' = dev-only deterministic stand-in. */
+  transportKind: TransportKind;
   start: (launch: SimulationLaunch) => void;
   exit: () => void;
 }
@@ -33,13 +36,22 @@ function messageId(): string {
 }
 
 /**
- * Owns the RN side of the simulation conversation. Swap `makeBridge` for the real
- * native transport once QAN-004 lands; the screen code does not change.
+ * Owns the RN side of the simulation conversation. By default the transport is
+ * chosen by selectUnityTransport(): the real native Unity bridge when the native
+ * module is present, the FakeUnityBridge (labelled, dev-only) otherwise. Tests
+ * can inject a transport via `makeBridge`.
  */
 export function useUnitySimulation(
-  makeBridge: () => UnityBridgeTransport = () => new FakeUnityBridge(),
+  makeBridge?: () => UnityBridgeTransport,
 ): UseUnitySimulationResult {
-  const bridge = useMemo(makeBridge, [makeBridge]);
+  const selection = useMemo(
+    () =>
+      makeBridge
+        ? { kind: 'fake' as TransportKind, transport: makeBridge() }
+        : selectUnityTransport(),
+    [makeBridge],
+  );
+  const bridge = selection.transport;
   const [phase, setPhase] = useState<SimulationPhase>('idle');
   const [summary, setSummary] = useState<AttemptSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -108,6 +120,7 @@ export function useUnitySimulation(
     phase,
     summary,
     error,
+    transportKind: selection.kind,
     start,
     exit,
   };

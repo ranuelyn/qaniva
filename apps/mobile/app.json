@@ -14,7 +14,6 @@
     "android": {
       "package": "app.qaniva.mobile"
     },
-    "plugins": ["expo-status-bar"],
     "extra": {
       "note": "Requires an Expo Development Build (custom native code) for the Unity embed — Expo Go is not a target. See docs/architecture/rn-unity-boundary.md."
     }

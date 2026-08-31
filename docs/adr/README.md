@@ -12,8 +12,9 @@ re-litigate it. Format: **Status · Context · Decision · Alternatives · Conse
 | [ADR-005](ADR-005-modular-monolith-backend.md) | Modular monolith backend (NestJS) | Accepted |
 | [ADR-006](ADR-006-rn-unity-versioned-bridge-contract.md) | Versioned, typed RN↔Unity bridge contract | Accepted |
 | [ADR-007](ADR-007-ai-provider-abstraction-and-safety-boundary.md) | AI provider abstraction + safety boundary | Accepted |
+| [ADR-008](ADR-008-unity-as-a-library-ios-integration.md) | Unity as a Library integration on iOS | Accepted |
 
-Decisions ADR-008..012 from the blueprint (voice later, golden replay as release
-gate, 2 production cases before feature expansion, JSONB case/attempt fields, beta
-via TestFlight/Play) are recorded in the blueprint and the backlog and will be
+Remaining blueprint decisions (voice later, golden replay as release gate, 2
+production cases before feature expansion, JSONB case/attempt fields, beta via
+TestFlight/Play) are recorded in the blueprint and the backlog and will be
 promoted to standalone ADRs as they are implemented.

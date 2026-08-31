@@ -54,28 +54,40 @@ The full event log is uploaded to the backend separately, keyed by `attemptId`.
 **To change the protocol:** edit `protocol.ts`, mirror into `BridgeProtocol.cs`,
 bump `PROTOCOL_VERSION` on both sides for any breaking change, update this page.
 
-## Native embed status (open — QAN-004)
+## Native embed — iOS (implemented; see ADR-008)
 
-`NativeUnityBridge` is the single seam:
+The full message path on iOS:
 
-- **iOS**: the host app's `UnityFramework` calls `sendMessageToGO` to reach
-  `SimulationBridgeController.OnHostMessage`; Unity → host via an exported
-  `__Internal` function.
-- **Android**: `UnitySendMessage` in; a small Java plugin (`QanivaBridgePlugin`)
-  out.
+```
+RN JS  useUnitySimulation
+         └─ selectUnityTransport()            src/unity/transport.ts
+              └─ NativeUnityBridgeTransport   src/unity/nativeBridge.ts
+                   └─ QanivaUnityBridge       modules/unity-host (local pod, ObjC++)
+                        │  NSBundle-load + objc_msgSend (no link-time Unity dep)
+                        ▼
+                   UnityFramework  ── sendMessageToGO("SimulationBridge","OnHostMessage",json)
+                        ▼
+                   SimulationBridgeController (created by BridgeBootstrap at Unity init)
+                        │  NativeUnityBridge.SendToHost -> DllImport "__Internal"
+                        ▼
+                   _QanivaBridge_SendToHost   Assets/Qaniva/Plugins/iOS/QanivaBridgeNative.mm
+                        │  host callback registered via dlsym("QanivaRegisterHostHandler")
+                        ▼
+                   QanivaUnityBridge -> RCTEventEmitter "QanivaUnityMessage" -> RN JS
+```
 
-Until it lands, the architecture is proven with `FakeUnityBridge` (RN,
-`apps/mobile/src/unity/`) and `StubClinicalRuntime` (Unity), each with tests that
-assert the full `START → READY → COMPLETED` round trip. The RN host screen and the
-Unity controller both program against the contract, so the swap is transport-only.
+Key decisions (details + alternatives in
+[ADR-008](../adr/ADR-008-unity-as-a-library-ios-integration.md)):
 
-### Spike plan for QAN-004
-
-1. `expo prebuild` the mobile app; add the exported Unity library to the iOS and
-   Android native projects.
-2. Implement `NativeUnityBridge.SendToHost` for each platform and the host→Unity
-   entry point.
-3. Replace `makeBridge` in `useUnitySimulation` with the native transport behind a
-   feature check; keep the fake for tests.
-4. Verify `START → READY → COMPLETED` on a real iOS device and a real Android
-   device. Check lifecycle, orientation, audio focus, memory, back navigation.
+- `apps/mobile/ios/` is committed (bare workflow); the transport is the local pod
+  `apps/mobile/modules/unity-host`; UnityFramework is embedded by the
+  `QanivaUnityFramework` wrapper pod **only when the export exists** at
+  `apps/mobile/unity-frameworks/ios/UnityFramework.framework` (git-ignored,
+  produced by `scripts/export-unity-ios.sh`).
+- The Unity runtime initialises **once per process** and is shown/hidden after
+  that (no unload/relaunch cycles).
+- Transport selection in JS is explicit: native when the module exists, otherwise
+  the labelled `FakeUnityBridge` with a warning + on-screen badge. The fake is a
+  dev/test aid only and is never part of a real proof or release path.
+- **Android**: not yet implemented — same pattern later (`UnityPlayer` +
+  `UnitySendMessage` in, a small Java plugin out).
