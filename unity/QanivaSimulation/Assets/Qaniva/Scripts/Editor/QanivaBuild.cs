@@ -5,7 +5,8 @@ using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace Qaniva.EditorTools
 {
@@ -60,6 +61,30 @@ namespace Qaniva.EditorTools
             Debug.Log($"[QanivaBuild] wrote {BootstrapScenePath} and registered it in Build Settings");
         }
 
+        /// <summary>
+        /// Creates the URP pipeline asset (with its default renderer) and assigns it
+        /// as the project's render pipeline (ADR-002: Unity 6 + URP). Idempotent.
+        /// </summary>
+        public static void ConfigureUrp()
+        {
+            const string urpAssetPath = "Assets/Qaniva/Settings/QanivaURP.asset";
+            var existing = AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>(urpAssetPath);
+            if (existing == null)
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(urpAssetPath)!);
+                var rendererData = ScriptableObject.CreateInstance<UniversalRendererData>();
+                AssetDatabase.CreateAsset(
+                    rendererData, "Assets/Qaniva/Settings/QanivaURPRenderer.asset");
+                var pipeline = UniversalRenderPipelineAsset.Create(rendererData);
+                AssetDatabase.CreateAsset(pipeline, urpAssetPath);
+                existing = pipeline;
+            }
+            GraphicsSettings.defaultRenderPipeline = existing;
+            QualitySettings.renderPipeline = existing;
+            AssetDatabase.SaveAssets();
+            Debug.Log("[QanivaBuild] URP pipeline asset assigned (graphics + quality settings)");
+        }
+
         /// <summary>Adds QANIVA_HAS_CLINICAL_CORE for iOS + Standalone (idempotent).</summary>
         public static void EnableClinicalCoreDefine()
         {
@@ -84,6 +109,7 @@ namespace Qaniva.EditorTools
         public static void ExportIos()
         {
             string exportPath = GetArg("-exportPath") ?? "build/ios";
+            bool simulator = Array.IndexOf(Environment.GetCommandLineArgs(), "-simulator") >= 0;
 
             if (EditorBuildSettings.scenes.Length == 0 || !File.Exists(BootstrapScenePath))
             {
@@ -92,6 +118,8 @@ namespace Qaniva.EditorTools
 
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.iOS, "app.qaniva.unity");
             PlayerSettings.iOS.targetOSVersionString = "15.1";
+            PlayerSettings.iOS.sdkVersion = simulator ? iOSSdkVersion.SimulatorSDK : iOSSdkVersion.DeviceSDK;
+            Debug.Log($"[QanivaBuild] iOS SDK target: {(simulator ? "Simulator" : "Device")}");
 
             var options = new BuildPlayerOptions
             {

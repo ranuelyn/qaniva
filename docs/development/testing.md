@@ -18,7 +18,9 @@ pass.
 | AI safety boundary | `apps/api/src/ai/*.spec.ts` | jest | yes |
 | Mobile RN-free unit | `apps/mobile/src/**/*.test.ts` | vitest | yes |
 | Mobile typecheck | `apps/mobile` | tsc | yes |
-| Unity EditMode | `unity/.../Scripts/Tests` | Unity Test Runner | **no** (needs the Editor — run locally) |
+| Mobile native build | `apps/mobile/ios` | xcodebuild (simulator, `CODE_SIGNING_ALLOWED=NO`) | **no** (macOS runner; run locally) |
+| Unity EditMode | `unity/.../Scripts/Tests` | Unity Test Runner (`-runTests -testPlatform EditMode`) | **no** (needs a licensed Editor — run locally) |
+| Unity real-engine integration | `RealClinicalRuntimeTests` (needs `QANIVA_HAS_CLINICAL_CORE` + synced DLL) | Unity Test Runner | **no** (same) |
 | Device perf, e2e beta | — | manual | release |
 
 ## Commands
@@ -27,6 +29,24 @@ pass.
 pnpm run ci                 # format:check + lint + typecheck + test across the TS workspace
 pnpm run validate:cases     # every fixture: JSON Schema + semantic cross-references
 cd clinical-core && dotnet test
+```
+
+Unity EditMode tests from the command line (Editor required; adjust the version):
+
+```bash
+/Applications/Unity/Hub/Editor/<version>/Unity.app/Contents/MacOS/Unity \
+  -batchmode -projectPath unity/QanivaSimulation \
+  -runTests -testPlatform EditMode \
+  -testResults "$PWD/unity-editmode-results.xml" -logFile -
+```
+
+Mobile native build (proves the host + native module compile — a TS typecheck is
+NOT evidence of mobile integration):
+
+```bash
+cd apps/mobile/ios && LANG=en_US.UTF-8 pod install
+xcodebuild -workspace Qaniva.xcworkspace -scheme Qaniva -configuration Debug \
+  -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
 ```
 
 ## The determinism guarantees

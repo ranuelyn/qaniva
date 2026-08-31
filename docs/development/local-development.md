@@ -49,6 +49,24 @@ Sync the engine DLL into Unity:
 scripts/sync-clinical-core-to-unity.sh
 ```
 
+## iOS native project (bare workflow, ADR-008)
+
+`apps/mobile/ios/` is committed. Do **not** run `expo prebuild` again — native
+changes (the Unity host pod, Podfile Unity logic) live in the tree. Workflow:
+
+```bash
+cd apps/mobile/ios
+LANG=en_US.UTF-8 pod install          # after any pod/podspec/Podfile change
+xcodebuild -workspace Qaniva.xcworkspace -scheme Qaniva -configuration Debug \
+  -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
+```
+
+To embed the real Unity runtime: `scripts/export-unity-ios.sh` (add `SIM=1` for a
+simulator-arch framework), then `pod install` again. The framework lands in
+`apps/mobile/unity-frameworks/ios/` (git-ignored). **Stale-framework rule:** after
+any change under `unity/QanivaSimulation/Assets/`, re-run the export before
+trusting a device/simulator run.
+
 ## Env vars
 
 Copy `.env.example` → `.env`. Public mobile vars are `EXPO_PUBLIC_*`. Nothing

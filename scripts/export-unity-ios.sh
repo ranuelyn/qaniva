@@ -39,12 +39,17 @@ run_unity() {
     -logFile - "$@" 2>&1 | tail -40
 }
 
-echo "==> enabling $0 scripting define + minimal scene"
+echo "==> configuring URP + QANIVA_HAS_CLINICAL_CORE define + minimal scene"
+run_unity Qaniva.EditorTools.QanivaBuild.ConfigureUrp
 run_unity Qaniva.EditorTools.QanivaBuild.EnableClinicalCoreDefine
 run_unity Qaniva.EditorTools.QanivaBuild.CreateMinimalScene
 
 echo "==> exporting iOS Xcode project -> $EXPORT_DIR"
-run_unity Qaniva.EditorTools.QanivaBuild.ExportIos -exportPath "$EXPORT_DIR"
+if [ "${SIM:-0}" = "1" ]; then
+  run_unity Qaniva.EditorTools.QanivaBuild.ExportIos -exportPath "$EXPORT_DIR" -simulator
+else
+  run_unity Qaniva.EditorTools.QanivaBuild.ExportIos -exportPath "$EXPORT_DIR"
+fi
 
 echo "==> building UnityFramework.framework"
 DERIVED="$PROJECT/build/DerivedData"
