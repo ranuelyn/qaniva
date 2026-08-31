@@ -45,14 +45,9 @@ namespace Qaniva.Bridge
             _bridge.MessageReceived += OnHostMessage;
         }
 
-        private void Awake()
-        {
-            if (_bridge == null)
-            {
-                var native = GetComponent<NativeUnityBridge>() ?? gameObject.AddComponent<NativeUnityBridge>();
-                Configure(native, new StubClinicalRuntime(), new ResourcesCaseProvider());
-            }
-        }
+        // NOTE: no Awake auto-configuration. BridgeBootstrap (or a test) must call
+        // Configure() explicitly, so there is exactly one place that decides which
+        // IClinicalRuntime implementation is live.
 
         private void OnDestroy() => Unsubscribe();
 

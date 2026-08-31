@@ -3,6 +3,7 @@
   "rootNamespace": "Qaniva.Bridge",
   "references": [
     "Qaniva.Simulation.Core",
+    "Qaniva.Clinical.Runtime",
     "Newtonsoft.Json"
   ],
   "includePlatforms": [],

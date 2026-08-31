@@ -5,6 +5,7 @@
     "Qaniva.Simulation.Core",
     "Qaniva.Bridge",
     "Qaniva.Presentation",
+    "Qaniva.Clinical.Runtime",
     "UnityEngine.TestRunner",
     "UnityEditor.TestRunner",
     "Newtonsoft.Json"
