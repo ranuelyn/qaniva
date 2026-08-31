@@ -13,7 +13,8 @@ Done criteria · Common failure modes**
 | [`unity-mobile`](unity-mobile/SKILL.md) | Unity 6 / URP simulation runtime |
 | [`unity-rn-bridge`](unity-rn-bridge/SKILL.md) | the versioned RN↔Unity contract |
 | [`deterministic-clinical-engine`](deterministic-clinical-engine/SKILL.md) | the pure C# engine |
-| [`case-authoring`](case-authoring/SKILL.md) | writing `case.json` |
+| [`case-authoring`](case-authoring/SKILL.md) | evidence-first case lifecycle: research → blueprint → review gate → `case.json` |
+| [`case-clinical-review`](case-clinical-review/SKILL.md) | the clinician review gate (section verdicts, evidence verification, versioned approval) |
 | [`clinical-safety`](clinical-safety/SKILL.md) | the AI boundary + clinical-truth rules |
 | [`testing-and-golden-replay`](testing-and-golden-replay/SKILL.md) | test layers + golden files |
 | [`coding-standards`](coding-standards/SKILL.md) | lint/format/TS/C# conventions |
