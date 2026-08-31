@@ -5,6 +5,13 @@ A case is **data** (`case.json`), validated by
 how to write one. It does **not** teach medicine — every clinical number must be
 verified by a clinician (see "Review").
 
+This guide covers the **implementation stage only**. A production case starts
+much earlier: research dossier → evidence ledger → blueprint → clinician review
+gate — see [`case-lifecycle.md`](case-lifecycle.md) and
+`skills/case-authoring/SKILL.md`; worked example under
+[`cases/stemi/`](cases/stemi/BLUEPRINT.md). Only a clinically approved
+blueprint may be encoded as `case.json`.
+
 ## Location & versioning
 
 ```
