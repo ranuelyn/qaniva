@@ -39,17 +39,27 @@ export function validateCaseStructure(data: unknown): ValidationResult {
 
 // --- Semantic / cross-reference validation --------------------------------
 
+interface EffectShape {
+  op: string;
+  factId?: string;
+}
+
 interface CaseShape {
+  metadata: { clinicalReview: { status: string } };
   availableActions: {
     id: string;
     criterionIds: string[];
     visibility: string;
     visibleWhen: unknown;
+    resultTemplateId?: string | null;
+    effects: EffectShape[];
   }[];
-  transitionRules: { id: string; terminalState: string | null }[];
-  scoringCriteria: { id: string; acceptedActions: string[] }[];
+  transitionRules: { id: string; terminalState: string | null; effects: EffectShape[] }[];
+  scoringCriteria: { id: string; acceptedActions: string[]; evidenceRefs?: string[] }[];
   terminalStates: { id: string }[];
   hiddenFacts: { id: string }[];
+  resultTemplates?: { id: string; assetId?: string | null }[];
+  resultAssets?: { id: string }[];
 }
 
 /**
@@ -118,6 +128,71 @@ export function validateCaseSemantics(data: unknown): ValidationResult {
   const dupFacts = findDuplicates(c.hiddenFacts.map((f) => f.id));
   if (dupFacts.length)
     issues.push({ path: 'hiddenFacts', message: `duplicate fact ids: ${dupFacts.join(', ')}` });
+
+  // Every disclose effect (action or rule) must reference a defined hidden fact.
+  const factIds = new Set(c.hiddenFacts.map((f) => f.id));
+  const checkEffects = (effects: EffectShape[], path: string) => {
+    for (const e of effects) {
+      if (e.op === 'disclose' && e.factId && !factIds.has(e.factId)) {
+        issues.push({ path, message: `disclose references unknown fact "${e.factId}"` });
+      }
+    }
+  };
+  for (const a of c.availableActions) checkEffects(a.effects ?? [], `availableActions/${a.id}`);
+  for (const r of c.transitionRules) checkEffects(r.effects ?? [], `transitionRules/${r.id}`);
+
+  // Result templates/assets: when the case declares resultTemplates, every
+  // resultTemplateId must resolve (legacy cases without the array keep
+  // free-form ids — explicit compatibility rule, see the schema description).
+  if (c.resultTemplates) {
+    const templateIds = new Set(c.resultTemplates.map((t) => t.id));
+    const dupTemplates = findDuplicates(c.resultTemplates.map((t) => t.id));
+    if (dupTemplates.length)
+      issues.push({
+        path: 'resultTemplates',
+        message: `duplicate template ids: ${dupTemplates.join(', ')}`,
+      });
+    for (const a of c.availableActions) {
+      if (a.resultTemplateId && !templateIds.has(a.resultTemplateId)) {
+        issues.push({
+          path: `availableActions/${a.id}/resultTemplateId`,
+          message: `unknown result template "${a.resultTemplateId}"`,
+        });
+      }
+    }
+    const assetIds = new Set((c.resultAssets ?? []).map((r) => r.id));
+    for (const t of c.resultTemplates) {
+      if (t.assetId && !assetIds.has(t.assetId)) {
+        issues.push({
+          path: `resultTemplates/${t.id}/assetId`,
+          message: `unknown result asset "${t.assetId}"`,
+        });
+      }
+    }
+  }
+  if (c.resultAssets) {
+    const dupAssets = findDuplicates(c.resultAssets.map((r) => r.id));
+    if (dupAssets.length)
+      issues.push({
+        path: 'resultAssets',
+        message: `duplicate asset ids: ${dupAssets.join(', ')}`,
+      });
+  }
+
+  // Production-facing cases (mvp_demo_approved or approved) must keep evidence
+  // traceability: every scoring criterion carries at least one evidence ref.
+  // The purely fictional regression case (not_reviewed) is exempt by design.
+  const reviewStatus = c.metadata?.clinicalReview?.status;
+  if (reviewStatus === 'mvp_demo_approved' || reviewStatus === 'approved') {
+    for (const s of c.scoringCriteria) {
+      if (!s.evidenceRefs || s.evidenceRefs.length === 0) {
+        issues.push({
+          path: `scoringCriteria/${s.id}/evidenceRefs`,
+          message: `a ${reviewStatus} case requires at least one evidence reference per criterion`,
+        });
+      }
+    }
+  }
 
   return { valid: issues.length === 0, issues };
 }

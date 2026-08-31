@@ -71,6 +71,16 @@
       "items": { "$ref": "#/$defs/terminalState" }
     },
     "debriefMetadata": { "$ref": "#/$defs/debriefMetadata" },
+    "resultTemplates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/resultTemplate" },
+      "description": "Learner-facing result texts for actions (resolved via actionDefinition.resultTemplateId). When this array is present, every non-null resultTemplateId in the case must resolve here; legacy cases without the array keep free-form template ids."
+    },
+    "resultAssets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/resultAsset" },
+      "description": "Visual artifacts an investigation result can reference (ECG now; X-ray/CT/ultrasound later). Generic by design — no modality-specific structure."
+    },
     "references": {
       "type": "array",
       "items": { "$ref": "#/$defs/reference" }
@@ -96,6 +106,10 @@
       ],
       "properties": {
         "title": { "type": "string", "minLength": 3 },
+        "clinicalVersion": {
+          "type": "string",
+          "description": "Human-readable clinical content version, e.g. '0.1-draft'. Distinct from the integer `version`: it communicates review maturity (implemented != clinically validated)."
+        },
         "chiefComplaint": { "type": "string", "minLength": 3 },
         "specialty": { "type": "string", "minLength": 2 },
         "estimatedMinutes": { "type": "integer", "minimum": 1, "maximum": 60 },
@@ -109,9 +123,13 @@
           "additionalProperties": false,
           "required": ["status", "reviewer", "date"],
           "properties": {
-            "status": { "enum": ["not_reviewed", "in_review", "approved"] },
+            "status": {
+              "enum": ["not_reviewed", "in_review", "mvp_demo_approved", "approved"],
+              "description": "'mvp_demo_approved' = the project owner authorized this DRAFT for internal/demo educational use only; clinical validation is still PENDING and the case is NOT clinically approved. Only 'approved' (a named clinician + date) means clinically validated."
+            },
             "reviewer": { "type": ["string", "null"] },
-            "date": { "type": ["string", "null"], "format": "date" }
+            "date": { "type": ["string", "null"], "format": "date" },
+            "notes": { "type": "string" }
           }
         },
         "fictional": {
@@ -347,7 +365,10 @@
       "properties": {
         "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
         "when": { "$ref": "#/$defs/conditionExpr" },
-        "outcome": { "enum": ["complete", "discharge", "admit", "death", "aborted"] },
+        "outcome": {
+          "enum": ["complete", "partial", "deteriorated", "discharge", "admit", "death", "aborted"],
+          "description": "Generic outcome vocabulary (no disease semantics): complete = intended endpoint reached; partial = intended endpoint reached in a degraded way (e.g. after deterioration); deteriorated = the case ended because the patient's condition failed out (non-death takeover endpoints); discharge/admit = disposition endpoints; death; aborted."
+        },
         "label": { "type": "string", "minLength": 1 }
       }
     },
@@ -373,6 +394,48 @@
         "label": { "type": "string", "minLength": 1 },
         "citation": { "type": "string", "minLength": 1 },
         "url": { "type": "string", "format": "uri" }
+      }
+    },
+    "resultTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Learner-facing result narrative. Must not reveal a diagnosis the learner is supposed to make unless the blueprint explicitly grants interpretation assistance."
+        },
+        "assetId": {
+          "type": ["string", "null"],
+          "description": "Optional resultAssets[].id this result lets the learner open (e.g. an ECG tracing)."
+        }
+      }
+    },
+    "resultAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "label", "provenance"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "kind": { "enum": ["image"] },
+        "label": { "type": "string", "minLength": 1 },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source", "license", "clinicalStatus"],
+          "properties": {
+            "source": { "type": "string", "minLength": 1 },
+            "license": { "type": "string", "minLength": 1 },
+            "attribution": { "type": ["string", "null"] },
+            "clinicalStatus": {
+              "enum": ["placeholder_replacement_required", "clinician_verified"],
+              "description": "A diagnostic asset is a PLACEHOLDER until a clinician has verified it shows exactly the intended pattern."
+            },
+            "verifiedBy": { "type": ["string", "null"] }
+          }
+        }
       }
     }
   }
