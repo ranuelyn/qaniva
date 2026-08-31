@@ -1,0 +1,224 @@
+{
+  "replayHash": "121e258f50a02eb5e2394a3b1dbf46b4808d0fe0215e6eb76e2a81cf40bbdd40",
+  "finalStateHash": "97cb5ee0d14f46b0ba49da01ab8b7c49dc929bc31360b2cf63a6d4711055ac35",
+  "outcome": "complete",
+  "terminalStateId": "observed_in_ed",
+  "simTimeSec": 410,
+  "vitals": {
+    "hr": 108,
+    "sbpMmHg": 110,
+    "dbpMmHg": 66,
+    "spo2": 99,
+    "rrPerMin": 20,
+    "tempC": 36.9
+  },
+  "circulation": "poor_perfusion",
+  "neuro": "alert",
+  "flags": [
+    "antihistamine_given",
+    "dispo_obs",
+    "epi_im_given",
+    "fluids_given",
+    "iv_access",
+    "labs_sent",
+    "monitor_on",
+    "neb_given",
+    "o2_given",
+    "positioned",
+    "responding",
+    "steroid_given",
+    "tryptase_sent"
+  ],
+  "disclosedFacts": [
+    "hx_asthma_risk",
+    "hx_exposure",
+    "hx_known_allergy",
+    "hx_med_negatives"
+  ],
+  "score": {
+    "total": 80,
+    "critical": 30,
+    "timing": 10,
+    "efficiency": 0,
+    "treatment": 30,
+    "disposition": 10,
+    "missedCriterionIds": []
+  },
+  "timeline": [
+    {
+      "seq": 0,
+      "simTimeSec": 45,
+      "actionId": "focused_history",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "c5832cdf2e45742bc7d21fb9a511c9776b26ec59c3548ca2345fb53080fe111d",
+      "afterHash": "fd304d55f911e417a769f5840294067438ed3634d2d54773de25855fab962866"
+    },
+    {
+      "seq": 1,
+      "simTimeSec": 65,
+      "actionId": "attach_monitor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "fd304d55f911e417a769f5840294067438ed3634d2d54773de25855fab962866",
+      "afterHash": "249e7395d3525167aa7b36384cfe673dc26bc36ee9e8940b189b4ec88d51a286"
+    },
+    {
+      "seq": 2,
+      "simTimeSec": 85,
+      "actionId": "give_epinephrine_im",
+      "classification": "Correct",
+      "scoreDelta": 30,
+      "triggeredRuleIds": [],
+      "beforeHash": "249e7395d3525167aa7b36384cfe673dc26bc36ee9e8940b189b4ec88d51a286",
+      "afterHash": "2bf845f9b13effe9880594094f960783765dcfb1dea91d9744c256eb90e6cce6"
+    },
+    {
+      "seq": 3,
+      "simTimeSec": 100,
+      "actionId": "position_supine_legs_raised",
+      "classification": "Correct",
+      "scoreDelta": 4,
+      "triggeredRuleIds": [],
+      "beforeHash": "2bf845f9b13effe9880594094f960783765dcfb1dea91d9744c256eb90e6cce6",
+      "afterHash": "3017d0a5c01e49037ec879747f6f5664034cb56704a39b1b231c74569227c9ce"
+    },
+    {
+      "seq": 4,
+      "simTimeSec": 115,
+      "actionId": "give_oxygen",
+      "classification": "Correct",
+      "scoreDelta": 8,
+      "triggeredRuleIds": [],
+      "beforeHash": "3017d0a5c01e49037ec879747f6f5664034cb56704a39b1b231c74569227c9ce",
+      "afterHash": "52731540915b0e7ba3468da90caeae7a4e091656d49b28ccf7d20d1afe3b5295"
+    },
+    {
+      "seq": 5,
+      "simTimeSec": 175,
+      "actionId": "iv_access",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [
+        "epi_response"
+      ],
+      "beforeHash": "52731540915b0e7ba3468da90caeae7a4e091656d49b28ccf7d20d1afe3b5295",
+      "afterHash": "9a44970c83ae1219d1f77c21d21590355318cdc40b1e1ff33ea081f9960d017c"
+    },
+    {
+      "seq": 6,
+      "simTimeSec": 205,
+      "actionId": "give_fluid_bolus",
+      "classification": "Correct",
+      "scoreDelta": 8,
+      "triggeredRuleIds": [],
+      "beforeHash": "9a44970c83ae1219d1f77c21d21590355318cdc40b1e1ff33ea081f9960d017c",
+      "afterHash": "1385241bcd45bbc0f964ef6fe9c58a49e4c24da132527901eb1d480052d736af"
+    },
+    {
+      "seq": 7,
+      "simTimeSec": 220,
+      "actionId": "ask_medications",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "1385241bcd45bbc0f964ef6fe9c58a49e4c24da132527901eb1d480052d736af",
+      "afterHash": "d0f0f90dd77c288148c842eab1b361f1b317e5fd265b168668992ed1b9d1ab20"
+    },
+    {
+      "seq": 8,
+      "simTimeSec": 235,
+      "actionId": "give_antihistamine",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "d0f0f90dd77c288148c842eab1b361f1b317e5fd265b168668992ed1b9d1ab20",
+      "afterHash": "279306d92b0005d3d044aff4564ab91b1a3cb675d595f393f6721a0ffa8bb2fe"
+    },
+    {
+      "seq": 9,
+      "simTimeSec": 250,
+      "actionId": "give_steroid",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "279306d92b0005d3d044aff4564ab91b1a3cb675d595f393f6721a0ffa8bb2fe",
+      "afterHash": "f026bf6374fc0bf5684d56a12ddd442f112630ac603a32e386303d4b341c7747"
+    },
+    {
+      "seq": 10,
+      "simTimeSec": 270,
+      "actionId": "give_nebulized_salbutamol",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "f026bf6374fc0bf5684d56a12ddd442f112630ac603a32e386303d4b341c7747",
+      "afterHash": "b6d14f3d38def61b9ff74b558f1c6f3dadcc7aeb9e81662558e729f745f3eb37"
+    },
+    {
+      "seq": 11,
+      "simTimeSec": 290,
+      "actionId": "order_tryptase",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "b6d14f3d38def61b9ff74b558f1c6f3dadcc7aeb9e81662558e729f745f3eb37",
+      "afterHash": "b240d3f59c20c348664ed88ac5612dc11983fea802f77560218d693ced30fc60"
+    },
+    {
+      "seq": 12,
+      "simTimeSec": 310,
+      "actionId": "order_baseline_labs",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "b240d3f59c20c348664ed88ac5612dc11983fea802f77560218d693ced30fc60",
+      "afterHash": "ab8554b29ac39de930950672afeb4a810b8124590dc8ed4ac49fe6e54ce61c7d"
+    },
+    {
+      "seq": 13,
+      "simTimeSec": 340,
+      "actionId": "exam_lungs",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [
+        "fluid_response"
+      ],
+      "beforeHash": "ab8554b29ac39de930950672afeb4a810b8124590dc8ed4ac49fe6e54ce61c7d",
+      "afterHash": "1eb7b0f9ca48573813e2edde785202a9936a81f3b2ee4217f607211fb75d4b0c"
+    },
+    {
+      "seq": 14,
+      "simTimeSec": 360,
+      "actionId": "give_epinephrine_im",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "1eb7b0f9ca48573813e2edde785202a9936a81f3b2ee4217f607211fb75d4b0c",
+      "afterHash": "7c749ad2fdba262fe9dd85191637128528b6a22a11781598903ae3c9b9ee67c5"
+    },
+    {
+      "seq": 15,
+      "simTimeSec": 390,
+      "actionId": "exam_airway_skin",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "7c749ad2fdba262fe9dd85191637128528b6a22a11781598903ae3c9b9ee67c5",
+      "afterHash": "d95fde54147151eda092de1d4a612660e5b481a57953c25df42a4c10bcd824cb"
+    },
+    {
+      "seq": 16,
+      "simTimeSec": 410,
+      "actionId": "disposition_observation",
+      "classification": "Correct",
+      "scoreDelta": 10,
+      "triggeredRuleIds": [],
+      "beforeHash": "d95fde54147151eda092de1d4a612660e5b481a57953c25df42a4c10bcd824cb",
+      "afterHash": "97cb5ee0d14f46b0ba49da01ab8b7c49dc929bc31360b2cf63a6d4711055ac35"
+    }
+  ],
+  "rejections": []
+}

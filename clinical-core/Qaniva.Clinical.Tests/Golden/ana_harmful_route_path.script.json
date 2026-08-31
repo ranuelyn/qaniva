@@ -1,0 +1,18 @@
+{
+  "caseId": "anaphylaxis_food_001",
+  "caseVersion": 1,
+  "seed": 20260901,
+  "steps": [
+    { "action": "attach_monitor" },
+    { "action": "exam_airway_skin" },
+    { "action": "give_epinephrine_iv_push" },
+    { "action": "give_epinephrine_im" },
+    { "action": "give_oxygen" },
+    { "action": "position_supine_legs_raised" },
+    { "action": "iv_access" },
+    { "action": "give_fluid_bolus" },
+    { "action": "exam_lungs" },
+    { "action": "focused_history" },
+    { "action": "disposition_observation" }
+  ]
+}

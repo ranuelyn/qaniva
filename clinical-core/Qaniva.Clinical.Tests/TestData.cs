@@ -21,6 +21,10 @@ internal static class TestData
 
     public static CaseDefinition StemiCase() => CaseLoader.FromFile(StemiCasePath);
 
+    public static string AnaphylaxisCasePath => Path.Combine(BaseDir, "TestData", "anaphylaxis_case.json");
+
+    public static CaseDefinition AnaphylaxisCase() => CaseLoader.FromFile(AnaphylaxisCasePath);
+
     public static AttemptScript LoadScript(string fileName)
     {
         var json = File.ReadAllText(Path.Combine(GoldenDir, fileName));

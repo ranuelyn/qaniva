@@ -1,0 +1,140 @@
+# Qaniva evidence ledger — anaphylaxis_food_001 (MVP demo approved; clinical validation PENDING)
+# Concise claims + references only. `reviewRequired: true` = a clinician must
+# verify against the primary source before any clinical-approval claim.
+
+meta:
+  caseId: anaphylaxis_food_001
+  createdAt: '2026-08-31'
+  status: mvp_demo_approved_validation_pending
+  primarySources:
+    - id: WAO2020
+      title: 'World Allergy Organization Anaphylaxis Guidance 2020'
+      organization: 'World Allergy Organization'
+      url: 'https://www.worldallergyorganizationjournal.org/article/S1939-4551(20)30375-6/fulltext'
+      publicationYear: 2020
+    - id: RCUK2021
+      title: 'Emergency treatment of anaphylaxis — Guidelines for healthcare providers'
+      organization: 'Resuscitation Council UK'
+      url: 'https://www.resus.org.uk/library/additional-guidance/guidance-anaphylaxis'
+      publicationYear: 2021
+    - id: JTFPP2023
+      title: 'Anaphylaxis: a 2023 practice parameter update (+ 2020 GRADE guideline)'
+      organization: 'AAAAI/ACAAI Joint Task Force'
+      url: 'https://www.annallergy.org/article/S1081-1206(23)01304-2/fulltext'
+      publicationYear: 2023
+    - id: EAACI2021
+      title: 'EAACI guidelines: Anaphylaxis (2021 update)'
+      organization: 'EAACI'
+      publicationYear: 2021
+    - id: AID2018
+      title: 'Anafilaksi: Türk Ulusal Rehberi 2018'
+      organization: 'Türkiye Ulusal Alerji ve Klinik İmmünoloji Derneği (AİD)'
+      url: 'https://www.aai.org.tr/pdf.php?id=103'
+      publicationYear: 2018
+
+records:
+  - id: EV-ANA-001
+    topic: recognition
+    claim: >-
+      Anaphylaxis is recognized clinically: acute onset with skin/mucosal
+      involvement plus respiratory compromise and/or reduced BP (or, after a
+      likely allergen, hypotension/bronchospasm/laryngeal involvement alone).
+    source: [WAO2020, JTFPP2023]
+    reviewRequired: true
+  - id: EV-ANA-002
+    topic: recognition
+    claim: 'No confirmatory test exists in the acute phase; treat on clinical grounds.'
+    source: [WAO2020]
+    reviewRequired: true
+  - id: EV-ANA-010
+    topic: treatment.epinephrine
+    claim: >-
+      IM epinephrine into the anterolateral thigh is the first-line treatment
+      and must not be delayed; adult IM dose 0.5 mg (RCUK/EAACI/AID) vs 0.3 mg
+      (US parameter) — divergence DA-1.
+    source: [RCUK2021, EAACI2021, AID2018, JTFPP2023]
+    reviewRequired: true
+  - id: EV-ANA-011
+    topic: treatment.epinephrine
+    claim: 'Delayed epinephrine is associated with worse outcomes and biphasic reactions.'
+    source: [JTFPP2023, WAO2020]
+    reviewRequired: true
+  - id: EV-ANA-012
+    topic: treatment.reassessment
+    claim: >-
+      Reassess airway/breathing/circulation after the dose; repeat IM
+      epinephrine after ~5 minutes if there is no improvement.
+    source: [RCUK2021, JTFPP2023]
+    reviewRequired: true
+  - id: EV-ANA-013
+    topic: monitoring
+    claim: 'Continuous monitoring (ECG, BP, SpO2) as early as possible in suspected anaphylaxis.'
+    source: [RCUK2021]
+    reviewRequired: true
+  - id: EV-ANA-015
+    topic: treatment.epinephrine_route
+    claim: >-
+      Bolus IV epinephrine in a patient with a pulse risks arrhythmia and
+      hypertensive surge; IV epinephrine belongs to dilute infusion in
+      refractory anaphylaxis with monitoring — undiluted IV push is a known
+      dangerous error.
+    source: [RCUK2021, JTFPP2023]
+    reviewRequired: true
+  - id: EV-ANA-016
+    topic: supportive
+    claim: 'IV access early for fluid therapy and possible refractory management.'
+    source: [RCUK2021]
+    reviewRequired: true
+  - id: EV-ANA-020
+    topic: supportive.oxygen
+    claim: 'Give high-flow oxygen when hypoxic/respiratory compromise is present.'
+    source: [RCUK2021, WAO2020]
+    reviewRequired: true
+  - id: EV-ANA-021
+    topic: supportive.fluids
+    claim: 'IV crystalloid bolus for hypotension/shock in anaphylaxis.'
+    source: [RCUK2021, WAO2020]
+    reviewRequired: true
+  - id: EV-ANA-022
+    topic: supportive.positioning
+    claim: >-
+      Position supine (legs raised if hypotensive); avoid sudden
+      standing/upright posture during the reaction.
+    source: [WAO2020, RCUK2021]
+    reviewRequired: true
+  - id: EV-ANA-023
+    topic: adjuncts.antihistamines
+    claim: >-
+      Antihistamines are third-line adjuncts for skin symptoms; they do not
+      treat airway/circulatory compromise and never substitute for epinephrine.
+    source: [RCUK2021, JTFPP2023]
+    reviewRequired: true
+  - id: EV-ANA-024
+    topic: adjuncts.steroids
+    claim: >-
+      Corticosteroids are no longer recommended for routine acute treatment
+      (RCUK) and do not prevent biphasic reactions (JTFPP GRADE) — divergence
+      DA-2 in wording strength.
+    source: [RCUK2021, JTFPP2023]
+    reviewRequired: true
+  - id: EV-ANA-025
+    topic: investigations.tryptase
+    claim: >-
+      Timed serum tryptase supports the diagnosis retrospectively; drawing it
+      must never delay treatment.
+    source: [RCUK2021, WAO2020]
+    reviewRequired: true
+  - id: EV-ANA-030
+    topic: disposition
+    claim: >-
+      Observe after resolution (duration individualized; extended observation
+      with severe reactions or biphasic risk factors); premature discharge
+      risks a biphasic reaction. Observation vs admission both acceptable
+      depending on severity/resources — divergence DA-3.
+    source: [JTFPP2023, RCUK2021]
+    reviewRequired: true
+  - id: EV-ANA-031
+    topic: risk_factors
+    claim: 'Asthma is a risk factor for severe/fatal anaphylaxis.'
+    source: [WAO2020]
+    reviewRequired: true

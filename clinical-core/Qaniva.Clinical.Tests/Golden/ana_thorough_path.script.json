@@ -1,0 +1,24 @@
+{
+  "caseId": "anaphylaxis_food_001",
+  "caseVersion": 1,
+  "seed": 20260901,
+  "steps": [
+    { "action": "focused_history" },
+    { "action": "attach_monitor" },
+    { "action": "give_epinephrine_im" },
+    { "action": "position_supine_legs_raised" },
+    { "action": "give_oxygen" },
+    { "action": "iv_access" },
+    { "action": "give_fluid_bolus" },
+    { "action": "ask_medications" },
+    { "action": "give_antihistamine" },
+    { "action": "give_steroid" },
+    { "action": "give_nebulized_salbutamol" },
+    { "action": "order_tryptase" },
+    { "action": "order_baseline_labs" },
+    { "action": "exam_lungs" },
+    { "action": "give_epinephrine_im" },
+    { "action": "exam_airway_skin" },
+    { "action": "disposition_observation" }
+  ]
+}

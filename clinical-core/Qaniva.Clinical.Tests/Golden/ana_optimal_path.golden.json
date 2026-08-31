@@ -1,0 +1,136 @@
+{
+  "replayHash": "d85648ba241e3de77fc89d16265fb1eb767e972f9a608b079a34551f0cb3df3e",
+  "finalStateHash": "f8994fab1b4ece8bc801d6f7f5a176bf22a9f9d0547153f72f494c7cf1fbbbbe",
+  "outcome": "complete",
+  "terminalStateId": "observed_in_ed",
+  "simTimeSec": 255,
+  "vitals": {
+    "hr": 108,
+    "sbpMmHg": 102,
+    "dbpMmHg": 62,
+    "spo2": 99,
+    "rrPerMin": 20,
+    "tempC": 36.9
+  },
+  "circulation": "poor_perfusion",
+  "neuro": "alert",
+  "flags": [
+    "dispo_obs",
+    "epi_im_given",
+    "fluids_given",
+    "iv_access",
+    "monitor_on",
+    "o2_given",
+    "positioned",
+    "responding"
+  ],
+  "disclosedFacts": [
+    "hx_asthma_risk",
+    "hx_exposure",
+    "hx_known_allergy"
+  ],
+  "score": {
+    "total": 80,
+    "critical": 30,
+    "timing": 10,
+    "efficiency": 0,
+    "treatment": 30,
+    "disposition": 10,
+    "missedCriterionIds": []
+  },
+  "timeline": [
+    {
+      "seq": 0,
+      "simTimeSec": 45,
+      "actionId": "focused_history",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "c5832cdf2e45742bc7d21fb9a511c9776b26ec59c3548ca2345fb53080fe111d",
+      "afterHash": "fd304d55f911e417a769f5840294067438ed3634d2d54773de25855fab962866"
+    },
+    {
+      "seq": 1,
+      "simTimeSec": 65,
+      "actionId": "attach_monitor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "fd304d55f911e417a769f5840294067438ed3634d2d54773de25855fab962866",
+      "afterHash": "249e7395d3525167aa7b36384cfe673dc26bc36ee9e8940b189b4ec88d51a286"
+    },
+    {
+      "seq": 2,
+      "simTimeSec": 85,
+      "actionId": "give_epinephrine_im",
+      "classification": "Correct",
+      "scoreDelta": 30,
+      "triggeredRuleIds": [],
+      "beforeHash": "249e7395d3525167aa7b36384cfe673dc26bc36ee9e8940b189b4ec88d51a286",
+      "afterHash": "2bf845f9b13effe9880594094f960783765dcfb1dea91d9744c256eb90e6cce6"
+    },
+    {
+      "seq": 3,
+      "simTimeSec": 100,
+      "actionId": "position_supine_legs_raised",
+      "classification": "Correct",
+      "scoreDelta": 4,
+      "triggeredRuleIds": [],
+      "beforeHash": "2bf845f9b13effe9880594094f960783765dcfb1dea91d9744c256eb90e6cce6",
+      "afterHash": "3017d0a5c01e49037ec879747f6f5664034cb56704a39b1b231c74569227c9ce"
+    },
+    {
+      "seq": 4,
+      "simTimeSec": 115,
+      "actionId": "give_oxygen",
+      "classification": "Correct",
+      "scoreDelta": 8,
+      "triggeredRuleIds": [],
+      "beforeHash": "3017d0a5c01e49037ec879747f6f5664034cb56704a39b1b231c74569227c9ce",
+      "afterHash": "52731540915b0e7ba3468da90caeae7a4e091656d49b28ccf7d20d1afe3b5295"
+    },
+    {
+      "seq": 5,
+      "simTimeSec": 175,
+      "actionId": "iv_access",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [
+        "epi_response"
+      ],
+      "beforeHash": "52731540915b0e7ba3468da90caeae7a4e091656d49b28ccf7d20d1afe3b5295",
+      "afterHash": "9a44970c83ae1219d1f77c21d21590355318cdc40b1e1ff33ea081f9960d017c"
+    },
+    {
+      "seq": 6,
+      "simTimeSec": 205,
+      "actionId": "give_fluid_bolus",
+      "classification": "Correct",
+      "scoreDelta": 8,
+      "triggeredRuleIds": [],
+      "beforeHash": "9a44970c83ae1219d1f77c21d21590355318cdc40b1e1ff33ea081f9960d017c",
+      "afterHash": "1385241bcd45bbc0f964ef6fe9c58a49e4c24da132527901eb1d480052d736af"
+    },
+    {
+      "seq": 7,
+      "simTimeSec": 235,
+      "actionId": "exam_lungs",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "1385241bcd45bbc0f964ef6fe9c58a49e4c24da132527901eb1d480052d736af",
+      "afterHash": "26e6cbbcc911aae5d658b1abec19509588466287a592ee980686ed5f2432fab4"
+    },
+    {
+      "seq": 8,
+      "simTimeSec": 255,
+      "actionId": "disposition_observation",
+      "classification": "Correct",
+      "scoreDelta": 10,
+      "triggeredRuleIds": [],
+      "beforeHash": "26e6cbbcc911aae5d658b1abec19509588466287a592ee980686ed5f2432fab4",
+      "afterHash": "f8994fab1b4ece8bc801d6f7f5a176bf22a9f9d0547153f72f494c7cf1fbbbbe"
+    }
+  ],
+  "rejections": []
+}

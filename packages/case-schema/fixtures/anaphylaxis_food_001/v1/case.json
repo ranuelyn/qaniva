@@ -1,0 +1,711 @@
+{
+  "schemaVersion": 1,
+  "id": "anaphylaxis_food_001",
+  "version": 1,
+  "metadata": {
+    "title": "Sudden rash and wheeze after lunch",
+    "clinicalVersion": "0.1-draft",
+    "chiefComplaint": "Rash, facial swelling and difficulty breathing for 25 minutes",
+    "specialty": "emergency_medicine",
+    "estimatedMinutes": 8,
+    "authors": ["qaniva-clinical-content (AI-assisted, evidence-ledger-backed)"],
+    "clinicalReview": {
+      "status": "mvp_demo_approved",
+      "reviewer": null,
+      "date": null,
+      "notes": "MVP DEMO APPROVED by the project owner for INTERNAL/DEMO educational use only. CLINICAL VALIDATION: PENDING — docs/clinical/cases/anaphylaxis/REVIEW.md is unsigned. Every clinical value traces to docs/clinical/cases/anaphylaxis/evidence.yaml (EV-ANA-… ids) and retains review-pending provenance. This case must not be represented as clinically approved."
+    },
+    "fictional": true
+  },
+  "learningObjectives": [
+    "Recognize anaphylaxis clinically and give intramuscular epinephrine first, without delay (EV-ANA-001, EV-ANA-010, EV-ANA-011)",
+    "Choose the safe epinephrine route — IM anterolateral thigh, never an undiluted IV bolus in a patient with a pulse (EV-ANA-015)",
+    "Support airway, breathing and circulation: positioning, high-flow oxygen, IV fluid bolus for hypotension (EV-ANA-020, EV-ANA-021, EV-ANA-022)",
+    "Reassess after the dose and treat adjuncts as adjuncts — antihistamines and steroids never substitute for epinephrine (EV-ANA-012, EV-ANA-023, EV-ANA-024)",
+    "Choose a biphasic-risk-aware disposition: observation or admission, never immediate discharge (EV-ANA-030)"
+  ],
+  "presentationProfile": {
+    "roomKey": "ed_resus_v1",
+    "patientVariant": "adult_rigged_v1",
+    "animationStateAtStart": "distress_mild",
+    "monitorLayout": "ed_standard",
+    "requiredProps": ["iv_pole", "crash_cart", "oxygen_supply"],
+    "cameraPreset": "bedside_01",
+    "audioProfile": "room_ambience_low"
+  },
+  "patient": {
+    "displayName": "Elif D. (fictional)",
+    "ageYears": 24,
+    "sex": "female",
+    "weightKg": 61,
+    "persona": "frightened, itchy, speaking in short sentences between wheezes",
+    "backgroundFacts": [
+      "Developed a rash, lip swelling and wheeze about 25 minutes after eating at a restaurant",
+      "Brought straight to resus from triage"
+    ]
+  },
+  "initialState": {
+    "vitals": {
+      "hr": 118,
+      "sbpMmHg": 88,
+      "dbpMmHg": 54,
+      "spo2": 92,
+      "rrPerMin": 26,
+      "tempC": 36.9
+    },
+    "rhythm": "sinus_tachycardia",
+    "airway": "at_risk",
+    "breathing": "labored",
+    "circulation": "poor_perfusion",
+    "neuro": "alert",
+    "painScore": 2,
+    "flags": []
+  },
+  "hiddenFacts": [
+    {
+      "id": "hx_exposure",
+      "disclosure": "on_ask",
+      "text": "She ate a noodle dish with a sauce at a restaurant ~25 minutes ago; the itching and rash started within minutes of eating."
+    },
+    {
+      "id": "hx_known_allergy",
+      "disclosure": "on_ask",
+      "text": "She has a known peanut allergy diagnosed in childhood. She usually carries an epinephrine autoinjector but left it at home today."
+    },
+    {
+      "id": "hx_asthma_risk",
+      "disclosure": "on_ask",
+      "text": "She has mild asthma (salbutamol as needed) — a risk factor for severe reactions."
+    },
+    {
+      "id": "hx_med_negatives",
+      "disclosure": "on_ask",
+      "text": "No beta-blocker or ACE-inhibitor use. No other regular medication. No previous reaction this severe."
+    },
+    {
+      "id": "tryptase_result",
+      "disclosure": "on_order_result",
+      "text": "Serum tryptase (drawn during the acute phase): elevated — supports mast-cell activation. A convalescent sample is recommended for comparison."
+    },
+    {
+      "id": "labs_result",
+      "disclosure": "on_order_result",
+      "text": "Baseline labs: no critical abnormalities reported."
+    }
+  ],
+  "availableActions": [
+    {
+      "id": "focused_history",
+      "type": "communication",
+      "label": "Take a focused history",
+      "timeCostSec": 45,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [
+        { "op": "disclose", "factId": "hx_exposure" },
+        { "op": "disclose", "factId": "hx_known_allergy" },
+        { "op": "disclose", "factId": "hx_asthma_risk" }
+      ],
+      "resultTemplateId": null,
+      "criterionIds": ["c_focused_history"]
+    },
+    {
+      "id": "ask_medications",
+      "type": "communication",
+      "label": "Ask about medications and prior reactions",
+      "timeCostSec": 15,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "disclose", "factId": "hx_med_negatives" }],
+      "resultTemplateId": null,
+      "criterionIds": []
+    },
+    {
+      "id": "reassure_patient",
+      "type": "communication",
+      "label": "Explain and reassure",
+      "timeCostSec": 20,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "reassured" }],
+      "resultTemplateId": "reassured_note",
+      "criterionIds": []
+    },
+    {
+      "id": "attach_monitor",
+      "type": "examine",
+      "label": "Attach monitor + BP + SpO2",
+      "timeCostSec": 20,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "monitor_on" }],
+      "resultTemplateId": "monitor_attached",
+      "criterionIds": ["c_early_monitoring"]
+    },
+    {
+      "id": "exam_airway_skin",
+      "type": "examine",
+      "label": "Examine airway and skin",
+      "timeCostSec": 30,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [],
+      "resultTemplateId": "exam_airway_findings",
+      "criterionIds": ["c_reassess_after_epi"],
+      "repeatable": true
+    },
+    {
+      "id": "exam_lungs",
+      "type": "examine",
+      "label": "Lung examination",
+      "timeCostSec": 30,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [],
+      "resultTemplateId": "exam_lungs_findings",
+      "criterionIds": ["c_reassess_after_epi"],
+      "repeatable": true
+    },
+    {
+      "id": "iv_access",
+      "type": "procedure",
+      "label": "Obtain IV access",
+      "timeCostSec": 60,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "iv_access" }],
+      "resultTemplateId": null,
+      "criterionIds": ["c_iv_access"]
+    },
+    {
+      "id": "order_tryptase",
+      "type": "order",
+      "label": "Send serum tryptase",
+      "timeCostSec": 20,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "tryptase_sent" }],
+      "resultTemplateId": "tryptase_pending",
+      "criterionIds": []
+    },
+    {
+      "id": "order_baseline_labs",
+      "type": "order",
+      "label": "Send baseline labs",
+      "timeCostSec": 20,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "labs_sent" }],
+      "resultTemplateId": "labs_sent_note",
+      "criterionIds": []
+    },
+    {
+      "id": "give_epinephrine_im",
+      "type": "medication",
+      "label": "Epinephrine 0.5 mg IM — anterolateral thigh",
+      "timeCostSec": 20,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "epi_im_given" }],
+      "resultTemplateId": "epi_im_given_note",
+      "criterionIds": ["c_epi_im_timely"],
+      "repeatable": true
+    },
+    {
+      "id": "give_epinephrine_iv_push",
+      "type": "medication",
+      "label": "Epinephrine 1 mg IV push",
+      "timeCostSec": 15,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "epi_iv_given" }],
+      "resultTemplateId": "epi_iv_given_note",
+      "criterionIds": ["c_iv_bolus_epi"]
+    },
+    {
+      "id": "give_oxygen",
+      "type": "medication",
+      "label": "High-flow oxygen",
+      "timeCostSec": 15,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [
+        { "op": "adjust", "target": "vitals.spo2", "value": 3 },
+        { "op": "setFlag", "flag": "o2_given" }
+      ],
+      "resultTemplateId": "oxygen_given_note",
+      "criterionIds": ["c_oxygen_support"]
+    },
+    {
+      "id": "give_fluid_bolus",
+      "type": "medication",
+      "label": "IV crystalloid bolus",
+      "timeCostSec": 30,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": ["flag('iv_access')"],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "fluids_given" }],
+      "resultTemplateId": "fluids_given_note",
+      "criterionIds": ["c_fluid_bolus"]
+    },
+    {
+      "id": "position_supine_legs_raised",
+      "type": "procedure",
+      "label": "Lie flat, raise the legs",
+      "timeCostSec": 15,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "positioned" }],
+      "resultTemplateId": "positioned_note",
+      "criterionIds": ["c_positioning"]
+    },
+    {
+      "id": "give_antihistamine",
+      "type": "medication",
+      "label": "Antihistamine IV (adjunct)",
+      "timeCostSec": 15,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "antihistamine_given" }],
+      "resultTemplateId": "antihistamine_note",
+      "criterionIds": []
+    },
+    {
+      "id": "give_steroid",
+      "type": "medication",
+      "label": "Corticosteroid IV (adjunct)",
+      "timeCostSec": 15,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "steroid_given" }],
+      "resultTemplateId": "steroid_note",
+      "criterionIds": []
+    },
+    {
+      "id": "give_nebulized_salbutamol",
+      "type": "medication",
+      "label": "Salbutamol nebulizer (for wheeze)",
+      "timeCostSec": 20,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "neb_given" }],
+      "resultTemplateId": "neb_note",
+      "criterionIds": []
+    },
+    {
+      "id": "disposition_observation",
+      "type": "disposition",
+      "label": "Observe in ED (4–6 h monitoring)",
+      "timeCostSec": 20,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": ["flag('epi_im_given')"],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "dispo_obs" }],
+      "resultTemplateId": null,
+      "criterionIds": ["c_disposition"]
+    },
+    {
+      "id": "disposition_admit",
+      "type": "disposition",
+      "label": "Admit for extended monitoring",
+      "timeCostSec": 20,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": ["flag('epi_im_given')"],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "dispo_admit" }],
+      "resultTemplateId": null,
+      "criterionIds": ["c_disposition"]
+    },
+    {
+      "id": "disposition_discharge_early",
+      "type": "disposition",
+      "label": "Discharge home now",
+      "timeCostSec": 20,
+      "visibility": "always",
+      "visibleWhen": null,
+      "preconditions": [],
+      "params": [],
+      "effects": [{ "op": "setFlag", "flag": "discharged" }],
+      "resultTemplateId": null,
+      "criterionIds": []
+    }
+  ],
+  "transitionRules": [
+    {
+      "id": "iv_epi_surge",
+      "when": "flag('epi_iv_given')",
+      "priority": 210,
+      "once": true,
+      "delaySec": 0,
+      "effects": [
+        { "op": "adjust", "target": "vitals.hr", "value": 38 },
+        { "op": "adjust", "target": "vitals.sbpMmHg", "value": 30 }
+      ],
+      "presentationCue": null,
+      "debriefText": "Undiluted IV bolus epinephrine caused a heart-rate and blood-pressure surge — IM dosing into the thigh is the safe route in a patient with a pulse.",
+      "terminalState": null
+    },
+    {
+      "id": "epi_response",
+      "when": "flag('epi_im_given')",
+      "priority": 150,
+      "once": true,
+      "delaySec": 60,
+      "effects": [
+        { "op": "adjust", "target": "vitals.sbpMmHg", "value": 14 },
+        { "op": "adjust", "target": "vitals.dbpMmHg", "value": 8 },
+        { "op": "adjust", "target": "vitals.spo2", "value": 4 },
+        { "op": "adjust", "target": "vitals.hr", "value": -10 },
+        { "op": "adjust", "target": "vitals.rrPerMin", "value": -6 },
+        { "op": "setEnum", "target": "breathing", "value": "spontaneous" },
+        { "op": "setEnum", "target": "airway", "value": "patent" },
+        { "op": "setFlag", "flag": "responding" }
+      ],
+      "presentationCue": "recovery",
+      "debriefText": "Intramuscular epinephrine took effect — the breathing eased and the blood pressure recovered.",
+      "terminalState": null
+    },
+    {
+      "id": "fluid_response",
+      "when": "flag('fluids_given')",
+      "priority": 140,
+      "once": true,
+      "delaySec": 120,
+      "effects": [
+        { "op": "adjust", "target": "vitals.sbpMmHg", "value": 8 },
+        { "op": "adjust", "target": "vitals.dbpMmHg", "value": 4 }
+      ],
+      "presentationCue": null,
+      "debriefText": null,
+      "terminalState": null
+    },
+    {
+      "id": "t1_reaction_worsens",
+      "when": "simTimeSec >= 360 && !flag('epi_im_given') && !flag('peri_arrest')",
+      "priority": 100,
+      "once": true,
+      "delaySec": 0,
+      "effects": [
+        { "op": "adjust", "target": "vitals.spo2", "value": -6 },
+        { "op": "adjust", "target": "vitals.hr", "value": 14 },
+        { "op": "adjust", "target": "vitals.sbpMmHg", "value": -16 },
+        { "op": "adjust", "target": "vitals.dbpMmHg", "value": -8 },
+        { "op": "adjust", "target": "vitals.rrPerMin", "value": 6 },
+        { "op": "setFlag", "flag": "deteriorated" }
+      ],
+      "presentationCue": "distress_severe",
+      "debriefText": "Epinephrine was not given in time — the airway swelling and bronchospasm progressed.",
+      "terminalState": null
+    },
+    {
+      "id": "t2_peri_arrest",
+      "when": "simTimeSec >= 780 && !flag('epi_im_given')",
+      "priority": 200,
+      "once": true,
+      "delaySec": 0,
+      "effects": [
+        { "op": "setEnum", "target": "airway", "value": "obstructed" },
+        { "op": "setEnum", "target": "breathing", "value": "apneic" },
+        { "op": "setEnum", "target": "circulation", "value": "arrest" },
+        { "op": "setEnum", "target": "neuro", "value": "unresponsive" },
+        { "op": "setFlag", "flag": "peri_arrest" }
+      ],
+      "presentationCue": "arrest",
+      "debriefText": "Untreated anaphylaxis progressed to airway obstruction and cardiovascular collapse — the resus team takes over.",
+      "terminalState": "peri_arrest_takeover"
+    },
+    {
+      "id": "tryptase_returns",
+      "when": "flag('tryptase_sent')",
+      "priority": 20,
+      "once": true,
+      "delaySec": 900,
+      "effects": [
+        { "op": "disclose", "factId": "tryptase_result" },
+        { "op": "setFlag", "flag": "tryptase_resulted" }
+      ],
+      "presentationCue": null,
+      "debriefText": null,
+      "terminalState": null
+    },
+    {
+      "id": "labs_return",
+      "when": "flag('labs_sent')",
+      "priority": 20,
+      "once": true,
+      "delaySec": 600,
+      "effects": [{ "op": "disclose", "factId": "labs_result" }],
+      "presentationCue": null,
+      "debriefText": null,
+      "terminalState": null
+    }
+  ],
+  "scoringCriteria": [
+    {
+      "id": "c_epi_im_timely",
+      "label": "Gave IM epinephrine promptly",
+      "criticality": "critical",
+      "acceptedActions": ["give_epinephrine_im"],
+      "timingWindow": { "fullCreditBeforeSec": 240, "zeroCreditAfterSec": 480 },
+      "stateConstraints": [],
+      "points": 30,
+      "category": "critical",
+      "harmful": false,
+      "rationale": "IM epinephrine is the first-line treatment and must not be delayed (window values are sim-design compression of 'immediately'; review-pending OQ-A2).",
+      "evidenceRefs": ["EV-ANA-010", "EV-ANA-011"]
+    },
+    {
+      "id": "c_focused_history",
+      "label": "Took a focused history (exposure, allergy, risk factors)",
+      "criticality": "minor",
+      "acceptedActions": ["focused_history"],
+      "stateConstraints": [],
+      "points": 5,
+      "category": "treatment",
+      "harmful": false,
+      "rationale": "Exposure, known allergy and asthma risk inform recognition and disposition.",
+      "evidenceRefs": ["EV-ANA-001", "EV-ANA-031"]
+    },
+    {
+      "id": "c_early_monitoring",
+      "label": "Attached monitoring early",
+      "criticality": "major",
+      "acceptedActions": ["attach_monitor"],
+      "timingWindow": { "fullCreditBeforeSec": 240, "zeroCreditAfterSec": 480 },
+      "stateConstraints": [],
+      "points": 5,
+      "category": "timing",
+      "harmful": false,
+      "rationale": "Continuous monitoring as early as possible in suspected anaphylaxis.",
+      "evidenceRefs": ["EV-ANA-013"]
+    },
+    {
+      "id": "c_iv_access",
+      "label": "Obtained IV access",
+      "criticality": "minor",
+      "acceptedActions": ["iv_access"],
+      "timingWindow": { "fullCreditBeforeSec": 600, "zeroCreditAfterSec": 900 },
+      "stateConstraints": [],
+      "points": 5,
+      "category": "timing",
+      "harmful": false,
+      "rationale": "IV access enables fluid therapy and refractory management.",
+      "evidenceRefs": ["EV-ANA-016"]
+    },
+    {
+      "id": "c_oxygen_support",
+      "label": "Gave high-flow oxygen (hypoxic patient)",
+      "criticality": "major",
+      "acceptedActions": ["give_oxygen"],
+      "stateConstraints": [],
+      "points": 8,
+      "category": "treatment",
+      "harmful": false,
+      "rationale": "Oxygen is indicated here (SpO2 92% with respiratory compromise) — contrast with the STEMI case where routine oxygen at 96% is unnecessary.",
+      "evidenceRefs": ["EV-ANA-020"]
+    },
+    {
+      "id": "c_fluid_bolus",
+      "label": "Gave an IV crystalloid bolus for hypotension",
+      "criticality": "major",
+      "acceptedActions": ["give_fluid_bolus"],
+      "stateConstraints": [],
+      "points": 8,
+      "category": "treatment",
+      "harmful": false,
+      "rationale": "Crystalloid bolus for anaphylactic hypotension.",
+      "evidenceRefs": ["EV-ANA-021"]
+    },
+    {
+      "id": "c_positioning",
+      "label": "Positioned supine with legs raised",
+      "criticality": "minor",
+      "acceptedActions": ["position_supine_legs_raised"],
+      "stateConstraints": [],
+      "points": 4,
+      "category": "treatment",
+      "harmful": false,
+      "rationale": "Supine positioning with legs raised for the hypotensive reaction; avoid sudden upright posture.",
+      "evidenceRefs": ["EV-ANA-022"]
+    },
+    {
+      "id": "c_reassess_after_epi",
+      "label": "Reassessed the patient after epinephrine",
+      "criticality": "major",
+      "acceptedActions": ["exam_lungs", "exam_airway_skin"],
+      "stateConstraints": ["flag('epi_im_given')"],
+      "points": 5,
+      "category": "treatment",
+      "harmful": false,
+      "rationale": "Reassess ABC after the dose (repeat dosing decisions depend on it). Only an examination performed AFTER epinephrine counts as reassessment — the state constraint encodes that.",
+      "evidenceRefs": ["EV-ANA-012"]
+    },
+    {
+      "id": "c_disposition",
+      "label": "Chose a biphasic-aware disposition (observe or admit)",
+      "criticality": "major",
+      "acceptedActions": ["disposition_observation", "disposition_admit"],
+      "stateConstraints": [],
+      "points": 10,
+      "category": "disposition",
+      "harmful": false,
+      "rationale": "Observation and admission are both guideline-compatible endpoints (DA-3); premature discharge is the error.",
+      "evidenceRefs": ["EV-ANA-030"]
+    },
+    {
+      "id": "c_iv_bolus_epi",
+      "label": "Gave undiluted IV bolus epinephrine (patient with a pulse)",
+      "criticality": "critical",
+      "acceptedActions": ["give_epinephrine_iv_push"],
+      "stateConstraints": [],
+      "points": 12,
+      "category": "critical",
+      "harmful": true,
+      "rationale": "Known dangerous route error: arrhythmia/hypertensive-surge risk; IV epinephrine belongs to dilute infusions in refractory cases. Safety-critical penalty.",
+      "evidenceRefs": ["EV-ANA-015"]
+    }
+  ],
+  "terminalStates": [
+    {
+      "id": "peri_arrest_takeover",
+      "when": "flag('peri_arrest')",
+      "outcome": "deteriorated",
+      "label": "The reaction progressed to peri-arrest — the resus team takes over"
+    },
+    {
+      "id": "discharged_early",
+      "when": "flag('discharged')",
+      "outcome": "discharge",
+      "label": "Discharged during an incompletely treated reaction (biphasic risk)"
+    },
+    {
+      "id": "observed_after_deterioration",
+      "when": "(flag('dispo_obs') || flag('dispo_admit')) && flag('deteriorated')",
+      "outcome": "partial",
+      "label": "Stabilized and observed — after avoidable deterioration"
+    },
+    {
+      "id": "observed_in_ed",
+      "when": "flag('dispo_obs')",
+      "outcome": "complete",
+      "label": "Stabilized — observed in the ED with monitoring"
+    },
+    {
+      "id": "admitted_for_monitoring",
+      "when": "flag('dispo_admit')",
+      "outcome": "admit",
+      "label": "Stabilized — admitted for extended monitoring"
+    }
+  ],
+  "debriefMetadata": {
+    "summary": "A 24-year-old with a known peanut allergy develops anaphylaxis after a restaurant meal. The case trains rapid clinical recognition, immediate IM epinephrine, safe route choice, supportive care, reassessment, and a biphasic-risk-aware disposition.",
+    "keyTeachingPoints": [
+      "Anaphylaxis is a clinical diagnosis — treat on recognition, no test is needed first (EV-ANA-001, EV-ANA-002)",
+      "IM epinephrine into the anterolateral thigh comes first; delay worsens outcomes (EV-ANA-010, EV-ANA-011)",
+      "Never give undiluted IV bolus epinephrine to a patient with a pulse (EV-ANA-015)",
+      "Position supine, give high-flow oxygen when hypoxic, and bolus IV fluids for hypotension (EV-ANA-020, EV-ANA-021, EV-ANA-022)",
+      "Antihistamines and steroids are adjuncts — they never substitute for epinephrine; reassess after each dose and observe for biphasic reactions (EV-ANA-012, EV-ANA-023, EV-ANA-024, EV-ANA-030)"
+    ],
+    "commonErrors": [
+      "Treating the rash (antihistamine/steroid) instead of the reaction (epinephrine)",
+      "Delaying epinephrine to finish the history or investigations",
+      "Choosing the IV bolus route for epinephrine",
+      "Discharging immediately after apparent recovery",
+      "Never re-examining the patient after treatment"
+    ]
+  },
+  "resultTemplates": [
+    {
+      "id": "reassured_note",
+      "text": "You explain what is happening. She nods, still itchy and frightened but listening."
+    },
+    {
+      "id": "monitor_attached",
+      "text": "Monitor attached — continuous ECG, NIBP and SpO2 running."
+    },
+    {
+      "id": "exam_airway_findings",
+      "text": "Widespread urticaria; lip and periorbital swelling. The tongue is not swollen and there is no stridor at this time."
+    },
+    {
+      "id": "exam_lungs_findings",
+      "text": "Diffuse expiratory wheeze in both lungs; she speaks in short sentences."
+    },
+    {
+      "id": "tryptase_pending",
+      "text": "Serum tryptase sent (drawn now). The result returns after the acute phase."
+    },
+    { "id": "labs_sent_note", "text": "CBC, electrolytes and creatinine sent." },
+    {
+      "id": "epi_im_given_note",
+      "text": "Epinephrine 0.5 mg given IM into the anterolateral thigh."
+    },
+    { "id": "epi_iv_given_note", "text": "Epinephrine 1 mg pushed IV, undiluted." },
+    { "id": "oxygen_given_note", "text": "High-flow oxygen applied via non-rebreather mask." },
+    { "id": "fluids_given_note", "text": "Rapid IV crystalloid bolus running." },
+    { "id": "positioned_note", "text": "She is laid flat with her legs raised." },
+    { "id": "antihistamine_note", "text": "IV antihistamine given." },
+    { "id": "steroid_note", "text": "IV corticosteroid given." },
+    { "id": "neb_note", "text": "Salbutamol nebulizer running for the wheeze." }
+  ],
+  "references": [
+    {
+      "label": "WAO Anaphylaxis Guidance 2020",
+      "citation": "World Allergy Organization Anaphylaxis Guidance 2020. World Allergy Organ J. 2020;13(10):100472.",
+      "url": "https://www.worldallergyorganizationjournal.org/article/S1939-4551(20)30375-6/fulltext"
+    },
+    {
+      "label": "Resuscitation Council UK 2021",
+      "citation": "Emergency treatment of anaphylaxis — Guidelines for healthcare providers. Resuscitation Council UK, May 2021.",
+      "url": "https://www.resus.org.uk/library/additional-guidance/guidance-anaphylaxis"
+    },
+    {
+      "label": "AAAAI/ACAAI 2023 practice parameter",
+      "citation": "Anaphylaxis: a 2023 practice parameter update. Ann Allergy Asthma Immunol. 2024;132(2):124–176.",
+      "url": "https://www.annallergy.org/article/S1081-1206(23)01304-2/fulltext"
+    },
+    {
+      "label": "Türk Ulusal Anafilaksi Rehberi 2018",
+      "citation": "Anafilaksi: Türk Ulusal Rehberi 2018. Türkiye Ulusal Alerji ve Klinik İmmünoloji Derneği (AİD)."
+    },
+    {
+      "label": "Evidence ledger + clinical status",
+      "citation": "docs/clinical/cases/anaphylaxis/evidence.yaml — per-claim provenance. CLINICAL STATUS: MVP DEMO APPROVED; CLINICAL VALIDATION PENDING (REVIEW.md unsigned). Fictional teaching case; not medical advice."
+    }
+  ]
+}

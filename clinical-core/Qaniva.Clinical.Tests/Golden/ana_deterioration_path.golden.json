@@ -1,0 +1,101 @@
+{
+  "replayHash": "1b8239e1b032440f6d8c61e674e0dd7199bbdbef2032113915d87298fa256be0",
+  "finalStateHash": "7c1ddaa7256b1e79f82f1cf4eea5e17d6edff595d87d39e84ce68725162af2da",
+  "outcome": "deteriorated",
+  "terminalStateId": "peri_arrest_takeover",
+  "simTimeSec": 795,
+  "vitals": {
+    "hr": 132,
+    "sbpMmHg": 72,
+    "dbpMmHg": 46,
+    "spo2": 86,
+    "rrPerMin": 32,
+    "tempC": 36.9
+  },
+  "circulation": "arrest",
+  "neuro": "unresponsive",
+  "flags": [
+    "deteriorated",
+    "monitor_on",
+    "peri_arrest"
+  ],
+  "disclosedFacts": [
+    "hx_asthma_risk",
+    "hx_exposure",
+    "hx_known_allergy"
+  ],
+  "score": {
+    "total": 10,
+    "critical": 0,
+    "timing": 5,
+    "efficiency": 0,
+    "treatment": 5,
+    "disposition": 0,
+    "missedCriterionIds": [
+      "c_epi_im_timely",
+      "c_iv_access",
+      "c_oxygen_support",
+      "c_fluid_bolus",
+      "c_positioning",
+      "c_reassess_after_epi",
+      "c_disposition"
+    ]
+  },
+  "timeline": [
+    {
+      "seq": 0,
+      "simTimeSec": 45,
+      "actionId": "focused_history",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "c5832cdf2e45742bc7d21fb9a511c9776b26ec59c3548ca2345fb53080fe111d",
+      "afterHash": "fd304d55f911e417a769f5840294067438ed3634d2d54773de25855fab962866"
+    },
+    {
+      "seq": 1,
+      "simTimeSec": 65,
+      "actionId": "attach_monitor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "fd304d55f911e417a769f5840294067438ed3634d2d54773de25855fab962866",
+      "afterHash": "249e7395d3525167aa7b36384cfe673dc26bc36ee9e8940b189b4ec88d51a286"
+    },
+    {
+      "seq": 2,
+      "simTimeSec": 95,
+      "actionId": "exam_lungs",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "249e7395d3525167aa7b36384cfe673dc26bc36ee9e8940b189b4ec88d51a286",
+      "afterHash": "7a8585aee1f296d56ca1fb2b90c84c89e03c1e5f301f6cc437c136869a8b13c4"
+    },
+    {
+      "seq": 3,
+      "simTimeSec": 495,
+      "actionId": "__wait__",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [
+        "t1_reaction_worsens"
+      ],
+      "beforeHash": "7a8585aee1f296d56ca1fb2b90c84c89e03c1e5f301f6cc437c136869a8b13c4",
+      "afterHash": "d266f5c4d5aea9c77187c46a24da6002ca97922f8a0cf2140699939657c2f8e0"
+    },
+    {
+      "seq": 4,
+      "simTimeSec": 795,
+      "actionId": "__wait__",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [
+        "t2_peri_arrest"
+      ],
+      "beforeHash": "d266f5c4d5aea9c77187c46a24da6002ca97922f8a0cf2140699939657c2f8e0",
+      "afterHash": "7c1ddaa7256b1e79f82f1cf4eea5e17d6edff595d87d39e84ce68725162af2da"
+    }
+  ],
+  "rejections": []
+}

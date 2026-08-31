@@ -26,6 +26,9 @@
     <None Include="../../packages/case-schema/fixtures/stemi_anterior_001/v1/case.json"
           Link="TestData/stemi_case.json"
           CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../packages/case-schema/fixtures/anaphylaxis_food_001/v1/case.json"
+          Link="TestData/anaphylaxis_case.json"
+          CopyToOutputDirectory="PreserveNewest" />
     <None Include="Golden/**/*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 

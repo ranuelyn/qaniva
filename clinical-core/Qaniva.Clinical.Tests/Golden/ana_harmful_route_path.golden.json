@@ -1,0 +1,159 @@
+{
+  "replayHash": "d5a5c2a1c10f061bd5d8594940d13b95383666fe0be4571c1739be839a986c01",
+  "finalStateHash": "bdba7daf34c9e34c16893b7d7933131478e905ddc2064cde9b338936c4e9e082",
+  "outcome": "complete",
+  "terminalStateId": "observed_in_ed",
+  "simTimeSec": 300,
+  "vitals": {
+    "hr": 146,
+    "sbpMmHg": 132,
+    "dbpMmHg": 62,
+    "spo2": 99,
+    "rrPerMin": 20,
+    "tempC": 36.9
+  },
+  "circulation": "poor_perfusion",
+  "neuro": "alert",
+  "flags": [
+    "dispo_obs",
+    "epi_im_given",
+    "epi_iv_given",
+    "fluids_given",
+    "iv_access",
+    "monitor_on",
+    "o2_given",
+    "positioned",
+    "responding"
+  ],
+  "disclosedFacts": [
+    "hx_asthma_risk",
+    "hx_exposure",
+    "hx_known_allergy"
+  ],
+  "score": {
+    "total": 68,
+    "critical": 18,
+    "timing": 10,
+    "efficiency": 0,
+    "treatment": 30,
+    "disposition": 10,
+    "missedCriterionIds": []
+  },
+  "timeline": [
+    {
+      "seq": 0,
+      "simTimeSec": 20,
+      "actionId": "attach_monitor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "c5832cdf2e45742bc7d21fb9a511c9776b26ec59c3548ca2345fb53080fe111d",
+      "afterHash": "202cfe26682e3870526a8dcdf3615583262062f95e99955cc95ab0be01db723e"
+    },
+    {
+      "seq": 1,
+      "simTimeSec": 50,
+      "actionId": "exam_airway_skin",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "202cfe26682e3870526a8dcdf3615583262062f95e99955cc95ab0be01db723e",
+      "afterHash": "62493d18a2c5565d1b6d316eb17ae47ee4e3152de0c7f082aa87ec61473aeea6"
+    },
+    {
+      "seq": 2,
+      "simTimeSec": 65,
+      "actionId": "give_epinephrine_iv_push",
+      "classification": "Harmful",
+      "scoreDelta": -12,
+      "triggeredRuleIds": [
+        "iv_epi_surge"
+      ],
+      "beforeHash": "62493d18a2c5565d1b6d316eb17ae47ee4e3152de0c7f082aa87ec61473aeea6",
+      "afterHash": "87799c7403edcd16dfd2ae1bce64520ea659a6c423758c3d611510fcf69d5fdf"
+    },
+    {
+      "seq": 3,
+      "simTimeSec": 85,
+      "actionId": "give_epinephrine_im",
+      "classification": "Correct",
+      "scoreDelta": 30,
+      "triggeredRuleIds": [],
+      "beforeHash": "87799c7403edcd16dfd2ae1bce64520ea659a6c423758c3d611510fcf69d5fdf",
+      "afterHash": "4cc595bda323a0f342951ba1f81894b1d461be886dae8c481aa933e5be80ef92"
+    },
+    {
+      "seq": 4,
+      "simTimeSec": 100,
+      "actionId": "give_oxygen",
+      "classification": "Correct",
+      "scoreDelta": 8,
+      "triggeredRuleIds": [],
+      "beforeHash": "4cc595bda323a0f342951ba1f81894b1d461be886dae8c481aa933e5be80ef92",
+      "afterHash": "09a94b364f7a379be36bcc08f05d31558f5ce7d8902e86ad0166c0b449d72a85"
+    },
+    {
+      "seq": 5,
+      "simTimeSec": 115,
+      "actionId": "position_supine_legs_raised",
+      "classification": "Correct",
+      "scoreDelta": 4,
+      "triggeredRuleIds": [],
+      "beforeHash": "09a94b364f7a379be36bcc08f05d31558f5ce7d8902e86ad0166c0b449d72a85",
+      "afterHash": "fde5e57d7dc4b3bfedfd95a8ba2717ba5ea4b62d417b1b4c2bbae54ca2ab8f35"
+    },
+    {
+      "seq": 6,
+      "simTimeSec": 175,
+      "actionId": "iv_access",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [
+        "epi_response"
+      ],
+      "beforeHash": "fde5e57d7dc4b3bfedfd95a8ba2717ba5ea4b62d417b1b4c2bbae54ca2ab8f35",
+      "afterHash": "23a5e076cd1a810930dcccc103022e4d41f7d172ac74a724c1beca31e392164a"
+    },
+    {
+      "seq": 7,
+      "simTimeSec": 205,
+      "actionId": "give_fluid_bolus",
+      "classification": "Correct",
+      "scoreDelta": 8,
+      "triggeredRuleIds": [],
+      "beforeHash": "23a5e076cd1a810930dcccc103022e4d41f7d172ac74a724c1beca31e392164a",
+      "afterHash": "592b8fb3c5a0ce62c68add416ff1c6097b2da83bfa42c1781be2f40eb16246c9"
+    },
+    {
+      "seq": 8,
+      "simTimeSec": 235,
+      "actionId": "exam_lungs",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "592b8fb3c5a0ce62c68add416ff1c6097b2da83bfa42c1781be2f40eb16246c9",
+      "afterHash": "f001c6783d2d90bc3799393b3fbd2289c5d1e04a62beb1ef3a8b976b25f41cfb"
+    },
+    {
+      "seq": 9,
+      "simTimeSec": 280,
+      "actionId": "focused_history",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "f001c6783d2d90bc3799393b3fbd2289c5d1e04a62beb1ef3a8b976b25f41cfb",
+      "afterHash": "36842f7e54238df7aedfe387a6b93a81802d158ddab8b5ec1469d7b3192bf4d4"
+    },
+    {
+      "seq": 10,
+      "simTimeSec": 300,
+      "actionId": "disposition_observation",
+      "classification": "Correct",
+      "scoreDelta": 10,
+      "triggeredRuleIds": [],
+      "beforeHash": "36842f7e54238df7aedfe387a6b93a81802d158ddab8b5ec1469d7b3192bf4d4",
+      "afterHash": "bdba7daf34c9e34c16893b7d7933131478e905ddc2064cde9b338936c4e9e082"
+    }
+  ],
+  "rejections": []
+}
