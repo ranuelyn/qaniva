@@ -93,8 +93,20 @@ routes taps into `SubmitPlayerAction`. Runtime modes (`interactive` default,
 `e2e_autoplay`, `e2e_ui`) and the whole flow are documented in
 [docs/architecture/simulation-ui.md](../../docs/architecture/simulation-ui.md).
 
-## Still manual (QAN-002, later)
+## 3D presentation (QAN-002)
 
-The real ED resus room, patient rig prefab + animation controller, vitals monitor
-prefab (wire `VitalsMonitorBinding`), presentation profiles. Keep to the MVP 3D
-budget (blueprint §3).
+The reusable ED/resus presentation is generated from primitives by
+`QanivaPresentationAssets.CreateAll` (materials + `ed_resus_v1` environment,
+`adult_neutral_v1` patient, `BedsideMonitor` prefabs — committed under
+`Assets/Qaniva/Resources/Qaniva/`). At runtime `EnvironmentBootstrap` composes
+the scene from the case's `presentationProfile` via `PresentationRegistry`;
+`PatientPresentationMapper` derives the presentation-only visual state and the
+monitor renders canonical snapshot vitals. Full architecture, prefab contracts,
+and how to add a room/patient: `docs/architecture/3d-presentation.md`. Asset
+policy/licensing: `docs/art/asset-manifest.md`.
+
+Composition previews without a device: run PlayMode tests with
+`QANIVA_CAPTURE_DIR=<dir>` (real-pipeline portrait PNGs).
+
+Still later: production room art, rigged humanoid + animations (QAN-020),
+second environment/patient content. Keep to the MVP 3D budget (blueprint §3).

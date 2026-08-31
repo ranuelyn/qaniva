@@ -13,7 +13,8 @@
 │                          │                                    │
 │                          ▼                                    │
 │  Unity 6 / URP simulation runtime                             │
-│   room · patient · monitor · camera · animation adapters      │
+│   ED room + patient + bedside monitor from presentationProfile │
+│   (EnvironmentBootstrap · PatientPresentationMapper)           │
 │   interactive UI (UI Toolkit): tabs · action list · vitals ·  │
 │   case log · exit  — renders GetActionAvailability()/timeline │
 │                          │ PlayerAction (user tap)             │

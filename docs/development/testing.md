@@ -21,6 +21,7 @@ pass.
 | Mobile native build | `apps/mobile/ios` | xcodebuild (simulator, `CODE_SIGNING_ALLOWED=NO`) | **no** (macOS runner; run locally) |
 | Unity EditMode | `unity/.../Scripts/Tests` | Unity Test Runner (`-runTests -testPlatform EditMode`) | **no** (needs a licensed Editor — run locally) |
 | Unity real-engine integration | `RealClinicalRuntimeTests` (needs `QANIVA_HAS_CLINICAL_CORE` + synced DLL) | Unity Test Runner | **no** (same) |
+| Unity PlayMode (3D presentation) | `PresentationPlayModeTests` — bootstrap composition, canonical monitor values, visual-state mapping + determinism, warm-relaunch reuse/reset, honest unknown-room failure (+ scene captures via `QANIVA_CAPTURE_DIR`) | Unity Test Runner (`-testPlatform PlayMode`) | **no** (same) |
 | Unity PlayMode (interactive UI) | `InteractiveUiPlayModeTests` — real UI buttons pressed via event dispatch; golden parity, hidden/disabled rendering, double-tap guard, no-autoplay-in-interactive | Unity Test Runner (`-testPlatform PlayMode`) | **no** (same) |
 | Device perf, e2e beta | — | manual | release |
 
