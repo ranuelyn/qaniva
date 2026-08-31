@@ -41,11 +41,20 @@ each is inert unless `SimulationBridgeController.CurrentMode` equals its own mod
 SimulationBridgeController ──SimulationStarted/SnapshotUpdated──► SimulationUiController
                                                                     ├─ VitalsPresenter    (vitals bar + status)
                                                                     ├─ ActionListPresenter (tabs + buttons)
-                                                                    └─ TimelinePresenter  (case log)
+                                                                    ├─ TimelinePresenter  (case log)
+                                                                    └─ ResultViewerPresenter (full-screen asset viewer)
 user tap ─► Button ─► ActionListPresenter handler ─► SimulationUiController.Submit(actionId)
         ─► SimulationBridgeController.SubmitPlayerAction ─► ClinicalRuntime ─► clinical-core
         ─► ActionOutcomeView ─► result banner + refreshed availability/vitals/timeline
 ```
+
+The result banner renders the engine-resolved template text plus any facts the
+step disclosed (all case-authored — the UI adds no clinical text). A result
+that carries a `ResultAssetId` (e.g. the ECG tracing) auto-opens the
+full-screen `ResultViewerPresenter` — pan via native ScrollView touch drag,
+simple +/- zoom, `result-viewer-close` to continue; "Open result" reopens the
+last asset. Assets load from `Resources/Qaniva/CaseAssets/<assetId>`; a missing
+asset fails loudly inside the viewer.
 
 ## Canonical action availability
 
@@ -97,7 +106,9 @@ attempt timeline. There is no Unity-side action log that could drift.
 ## Element naming contract (E2E + tests)
 
 Tabs: `tab-<Category>` (e.g. `tab-Treat`); actions: `action-<actionId>`;
-`exit-button`, `toggle-timeline`, `timeline-<seq>`. `InteractiveE2eDriver` and
+`exit-button`, `toggle-timeline`, `timeline-<seq>`; result viewer:
+`result-view-button`, `result-viewer`, `result-viewer-close`,
+`result-zoom-in`/`result-zoom-out`. `InteractiveE2eDriver` and
 the PlayMode tests locate controls by these names and press them via
 `NavigationSubmitEvent` — real event dispatch, same handlers as a tap.
 

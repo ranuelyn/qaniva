@@ -4,7 +4,9 @@
 [BLUEPRINT.md](BLUEPRINT.md) — you never need to read JSON or code. Claims are
 traceable via [evidence.yaml](evidence.yaml) (EV-… ids).
 
-**CLINICAL STATUS: DRAFT — REVIEW REQUIRED.**
+**CLINICAL STATUS: MVP DEMO APPROVED — CLINICAL VALIDATION PENDING.**
+(The case is implemented as an internal/demo prototype per the project owner's
+2026-08-31 decision; this review remains REQUIRED before any clinical claim.)
 Reviewer: __________ · Credentials: __________ · Date: __________
 
 How to review: work through the sections below; mark each **APPROVE /

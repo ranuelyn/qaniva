@@ -1,9 +1,14 @@
 # STEMI case blueprint — `stemi_anterior_001`
 
-**CLINICAL STATUS: DRAFT — REVIEW REQUIRED** (see [REVIEW.md](REVIEW.md)).
+**CLINICAL STATUS: MVP DEMO APPROVED — CLINICAL VALIDATION PENDING.** The
+project owner authorized implementing this draft as an INTERNAL/DEMO
+educational prototype (2026-08-31); it is NOT clinically approved until a
+clinician signs [REVIEW.md](REVIEW.md).
 Every clinical value below is provisional. Evidence IDs refer to
 [`evidence.yaml`](evidence.yaml); design questions marked **[Q*n*]** map to the
-review checklist. Nothing here enters the engine before clinician approval.
+review checklist. Implemented as versioned case data
+(`packages/case-schema/fixtures/stemi_anterior_001/v1/`) under the MVP-demo
+authorization; implementation deviations are listed at the end of this file.
 
 ---
 
@@ -299,3 +304,15 @@ Researched (statin continuation, DAPT duration, cardiac rehab, secondary
 prevention — EV-STEMI-036/-037) and **excluded** from the playable case; one
 debrief line may point forward ("post-PCI care continues in CCU…") without
 scoring anything.
+
+
+---
+
+## Implementation deviations (2026-08-31, QAN-012D)
+
+| # | Blueprint behavior | Implemented behavior | Why | Clinical impact | Status |
+| --- | --- | --- | --- | --- | --- |
+| D-IMPL-1 | `rhythm: sinus_tachycardia_st_elevation` | `sinus_rhythm` | the rhythm string is learner-visible; the draft value leaked the diagnosis | none (display string only) | review-pending (Q1 covers vitals/rhythm) |
+| D-IMPL-2 | post-T1 state-dependent exam findings | static exam text | IMPLEMENTATION_SPEC GAP-3 ("static acceptable v1") | cosmetic; deterioration still shows via vitals/visuals | review-pending |
+| D-IMPL-3 | patient visual `adult_neutral_v1` | `adult_rigged_v1` (QAN-020 rigged model) | presentation-only asset upgrade; same prefab contract | none (presentation) | n/a |
+| D-IMPL-4 | ECG asset "acquired per spec, clinician-verified before implementation" | committed code-generated placeholder, watermarked NOT-DIAGNOSTIC, provenance `placeholder_replacement_required` in case data | MVP-demo authorization; no legal external asset integrated yet | learner sees a schematic tracing — replacement REQUIRED before clinical validation | open (S4/Q2) |

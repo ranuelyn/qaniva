@@ -100,18 +100,50 @@ Fill the review template (synopsis, section checklist, medication quick table,
 questions). Hand off to a clinician. Iterate CHANGES_REQUESTED on changed
 sections. **STOP here — implementation is a separate, post-approval task.**
 
-### 5 IMPLEMENTED (only after approval)
+### 5 IMPLEMENTED (only after approval — or an explicit owner MVP-demo decision)
 
-Copy the demo fixture → `fixtures/<id>/v1/case.json`; encode the approved
-blueprint; `pnpm run validate:cases`; CLI `validate`; record
-`metadata.clinicalReview` from the signed review.
+Two entry authorizations exist: a signed review (`status: approved`) or an
+explicit project-owner decision to build an internal/demo prototype
+(`status: mvp_demo_approved` + a notes field spelling out that clinical
+validation is PENDING — never label such a build clinically/physician
+approved). Under `mvp_demo_approved` every review-flagged value keeps its
+provenance and the post-review pass bumps the case version.
+
+Copy the demo fixture → `fixtures/<id>/v1/case.json`; encode the blueprint;
+`pnpm run validate:cases`; CLI `validate`; record `metadata.clinicalReview`.
+Lessons from the first real implementation (stemi, 2026-08-31):
+
+- Encode the blueprint tables 1:1; when the blueprint under-specified
+  something (visible-vs-disabled gating; a learner-visible string), decide,
+  then record it in a BLUEPRINT "Implementation deviations" table — never
+  silently.
+- **Spoiler-audit every learner-visible string** (rhythm, labels, result
+  templates) — a draft rhythm string can leak the diagnosis.
+- Delayed results/callbacks = transition rules with `delaySec`; conditional
+  effects = the flag + paired `once:false` rules pattern (see
+  clinical-engine.md) — both data-only, no engine changes.
+- Result narratives/assets = `resultTemplates`/`resultAssets`; a diagnostic
+  asset ships only with provenance (license + `clinicalStatus`); an unverified
+  asset is a watermarked placeholder with `placeholder_replacement_required`.
+- Sync to Unity is automatic (`scripts/sync-clinical-core-to-unity.sh` copies
+  every fixture); bundle any result asset under
+  `Resources/Qaniva/CaseAssets/`; reuse the existing room/patient — a new case
+  should need zero new art; add the case's ideal path to the e2e driver table
+  and the RN fallback/briefing entries.
+- One summary/contract change ripples: zod schema → C# DTO mirror → parity
+  tests → API test fixture → RN fake bridge. Run the whole TS CI, not one
+  package.
 
 ### 6 TECHNICAL_QA
 
-6 golden-path scripts (ideal, delayed-critical, wrong-harmless, harmful,
-early-disposition, AI-unavailable) + `UPDATE_GOLDEN=1 dotnet test` + line-by-line
-golden review (testing-and-golden-replay skill). Then BLIND_PLAYTEST before
-PUBLISHED.
+6 golden-path scripts + `UPDATE_GOLDEN=1 dotnet test` + line-by-line golden
+review (testing-and-golden-replay skill). Design the six paths **in the
+blueprint with expected scores** so the generated goldens are verifiable by
+hand (stemi proof: ideal must equal the accepted-alternative path exactly;
+the delayed path's loss must equal the sum of its timing decays). Add
+case-behaviour engine tests (gating, delayed results, state-dependent harm,
+terminal variety) and a case PlayMode suite (composition, result viewer,
+completion summary, warm relaunch). Then BLIND_PLAYTEST before PUBLISHED.
 
 ## Validation
 

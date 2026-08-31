@@ -27,6 +27,15 @@ IDEA → RESEARCHING → DRAFT → CLINICAL_REVIEW ⇄ CHANGES_REQUESTED
 Clinical approval and technical QA are **distinct gates**: a clinician approves
 medicine; QA approves determinism/regression. Neither substitutes for the other.
 
+**MVP-demo branch (owner decision, first used for stemi 2026-08-31):** the
+project owner may authorize implementing a DRAFT as an *internal/demo
+educational prototype* before CLINICAL_REVIEW completes. The case then carries
+`metadata.clinicalReview.status = mvp_demo_approved` (+ notes: "clinical
+validation PENDING"), all review flags stay live, and the case may never be
+described as clinically/physician approved. The pending review remains on the
+backlog; acting on the signed review bumps the case version. PUBLISHED (real
+users) still requires `approved`.
+
 ## Directory standard
 
 ```

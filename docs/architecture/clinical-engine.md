@@ -44,6 +44,40 @@ deliberate change with tests in `ExpressionEvaluatorTests`.
 `set <target> <number>` / `adjust <target> <delta>` where `target` is
 `vitals.<name>` or `painScore`. Effects may not write `simTimeSec`.
 
+**Conditional effects** are deliberately NOT an effect feature — express them as
+a transition-rule pair (data-only, deterministic). Worked example
+(nitrate harmful only while hypotensive, `stemi_anterior_001`): the action sets
+a transient flag; a high-priority `once:false` rule applies the consequence when
+`flag && vitals.sbpMmHg < 100` and clears the flag; a low-priority `once:false`
+cleanup rule clears the flag otherwise — the flag never survives the rule pass.
+
+## Results & assets (QAN-022 minimal)
+
+`resultTemplates[] {id, text, assetId?}` + `resultAssets[] {id, kind:"image",
+label, provenance{source, license, clinicalStatus, …}}` are case data. On an
+accepted action the engine resolves `resultTemplateId` into
+`ActionResult.ResultText/ResultAssetId/ResultAssetLabel` and diffs disclosures
+into `NewlyDisclosedFacts` — presentation layers render these verbatim (Unity's
+result banner + full-screen viewer loads the image from
+`Resources/Qaniva/CaseAssets/<assetId>`). Broken template/asset references fail
+at load (CaseLoader) and in `@qaniva/case-schema` semantics. Legacy cases
+without a `resultTemplates` array keep free-form ids (explicit compatibility
+rule). A diagnostic asset with
+`provenance.clinicalStatus: placeholder_replacement_required` is not
+clinically valid — the honesty is machine-checkable.
+
+## Scoring / debrief outputs
+
+`ScoringEngine` also emits `CriterionResults()` — per-criterion
+`correct | delayed | missed | harmful | avoided` with awarded/max points and
+credit time. Harmful criteria respect `stateConstraints` (state-dependent harm,
+e.g. only while hypotensive); constraint-free harmful criteria stay
+unconditional. Terminal outcomes:
+`complete | partial | deteriorated | discharge | admit | death | aborted`
+(generic vocabulary — no disease semantics in the enum). The AttemptSummary
+sent to RN carries `criteria[]` + the case's `debrief{}` metadata so the
+Results screen renders a timing-aware debrief without recomputing anything.
+
 ## Determinism rules (enforced by review + tests)
 
 - No `DateTime.Now`, `Environment.TickCount`, `Guid.NewGuid` in engine logic.
