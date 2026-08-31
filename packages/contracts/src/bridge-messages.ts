@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PROTOCOL_VERSION, SIMULATION_FAILURE_CODES } from './protocol';
+import { PROTOCOL_VERSION, SIMULATION_FAILURE_CODES, SIMULATION_MODES } from './protocol';
 import { attemptSummarySchema } from './attempt-summary';
 
 /**
@@ -29,6 +29,8 @@ export const startSimulationMessageSchema = z.object({
     difficulty: difficultySchema,
     /** Deterministic RNG seed. Same seed + same actions => same outcome. */
     seed: z.number().int().nonnegative(),
+    /** Runtime mode; production launches always send "interactive". */
+    mode: z.enum(SIMULATION_MODES).default('interactive'),
   }),
 });
 

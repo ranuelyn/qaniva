@@ -6,6 +6,7 @@ import {
   RN_TO_UNITY_TYPES,
   UNITY_TO_RN_TYPES,
   SIMULATION_FAILURE_CODES,
+  SIMULATION_MODES,
 } from '../protocol';
 
 /**
@@ -41,6 +42,12 @@ describe('C# bridge protocol mirror parity', () => {
   it('contains every simulation failure code', () => {
     for (const code of SIMULATION_FAILURE_CODES) {
       expect(source, `missing ${code}`).toContain(`"${code}"`);
+    }
+  });
+
+  it('contains every simulation mode', () => {
+    for (const mode of SIMULATION_MODES) {
+      expect(source, `missing ${mode}`).toContain(`"${mode}"`);
     }
   });
 });

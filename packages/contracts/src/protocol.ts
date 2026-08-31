@@ -33,6 +33,20 @@ export type RnToUnityType = (typeof RN_TO_UNITY_TYPES)[number];
 export type UnityToRnType = (typeof UNITY_TO_RN_TYPES)[number];
 export type BridgeMessageType = RnToUnityType | UnityToRnType;
 
+/**
+ * How the Unity runtime should run the simulation.
+ *  - interactive:   normal play — every action comes from the user via the UI.
+ *  - e2e_autoplay:  regression driver applies the golden script directly to the
+ *                   runtime (bridge/lifecycle testing; bypasses the UI).
+ *  - e2e_ui:        regression driver presses the ACTUAL interactive UI controls
+ *                   (interactive-path testing; nothing bypasses the UI).
+ * Production launches always use "interactive"; the e2e modes exist only for
+ * automated verification and are inert unless the Unity build carries the
+ * QANIVA_INTEGRATION_AUTOPLAY scripting define.
+ */
+export const SIMULATION_MODES = ['interactive', 'e2e_autoplay', 'e2e_ui'] as const;
+export type SimulationMode = (typeof SIMULATION_MODES)[number];
+
 /** Stable failure codes for SIMULATION_FAILED. */
 export const SIMULATION_FAILURE_CODES = [
   'CASE_LOAD_FAILED',

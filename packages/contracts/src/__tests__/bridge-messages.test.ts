@@ -21,6 +21,7 @@ const START: RnToUnityMessage = {
     locale: 'en',
     difficulty: 'standard',
     seed: 42,
+    mode: 'interactive',
   },
 };
 

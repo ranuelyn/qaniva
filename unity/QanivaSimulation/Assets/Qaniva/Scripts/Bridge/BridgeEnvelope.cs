@@ -40,6 +40,7 @@ namespace Qaniva.Bridge
         public string locale = "en";
         public string difficulty = "standard";
         public long seed;
+        public string mode = BridgeProtocol.Modes.Interactive;
     }
 
     [Serializable]

@@ -33,6 +33,16 @@ namespace Qaniva.Bridge
             public const string ExitRequested = "EXIT_REQUESTED";
         }
 
+        // Runtime modes carried in START_SIMULATION.payload.mode.
+        // Production always sends "interactive"; the e2e modes drive automated
+        // verification and are inert without QANIVA_INTEGRATION_AUTOPLAY.
+        public static class Modes
+        {
+            public const string Interactive = "interactive";
+            public const string E2eAutoplay = "e2e_autoplay";
+            public const string E2eUi = "e2e_ui";
+        }
+
         // Stable failure codes for SIMULATION_FAILED.
         public static class FailureCodes
         {
