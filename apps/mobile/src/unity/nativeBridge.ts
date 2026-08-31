@@ -121,6 +121,12 @@ export class NativeUnityBridgeTransport {
     };
   }
 
+  /** Return control to the RN window (the warm Unity runtime stays loaded). */
+  hide(): void {
+    this.clearStartRetry();
+    this.native.hideUnity();
+  }
+
   private clearStartRetry(): void {
     if (this.startRetryTimer !== null) {
       clearInterval(this.startRetryTimer);

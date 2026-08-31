@@ -1,8 +1,16 @@
-import { useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { ScrollView, View } from 'react-native';
 import type { AttemptSummary, CriterionResult } from '@qaniva/contracts';
-import { Body, Card, PrimaryButton, Screen, Title } from '@/components/ui';
-import { colors } from '@/theme/tokens';
+import {
+  Body,
+  Card,
+  Caption,
+  Numeric,
+  PrimaryButton,
+  Screen,
+  SecondaryButton,
+  SectionHeader,
+} from '@/components/ui';
 import { attemptStore } from '@/storage/asyncStorageKv';
 import { analytics } from '@/analytics';
 import { cryptoRandomId, randomSeed } from '@/lib/ids';
@@ -48,14 +56,6 @@ function evidenceSuffix(c: CriterionResult): string {
   return c.evidenceRefs.length ? `  ·  Evidence: ${c.evidenceRefs.join(', ')}` : '';
 }
 
-function SectionTitle({ children }: { children: string }) {
-  return (
-    <Text style={{ color: colors.text, fontSize: 17, fontWeight: '700', marginTop: 8 }}>
-      {children}
-    </Text>
-  );
-}
-
 export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
   const { caseId, title, summary } = route.params;
   const [saveNote, setSaveNote] = useState<string | null>(null);
@@ -71,10 +71,18 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
     };
   }, [caseId, summary]);
 
+  const scrollRef = useRef<ScrollView>(null);
   useEffect(() => {
     if (!E2E_MODE) return;
-    const timer = setTimeout(() => navigation.popToTop(), 6000);
-    return () => clearTimeout(timer);
+    // Capture aid: scroll the REAL ScrollView through the debrief before
+    // returning home, so the screenshot series records every section.
+    const timers = [
+      setTimeout(() => scrollRef.current?.scrollTo({ y: 900, animated: true }), 4000),
+      setTimeout(() => scrollRef.current?.scrollTo({ y: 2000, animated: true }), 8000),
+      setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 12000),
+      setTimeout(() => navigation.popToTop(), 16000),
+    ];
+    return () => timers.forEach(clearTimeout);
   }, [navigation]);
 
   function replay() {
@@ -113,14 +121,11 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
   return (
     <Screen>
-      <Title>Results</Title>
       <Body muted>{title}</Body>
-      <ScrollView contentContainerStyle={{ gap: 10, paddingBottom: 12 }}>
+      <ScrollView ref={scrollRef} contentContainerStyle={{ gap: 10, paddingBottom: 12 }}>
         <Card>
           <Body>{OUTCOME_LABELS[summary.terminalState] ?? summary.terminalState}</Body>
-          <Text style={{ color: colors.text, fontSize: 28, fontWeight: '800' }}>
-            {summary.totalScore} pts
-          </Text>
+          <Numeric>{summary.totalScore} pts</Numeric>
           <Body muted>
             critical {summary.scoreBreakdown.critical} · timing {summary.scoreBreakdown.timing} ·
             treatment {summary.scoreBreakdown.treatment} · disposition{' '}
@@ -138,7 +143,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {stateEvents.length > 0 && (
           <>
-            <SectionTitle>What happened to the patient</SectionTitle>
+            <SectionHeader>What happened to the patient</SectionHeader>
             {stateEvents.map((e) =>
               e.stateChanges.map((text, i) => (
                 <Card key={`${e.seq}-${i}`}>
@@ -151,7 +156,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
           </>
         )}
 
-        <SectionTitle>Critical decisions</SectionTitle>
+        <SectionHeader>Critical decisions</SectionHeader>
         {critical.map((c) => (
           <Card key={c.id}>
             <Body>
@@ -169,7 +174,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {safetyHarm.length > 0 && (
           <>
-            <SectionTitle>Harmful actions</SectionTitle>
+            <SectionHeader>Harmful actions</SectionHeader>
             {safetyHarm.map((c) => (
               <Card key={c.id}>
                 <Body>
@@ -183,7 +188,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {unnecessary.length > 0 && (
           <>
-            <SectionTitle>Unnecessary (efficiency)</SectionTitle>
+            <SectionHeader>Unnecessary (efficiency)</SectionHeader>
             {unnecessary.map((c) => (
               <Card key={c.id}>
                 <Body>
@@ -197,7 +202,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {delayed.length > 0 && (
           <>
-            <SectionTitle>Correct but delayed</SectionTitle>
+            <SectionHeader>Correct but delayed</SectionHeader>
             {delayed.map((c) => (
               <Card key={c.id}>
                 <Body>
@@ -215,7 +220,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {missedOther.length > 0 && (
           <>
-            <SectionTitle>Missed</SectionTitle>
+            <SectionHeader>Missed</SectionHeader>
             {missedOther.map((c) => (
               <Card key={c.id}>
                 <Body>
@@ -229,7 +234,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {alternatives.length > 0 && (
           <>
-            <SectionTitle>Accepted alternatives</SectionTitle>
+            <SectionHeader>Accepted alternatives</SectionHeader>
             {alternatives.map((c) => (
               <Card key={`alt-${c.id}`}>
                 <Body muted>
@@ -243,7 +248,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {doneWell.filter((c) => c.criticality !== 'critical').length > 0 && (
           <>
-            <SectionTitle>Done well</SectionTitle>
+            <SectionHeader>Done well</SectionHeader>
             {doneWell
               .filter((c) => c.criticality !== 'critical')
               .map((c) => (
@@ -259,7 +264,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {(summary.debrief?.keyTeachingPoints?.length ?? 0) > 0 && (
           <>
-            <SectionTitle>Key teaching points</SectionTitle>
+            <SectionHeader>Key teaching points</SectionHeader>
             <Card>
               {summary.debrief.keyTeachingPoints.map((p, i) => (
                 <Body key={i} muted>
@@ -272,7 +277,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {(summary.debrief?.commonErrors?.length ?? 0) > 0 && (
           <>
-            <SectionTitle>Common errors in this case</SectionTitle>
+            <SectionHeader>Common errors in this case</SectionHeader>
             <Card>
               {summary.debrief.commonErrors.map((p, i) => (
                 <Body key={i} muted>
@@ -283,7 +288,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
           </>
         )}
 
-        <SectionTitle>Clinical timeline</SectionTitle>
+        <SectionHeader>Clinical timeline</SectionHeader>
         {summary.timeline.map((entry) => (
           <Card key={entry.seq}>
             <Body>
@@ -300,7 +305,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {(summary.references?.length ?? 0) > 0 && (
           <>
-            <SectionTitle>References</SectionTitle>
+            <SectionHeader>References</SectionHeader>
             <Card>
               {summary.references.map((r, i) => (
                 <View key={i} style={{ marginBottom: 4 }}>
@@ -312,11 +317,11 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
           </>
         )}
 
-        <Body muted>replay hash: {summary.replayHash}</Body>
+        <Caption>replay hash: {summary.replayHash}</Caption>
       </ScrollView>
 
       <PrimaryButton label="Replay this case" onPress={replay} />
-      <PrimaryButton label="Back to home" onPress={() => navigation.popToTop()} />
+      <SecondaryButton label="Back to home" onPress={() => navigation.popToTop()} />
     </Screen>
   );
 }

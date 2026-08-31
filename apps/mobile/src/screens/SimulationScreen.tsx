@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { ActivityIndicator } from 'react-native';
 import type { SimulationMode } from '@qaniva/contracts';
-import { Body, PrimaryButton, Screen, Title } from '@/components/ui';
+import { Body, PrimaryButton, Screen, Wordmark } from '@/components/ui';
 import { useUnitySimulation } from '@/unity/useUnitySimulation';
 import { analytics } from '@/analytics';
 import type { ScreenProps } from '@/navigation/types';
@@ -65,7 +65,8 @@ export function SimulationScreen({ navigation, route }: ScreenProps<'Simulation'
 
   return (
     <Screen>
-      <Title>{title}</Title>
+      <Wordmark compact />
+      <Body muted>{title}</Body>
       {sim.phase === 'failed' ? (
         <>
           <Body>
@@ -76,15 +77,18 @@ export function SimulationScreen({ navigation, route }: ScreenProps<'Simulation'
         </>
       ) : (
         <>
-          <ActivityIndicator />
+          <ActivityIndicator color={undefined} />
           <Body muted>
-            {sim.phase === 'starting' && 'Loading the deterministic case and warming up Unity…'}
-            {sim.phase === 'ready' && 'Running the simulation…'}
-            {sim.phase === 'idle' && 'Preparing…'}
+            {sim.phase === 'starting' && 'Preparing the simulation…'}
+            {sim.phase === 'ready' && 'Entering the simulation…'}
+            {sim.phase === 'idle' && 'Preparing the simulation…'}
             {sim.phase === 'exited' && 'Leaving the simulation…'}
           </Body>
           {sim.transportKind === 'fake' && (
-            <Body muted>⚠ FAKE BRIDGE (dev build without Unity runtime)</Body>
+            <Body muted>
+              ⚠ Development build without the simulation runtime — results are simulated
+              placeholders.
+            </Body>
           )}
         </>
       )}

@@ -1,18 +1,25 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Body, Card, PrimaryButton, Screen, Title } from '@/components/ui';
+import { Body, Caption, Card, PrimaryButton, Screen, SectionHeader, Title } from '@/components/ui';
 import { apiClient } from '@/api/client';
-import { catalogCase, DEFAULT_BRIEFING } from '@/cases/catalog';
+import { catalogCase, DEFAULT_BRIEFING, specialtyLabel } from '@/cases/catalog';
 import { attemptStore } from '@/storage/asyncStorageKv';
 import type { StoredAttempt } from '@/storage/attemptStore';
 import { analytics } from '@/analytics';
 import { cryptoRandomId, randomSeed } from '@/lib/ids';
+import { colors, spacing, typography } from '@/theme/tokens';
 import type { ScreenProps } from '@/navigation/types';
 
+/**
+ * Case briefing (INACSL prebrief). Every line comes from the AUTHORED case
+ * data (`metadata.briefing` in case.json via the catalog) — no case text lives
+ * in app code.
+ */
 export function CaseDetailScreen({ navigation, route }: ScreenProps<'CaseDetail'>) {
   const { caseId, caseVersion, title } = route.params;
-  const briefing = catalogCase(caseId)?.briefing ?? DEFAULT_BRIEFING;
+  const entry = catalogCase(caseId);
+  const briefing = entry?.briefing ?? DEFAULT_BRIEFING;
   const [history, setHistory] = useState<StoredAttempt[]>([]);
 
   useEffect(() => {
@@ -46,16 +53,28 @@ export function CaseDetailScreen({ navigation, route }: ScreenProps<'CaseDetail'
 
   return (
     <Screen>
-      <Title>{title}</Title>
-      <ScrollView contentContainerStyle={{ gap: 8 }}>
-        {briefing.map((line, i) => (
-          <Body key={i} muted>
-            {line}
-          </Body>
-        ))}
+      <ScrollView contentContainerStyle={styles.content}>
+        <Title>{title}</Title>
+        {entry ? (
+          <Caption>
+            {specialtyLabel(entry.manifest.specialty)} · estimated ~
+            {entry.manifest.estimatedMinutes} min session
+          </Caption>
+        ) : null}
+
+        <SectionHeader>Briefing</SectionHeader>
+        <Card>
+          {briefing.map((line, i) => (
+            <View key={i} style={styles.briefingLine}>
+              <Text style={styles.briefingBullet}>—</Text>
+              <Body muted>{line}</Body>
+            </View>
+          ))}
+        </Card>
+
         {history.length > 0 && (
           <>
-            <Body>Your recent attempts</Body>
+            <SectionHeader>Your recent attempts</SectionHeader>
             {history.map((a) => (
               <Card key={a.summary.attemptId}>
                 <Body muted>
@@ -74,3 +93,9 @@ export function CaseDetailScreen({ navigation, route }: ScreenProps<'CaseDetail'
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  content: { gap: spacing.sm, paddingBottom: spacing.md },
+  briefingLine: { flexDirection: 'row', gap: spacing.sm, paddingRight: spacing.md },
+  briefingBullet: { ...typography.body, color: colors.brand },
+});

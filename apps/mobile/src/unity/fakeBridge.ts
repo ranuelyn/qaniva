@@ -17,6 +17,8 @@ export interface UnityBridgeTransport {
   send(message: RnToUnityMessage): void;
   subscribe(handler: (message: UnityToRnMessage) => void): () => void;
   dispose(): void;
+  /** Return the screen to the RN window without disposing (e.g. on SIMULATION_FAILED). */
+  hide?(): void;
 }
 
 let counter = 0;

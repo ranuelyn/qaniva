@@ -73,6 +73,8 @@ export function useUnitySimulation(
         case 'SIMULATION_FAILED':
           setError(`${message.payload.code}: ${message.payload.message}`);
           setPhase('failed');
+          // The full-screen Unity window must not cover the RN error screen.
+          bridge.hide?.();
           break;
         case 'EXIT_REQUESTED':
           setPhase('exited');

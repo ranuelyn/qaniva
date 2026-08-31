@@ -11,6 +11,7 @@ import type { AttemptSummary } from '@qaniva/contracts';
 export interface KeyValueStore {
   getItem(key: string): Promise<string | null>;
   setItem(key: string, value: string): Promise<void>;
+  removeItem?(key: string): Promise<void>;
 }
 
 /** One persisted attempt: the full deterministic summary + bookkeeping. */
@@ -76,6 +77,26 @@ export class AttemptStore {
     } catch (e) {
       return { ok: false, error: e instanceof Error ? e.message : 'unknown storage error' };
     }
+  }
+
+  /** Deletes ALL locally stored attempts (Settings → Reset local progress). */
+  async clearAll(): Promise<SaveResult> {
+    try {
+      if (this.kv.removeItem) {
+        await this.kv.removeItem(STORE_KEY);
+      } else {
+        await this.kv.setItem(STORE_KEY, JSON.stringify([]));
+      }
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, error: e instanceof Error ? e.message : 'unknown storage error' };
+    }
+  }
+
+  /** The most recently completed attempt across all cases (for Home "Continue"). */
+  async latestAttempt(): Promise<StoredAttempt | null> {
+    const all = await this.listAll();
+    return all.length ? all[all.length - 1]! : null;
   }
 
   async progressForCase(caseId: string): Promise<CaseProgress> {

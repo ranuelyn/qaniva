@@ -72,6 +72,23 @@ export const appOpenEvent = z.object({
   event: z.literal('app_open'),
 });
 
+export const onboardingViewedEvent = z.object({
+  ...base,
+  event: z.literal('onboarding_viewed'),
+});
+
+export const onboardingCompletedEvent = z.object({
+  ...base,
+  event: z.literal('onboarding_completed'),
+});
+
+export const surfaceViewedEvent = z.object({
+  ...base,
+  event: z.literal('surface_viewed'),
+  /** Product shell surface: home | cases | progress | settings | about | disclaimer. */
+  surface: z.enum(['home', 'cases', 'progress', 'settings', 'about', 'disclaimer']),
+});
+
 export const caseViewedEvent = z.object({
   ...base,
   event: z.literal('case_viewed'),
@@ -107,6 +124,9 @@ export const feedbackSubmitEvent = z.object({
 
 export const analyticsEventSchema = z.discriminatedUnion('event', [
   appOpenEvent,
+  onboardingViewedEvent,
+  onboardingCompletedEvent,
+  surfaceViewedEvent,
   caseViewedEvent,
   caseAbortEvent,
   debriefViewedEvent,

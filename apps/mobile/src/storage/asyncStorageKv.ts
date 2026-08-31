@@ -5,6 +5,7 @@ import { AttemptStore, type KeyValueStore } from './attemptStore';
 const asyncStorageKv: KeyValueStore = {
   getItem: (key) => AsyncStorage.getItem(key),
   setItem: (key, value) => AsyncStorage.setItem(key, value),
+  removeItem: (key) => AsyncStorage.removeItem(key),
 };
 
 export const attemptStore = new AttemptStore(asyncStorageKv);
