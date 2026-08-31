@@ -27,6 +27,23 @@
     <!-- E. last action result feedback -->
     <ui:VisualElement name="result-banner" class="result-banner hidden">
       <ui:Label name="result-text" class="result-text" text="" />
+      <ui:Button name="result-view-button" class="result-view-button hidden" text="Open result" />
+    </ui:VisualElement>
+
+    <!-- F. full-screen result viewer (generic: ECG now, imaging later).
+         Pan = native ScrollView touch drag; zoom = simple +/- controls. -->
+    <ui:VisualElement name="result-viewer" class="result-viewer hidden">
+      <ui:Label name="result-viewer-title" class="result-viewer-title" text="" />
+      <ui:ScrollView name="result-viewer-scroll" class="result-viewer-scroll"
+                     mode="VerticalAndHorizontal">
+        <ui:VisualElement name="result-viewer-image" class="result-viewer-image" />
+      </ui:ScrollView>
+      <ui:Label name="result-viewer-note" class="result-viewer-note" text="" />
+      <ui:VisualElement name="result-viewer-controls" class="result-viewer-controls">
+        <ui:Button name="result-zoom-out" class="viewer-button" text="−" />
+        <ui:Button name="result-zoom-in" class="viewer-button" text="+" />
+        <ui:Button name="result-viewer-close" class="viewer-button close" text="Close" />
+      </ui:VisualElement>
     </ui:VisualElement>
 
     <!-- H. completion overlay -->

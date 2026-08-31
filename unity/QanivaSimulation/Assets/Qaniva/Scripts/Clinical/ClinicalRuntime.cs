@@ -95,6 +95,12 @@ namespace Qaniva.Clinical.Runtime
                 TriggeredRuleIds = result.Event?.TriggeredRuleIds.ToList() ?? new List<string>(),
                 PresentationCues = result.PresentationCues.ToList(),
                 Snapshot = Map(_sim.Snapshot()),
+                ResultText = result.ResultText,
+                ResultAssetId = result.ResultAssetId,
+                ResultAssetLabel = result.ResultAssetLabel,
+                NewlyDisclosedFacts = result.NewlyDisclosedFacts
+                    .Select(f => new DisclosedFactView { Id = f.Id, Text = f.Text })
+                    .ToList(),
             };
         }
 
@@ -121,7 +127,25 @@ namespace Qaniva.Clinical.Runtime
                 ScoreTreatment = score.Breakdown.Treatment,
                 ScoreDisposition = score.Breakdown.Disposition,
                 ReplayHash = Replayer.ComputeReplayHash(_case, _seed, _appliedActionIds, snap.StateHash),
+                DebriefSummary = _case.DebriefMetadata.Summary,
+                DebriefKeyTeachingPoints = _case.DebriefMetadata.KeyTeachingPoints.ToList(),
+                DebriefCommonErrors = _case.DebriefMetadata.CommonErrors.ToList(),
             };
+            foreach (var c in _sim.CriterionResults())
+            {
+                summary.Criteria.Add(new CriterionResultView
+                {
+                    Id = c.Id,
+                    Label = c.Label,
+                    Category = c.Category,
+                    Criticality = c.Criticality,
+                    Harmful = c.Harmful,
+                    Classification = c.Classification,
+                    CreditedAtSec = c.CreditedAtSec,
+                    AwardedPoints = c.AwardedPoints,
+                    MaxPoints = c.MaxPoints,
+                });
+            }
             foreach (var e in _sim.Timeline.Events)
             {
                 summary.Timeline.Add(new TimelineEntryView

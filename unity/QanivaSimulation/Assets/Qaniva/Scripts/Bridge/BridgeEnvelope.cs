@@ -94,7 +94,31 @@ namespace Qaniva.Bridge
         public double totalScore;
         public ScoreBreakdownDto scoreBreakdown = new ScoreBreakdownDto();
         public List<TimelineEntryDto> timeline = new List<TimelineEntryDto>();
+        public List<CriterionResultDto> criteria = new List<CriterionResultDto>();
+        public DebriefContentDto debrief = new DebriefContentDto();
         public string replayHash = "";
+    }
+
+    [Serializable]
+    public sealed class CriterionResultDto
+    {
+        public string id = "";
+        public string label = "";
+        public string category = "";
+        public string criticality = "minor";
+        public bool harmful;
+        public string classification = "missed";
+        public int creditedAtSec = -1;
+        public double awardedPoints;
+        public double maxPoints;
+    }
+
+    [Serializable]
+    public sealed class DebriefContentDto
+    {
+        public string summary = "";
+        public List<string> keyTeachingPoints = new List<string>();
+        public List<string> commonErrors = new List<string>();
     }
 
     [Serializable]

@@ -42,6 +42,9 @@ namespace Qaniva.Bridge
         /// </summary>
         public string CurrentMode { get; private set; } = BridgeProtocol.Modes.Interactive;
 
+        /// <summary>Case id of the in-flight simulation (null before the first START).</summary>
+        public string CurrentCaseId => _caseId;
+
         /// <summary>Raised when a NEW simulation has been loaded and initialised.</summary>
         public event Action SimulationStarted;
 
@@ -244,7 +247,28 @@ namespace Qaniva.Bridge
                     disposition = summary.ScoreDisposition,
                 },
                 replayHash = summary.ReplayHash,
+                debrief = new DebriefContentDto
+                {
+                    summary = summary.DebriefSummary,
+                    keyTeachingPoints = new List<string>(summary.DebriefKeyTeachingPoints),
+                    commonErrors = new List<string>(summary.DebriefCommonErrors),
+                },
             };
+            foreach (var c in summary.Criteria)
+            {
+                dto.criteria.Add(new CriterionResultDto
+                {
+                    id = c.Id,
+                    label = c.Label,
+                    category = c.Category,
+                    criticality = c.Criticality,
+                    harmful = c.Harmful,
+                    classification = c.Classification,
+                    creditedAtSec = c.CreditedAtSec,
+                    awardedPoints = c.AwardedPoints,
+                    maxPoints = c.MaxPoints,
+                });
+            }
             foreach (var e in summary.Timeline)
             {
                 dto.timeline.Add(new TimelineEntryDto

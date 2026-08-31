@@ -1,0 +1,100 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace Qaniva.Presentation
+{
+    /// <summary>
+    /// Full-screen viewer for investigation result assets (the case's generic
+    /// `resultAssets` — an ECG tracing today, X-ray/CT/ultrasound later).
+    ///
+    /// Presentation only: it renders a bundled image referenced by the engine's
+    /// ActionOutcomeView.ResultAssetId. It never interprets the asset, never adds
+    /// clinical text, and never touches simulation state. Pan is the ScrollView's
+    /// native touch drag; zoom is deliberately simple (+/- buttons).
+    ///
+    /// Assets resolve from Resources/Qaniva/CaseAssets/&lt;assetId&gt; (bundled,
+    /// mirroring ResourcesCaseProvider for case JSON).
+    /// </summary>
+    public sealed class ResultViewerPresenter
+    {
+        public const string AssetResourceFolder = "Qaniva/CaseAssets/";
+
+        private const float MinZoom = 0.5f;
+        private const float MaxZoom = 4f;
+        private const float ZoomStep = 1.25f;
+
+        /// <summary>Base on-panel width for a freshly opened asset (panel ref width 1206).</summary>
+        private const float FitWidth = 1150f;
+
+        private readonly VisualElement _panel;
+        private readonly Label _title;
+        private readonly ScrollView _scroll;
+        private readonly VisualElement _image;
+        private readonly Label _note;
+
+        private Texture2D _texture;
+        private float _zoom = 1f;
+
+        public ResultViewerPresenter(VisualElement root)
+        {
+            _panel = root.Q<VisualElement>("result-viewer");
+            _title = root.Q<Label>("result-viewer-title");
+            _scroll = root.Q<ScrollView>("result-viewer-scroll");
+            _image = root.Q<VisualElement>("result-viewer-image");
+            _note = root.Q<Label>("result-viewer-note");
+
+            root.Q<Button>("result-viewer-close").clicked += Close;
+            root.Q<Button>("result-zoom-in").clicked += () => SetZoom(_zoom * ZoomStep);
+            root.Q<Button>("result-zoom-out").clicked += () => SetZoom(_zoom / ZoomStep);
+        }
+
+        public bool IsOpen => _panel != null && !_panel.ClassListContains("hidden");
+
+        /// <summary>Opens the viewer for a result asset id. Missing assets fail loudly
+        /// in the viewer itself (never a silent blank screen).</summary>
+        public void Open(string assetId, string label)
+        {
+            if (_panel == null)
+            {
+                return;
+            }
+
+            _texture = Resources.Load<Texture2D>(AssetResourceFolder + assetId);
+            _title.text = string.IsNullOrEmpty(label) ? assetId : label;
+
+            if (_texture == null)
+            {
+                Debug.LogError($"[ResultViewer] asset \"{assetId}\" not found under Resources/{AssetResourceFolder}");
+                _note.text = $"Result asset \"{assetId}\" is missing from this build.";
+                _image.style.backgroundImage = new StyleBackground((Texture2D)null);
+                _image.style.width = 0;
+                _image.style.height = 0;
+            }
+            else
+            {
+                _note.text = "";
+                _image.style.backgroundImage = new StyleBackground(_texture);
+                SetZoom(1f);
+            }
+
+            _panel.RemoveFromClassList("hidden");
+        }
+
+        public void Close()
+        {
+            _panel?.AddToClassList("hidden");
+        }
+
+        private void SetZoom(float zoom)
+        {
+            _zoom = Mathf.Clamp(zoom, MinZoom, MaxZoom);
+            if (_texture == null)
+            {
+                return;
+            }
+            float width = FitWidth * _zoom;
+            _image.style.width = width;
+            _image.style.height = width * ((float)_texture.height / _texture.width);
+        }
+    }
+}

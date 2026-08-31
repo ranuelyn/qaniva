@@ -83,7 +83,7 @@ namespace Qaniva.Presentation
             yield return new WaitForSeconds(2.0f); // let the UI build + first layout
 
             int stepsTaken = 0;
-            foreach (var actionId in IntegrationAutoPlayer.IdealPath)
+            foreach (var actionId in IntegrationAutoPlayer.IdealPathFor(_controller.CurrentCaseId))
             {
                 if (abortRun && stepsTaken == 2)
                 {
@@ -146,6 +146,22 @@ namespace Qaniva.Presentation
 
                 // respect the UI's double-submit debounce like a human would
                 yield return new WaitForSeconds(Mathf.Max(1.0f, SimulationUiController.SubmitDebounceSeconds * 2));
+
+                // If the action opened the full-screen result viewer (e.g. the
+                // ECG tracing), inspect briefly then close it through the REAL
+                // close button — the viewer round-trip is part of the E2E proof.
+                var viewer = root.Q<VisualElement>("result-viewer");
+                if (viewer != null && !viewer.ClassListContains("hidden"))
+                {
+                    Debug.Log("[InteractiveE2eDriver] result viewer open — closing via result-viewer-close");
+                    yield return new WaitForSeconds(1.0f);
+                    var close = root.Q<Button>("result-viewer-close");
+                    if (close != null)
+                    {
+                        Press(close);
+                    }
+                    yield return null;
+                }
             }
 
             _running = false;

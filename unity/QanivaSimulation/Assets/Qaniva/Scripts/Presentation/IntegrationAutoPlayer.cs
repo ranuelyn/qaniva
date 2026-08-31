@@ -24,6 +24,19 @@ namespace Qaniva.Presentation
             "give_atropine", "consult_cardiology", "disposition_ccu",
         };
 
+        // Mirrors .../Golden/stemi_ideal_path.script.json.
+        internal static readonly string[] StemiIdealPath =
+        {
+            "focused_history", "attach_monitor", "ecg_12lead", "give_aspirin",
+            "iv_access", "give_ticagrelor", "give_heparin_ufh",
+            "activate_cath_lab", "start_statin", "disposition_cath_lab",
+        };
+
+        /// <summary>The e2e drivers' ideal action sequence for a case (test data,
+        /// mirrored from the committed golden scripts — never clinical logic).</summary>
+        internal static string[] IdealPathFor(string caseId) =>
+            caseId == "stemi_anterior_001" ? StemiIdealPath : IdealPath;
+
         /// <summary>Single place that decides whether this driver may act (unit-tested).</summary>
         public static bool ShouldRunFor(string mode) => mode == BridgeProtocol.Modes.E2eAutoplay;
 
@@ -79,7 +92,7 @@ namespace Qaniva.Presentation
         {
             Debug.Log("[IntegrationAutoPlayer] e2e_autoplay: driving the demo ideal path (runtime-direct)");
             yield return new WaitForSeconds(1.5f);
-            foreach (var actionId in IdealPath)
+            foreach (var actionId in IdealPathFor(_controller.CurrentCaseId))
             {
                 var outcome = _controller.SubmitPlayerAction(actionId);
                 Debug.Log($"[IntegrationAutoPlayer] {actionId}: accepted={outcome.Accepted} terminated={outcome.Terminated}");

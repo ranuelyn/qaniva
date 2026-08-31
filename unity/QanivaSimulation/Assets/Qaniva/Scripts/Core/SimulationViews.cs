@@ -51,6 +51,41 @@ namespace Qaniva.Simulation.Core
         public List<string> TriggeredRuleIds = new List<string>();
         public List<string> PresentationCues = new List<string>();
         public SimulationSnapshotView Snapshot;
+
+        /// <summary>Case-authored result narrative for this action (null when none).</summary>
+        public string ResultText;
+
+        /// <summary>Result-asset id the learner may open (e.g. an ECG tracing), or null.</summary>
+        public string ResultAssetId;
+
+        /// <summary>Learner-facing label of that asset ("12-lead ECG"), or null.</summary>
+        public string ResultAssetLabel;
+
+        /// <summary>Facts disclosed by this step (engine-diffed), with learner-facing text.</summary>
+        public List<DisclosedFactView> NewlyDisclosedFacts = new List<DisclosedFactView>();
+    }
+
+    [Serializable]
+    public sealed class DisclosedFactView
+    {
+        public string Id = "";
+        public string Text = "";
+    }
+
+    /// <summary>One rubric criterion's final deterministic outcome (engine-owned debrief fact).</summary>
+    [Serializable]
+    public sealed class CriterionResultView
+    {
+        public string Id = "";
+        public string Label = "";
+        public string Category = "";
+        public string Criticality = "minor";
+        public bool Harmful;
+        /// <summary>correct | delayed | missed | harmful | avoided</summary>
+        public string Classification = "missed";
+        public int CreditedAtSec = -1;
+        public double AwardedPoints;
+        public double MaxPoints;
     }
 
     [Serializable]
@@ -111,6 +146,10 @@ namespace Qaniva.Simulation.Core
         public double ScoreTreatment;
         public double ScoreDisposition;
         public List<TimelineEntryView> Timeline = new List<TimelineEntryView>();
+        public List<CriterionResultView> Criteria = new List<CriterionResultView>();
+        public string DebriefSummary = "";
+        public List<string> DebriefKeyTeachingPoints = new List<string>();
+        public List<string> DebriefCommonErrors = new List<string>();
         public string ReplayHash = "";
     }
 }

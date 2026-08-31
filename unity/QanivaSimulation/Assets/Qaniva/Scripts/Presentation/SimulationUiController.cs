@@ -48,6 +48,10 @@ namespace Qaniva.Presentation
         private TimelinePresenter _timeline;
         private VisualElement _resultBanner;
         private Label _resultText;
+        private Button _resultViewButton;
+        private ResultViewerPresenter _resultViewer;
+        private string _openableAssetId;
+        private string _openableAssetLabel;
         private VisualElement _completionPanel;
         private Label _completionDetail;
 
@@ -83,6 +87,15 @@ namespace Qaniva.Presentation
             _timeline = new TimelinePresenter(root);
             _resultBanner = root.Q<VisualElement>("result-banner");
             _resultText = root.Q<Label>("result-text");
+            _resultViewButton = root.Q<Button>("result-view-button");
+            _resultViewer = new ResultViewerPresenter(root);
+            _resultViewButton.clicked += () =>
+            {
+                if (!string.IsNullOrEmpty(_openableAssetId))
+                {
+                    _resultViewer.Open(_openableAssetId, _openableAssetLabel);
+                }
+            };
             _completionPanel = root.Q<VisualElement>("completion-panel");
             _completionDetail = root.Q<Label>("completion-detail");
 
@@ -121,6 +134,10 @@ namespace Qaniva.Presentation
             _lastSubmitTime = -999f;
             _resultBanner.AddToClassList("hidden");
             _resultText.text = "";
+            _resultViewButton.AddToClassList("hidden");
+            _resultViewer.Close();
+            _openableAssetId = null;
+            _openableAssetLabel = null;
             _completionPanel.AddToClassList("hidden");
             _completionDetail.text = "";
             _timeline.Hide();
@@ -167,12 +184,41 @@ namespace Qaniva.Presentation
             if (outcome.Accepted)
             {
                 var snap = outcome.Snapshot;
-                _resultText.text =
-                    $"{actionId} — done ({outcome.Classification})\n"
-                    + $"t = {snap.SimTimeSec / 60:00}:{snap.SimTimeSec % 60:00}"
-                    + (outcome.TriggeredRuleIds.Count > 0
-                        ? $"   state change: {string.Join(", ", outcome.TriggeredRuleIds)}"
-                        : "");
+                var text = new System.Text.StringBuilder();
+                text.Append($"t = {snap.SimTimeSec / 60:00}:{snap.SimTimeSec % 60:00}");
+
+                // Case-authored result narrative + any facts this step disclosed —
+                // all engine-provided text; the UI adds nothing clinical.
+                if (!string.IsNullOrEmpty(outcome.ResultText))
+                {
+                    text.Append('\n').Append(outcome.ResultText);
+                }
+                foreach (var fact in outcome.NewlyDisclosedFacts)
+                {
+                    if (!string.IsNullOrEmpty(fact.Text))
+                    {
+                        text.Append('\n').Append(fact.Text);
+                    }
+                }
+                if (string.IsNullOrEmpty(outcome.ResultText) && outcome.NewlyDisclosedFacts.Count == 0)
+                {
+                    text.Append('\n').Append($"{actionId} — done");
+                }
+                _resultText.text = text.ToString();
+
+                _openableAssetId = outcome.ResultAssetId;
+                _openableAssetLabel = string.IsNullOrEmpty(outcome.ResultAssetLabel)
+                    ? actionId
+                    : outcome.ResultAssetLabel;
+                if (string.IsNullOrEmpty(_openableAssetId))
+                {
+                    _resultViewButton.AddToClassList("hidden");
+                }
+                else
+                {
+                    _resultViewButton.RemoveFromClassList("hidden");
+                    _resultViewer.Open(_openableAssetId, _openableAssetLabel);
+                }
             }
             else
             {
