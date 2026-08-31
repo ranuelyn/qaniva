@@ -33,11 +33,16 @@ namespace Qaniva.EditorTools
 
             CreateMaterials();
             var patient = CreatePatientPrefab();
+            var rigged = CreateRiggedPatientPrefab();
             var monitor = CreateMonitorPrefab();
             CreateEnvironmentPrefab(monitor);
             AssetDatabase.SaveAssets();
             Debug.Log("[QanivaPresentationAssets] all presentation assets written");
             UnityEngine.Object.DestroyImmediate(patient);
+            if (rigged != null)
+            {
+                UnityEngine.Object.DestroyImmediate(rigged);
+            }
         }
 
         // --- materials -----------------------------------------------------
@@ -82,6 +87,7 @@ namespace Qaniva.EditorTools
             Make("AccentTeal", new Color(0.12f, 0.43f, 0.55f), 0f, 0.35f);
             Make("IvBag", new Color(0.85f, 0.90f, 0.92f, 1f), 0f, 0.6f);
             Make("CeilingPanel", Color.white, 0f, 0.2f, new Color(1.6f, 1.6f, 1.55f));
+            Make("Hair", new Color(0.14f, 0.12f, 0.11f), 0f, 0.45f);
         }
 
         // --- helpers ------------------------------------------------------
@@ -194,6 +200,82 @@ namespace Qaniva.EditorTools
             var prefab = PrefabUtility.SaveAsPrefabAsset(root, path);
             Debug.Log($"[QanivaPresentationAssets] wrote {path}");
             return root; // caller destroys
+        }
+
+        // --- rigged patient (QAN-020) -------------------------------------
+
+        /// <summary>
+        /// Wraps the first-party Blender-generated rig
+        /// (Assets/Qaniva/Art/Patients/adult_rigged_v1.fbx, built by
+        /// scripts/generate-patient-blender.py) in the SAME patient prefab
+        /// contract as the primitive patient: root carries PatientVisualController
+        /// + procedure anchors; +Z = toward the head end of the bed; the model's
+        /// materials are remapped onto the shared URP set (Skin/Gown/Hair) so the
+        /// controller's skin tinting works identically.
+        /// </summary>
+        private static GameObject CreateRiggedPatientPrefab()
+        {
+            const string fbxPath = "Assets/Qaniva/Art/Patients/adult_rigged_v1.fbx";
+            var importer = AssetImporter.GetAtPath(fbxPath) as ModelImporter;
+            if (importer == null)
+            {
+                Debug.LogError($"[QanivaPresentationAssets] {fbxPath} missing — run scripts/generate-patient-blender.py in Blender first. Keeping the existing rigged prefab (if any).");
+                return null;
+            }
+
+            importer.materialImportMode = ModelImporterMaterialImportMode.ImportViaMaterialDescription;
+            importer.animationType = ModelImporterAnimationType.Generic; // procedural bone animation, no clips yet
+            foreach (var (src, dst) in new[]
+            {
+                ("PatientSkinMat", "Skin"),
+                ("PatientGownMat", "Gown"),
+                ("PatientHairMat", "Hair"),
+            })
+            {
+                importer.AddRemap(
+                    new AssetImporter.SourceAssetIdentifier(typeof(Material), src), Mat(dst));
+            }
+            importer.SaveAndReimport();
+
+            var fbx = AssetDatabase.LoadAssetAtPath<GameObject>(fbxPath);
+            var root = new GameObject("adult_rigged_v1");
+
+            var model = (GameObject)PrefabUtility.InstantiatePrefab(fbx);
+            model.name = "Model";
+            model.transform.SetParent(root.transform, false);
+            // Supine: X+90 lays the imported rig down with the head toward +Z
+            // (bed-head) but face-down; the extra 180° roll about the body's long
+            // axis turns it onto its back. Empirical values verified via PlayMode
+            // captures (the Blender FBX import bakes its own axis compensation).
+            model.transform.localRotation =
+                Quaternion.AngleAxis(180f, Vector3.forward) * Quaternion.Euler(90f, 0f, 0f);
+            // Feet toward the bed's foot end; body rests on the mattress plane.
+            model.transform.localPosition = new Vector3(0f, 0.14f, -0.85f);
+
+            foreach (var renderer in model.GetComponentsInChildren<Renderer>())
+            {
+                foreach (var m in renderer.sharedMaterials)
+                {
+                    Debug.Log($"[QanivaPresentationAssets] rigged patient material: {renderer.name} -> {(m == null ? "NULL" : m.name)}");
+                }
+            }
+
+            // Bed dressing shared with the primitive patient look. The blanket sits
+            // OVER the legs (covers the lower body up to the waist).
+            Box("Pillow", root.transform, new Vector3(0f, 0.05f, 0.92f), new Vector3(0.42f, 0.07f, 0.20f), "PlasticLight");
+            Box("Blanket", root.transform, new Vector3(0f, 0.19f, -0.44f), new Vector3(0.56f, 0.12f, 0.78f), "Blanket");
+
+            Anchor("AnchorHead", root.transform, new Vector3(0f, 0.20f, 0.80f));
+            Anchor("AnchorChest", root.transform, new Vector3(0f, 0.22f, 0.35f));
+            Anchor("AnchorLeftArm", root.transform, new Vector3(-0.30f, 0.10f, 0.15f));
+            Anchor("AnchorRightArm", root.transform, new Vector3(0.30f, 0.10f, 0.15f));
+
+            root.AddComponent<PatientVisualController>();
+
+            var path = $"{PatientDir}/adult_rigged_v1.prefab";
+            PrefabUtility.SaveAsPrefabAsset(root, path);
+            Debug.Log($"[QanivaPresentationAssets] wrote {path}");
+            return root;
         }
 
         // --- bedside monitor ---------------------------------------------

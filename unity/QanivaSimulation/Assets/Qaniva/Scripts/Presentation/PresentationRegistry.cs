@@ -21,6 +21,7 @@ namespace Qaniva.Presentation
         private static readonly Dictionary<string, string> Patients = new()
         {
             ["adult_neutral_v1"] = "Qaniva/Patients/adult_neutral_v1",
+            ["adult_rigged_v1"] = "Qaniva/Patients/adult_rigged_v1",
         };
 
         public static string ResolveEnvironment(string roomKey) =>
