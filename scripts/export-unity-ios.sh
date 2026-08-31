@@ -54,10 +54,14 @@ fi
 echo "==> building UnityFramework.framework"
 DERIVED="$PROJECT/build/DerivedData"
 if [ "${SIM:-0}" = "1" ]; then
+  # Unity pins ARCHS=x86_64 for simulator exports; its IL2CPP build script honours
+  # an ARCHS override, so build for the host architecture (arm64 on Apple Silicon).
+  HOST_ARCH="$(uname -m)"
   xcodebuild -project "$EXPORT_DIR/Unity-iPhone.xcodeproj" \
     -scheme UnityFramework -configuration Release \
     -destination 'generic/platform=iOS Simulator' \
     -derivedDataPath "$DERIVED" \
+    ARCHS="$HOST_ARCH" ONLY_ACTIVE_ARCH=YES \
     CODE_SIGNING_ALLOWED=NO build | tail -5
   PRODUCT="$DERIVED/Build/Products/Release-iphonesimulator/UnityFramework.framework"
 else

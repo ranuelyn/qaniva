@@ -16,15 +16,19 @@ typedef void (*QanivaHostHandler)(const char *json);
 
 static QanivaHostHandler sHostHandler = NULL;
 
+// "used" + default visibility: the host resolves QanivaRegisterHostHandler via
+// dlsym, so it must survive dead-stripping and be exported from UnityFramework.
+#define QANIVA_EXPORT __attribute__((used, visibility("default")))
+
 extern "C" {
 
 /// Called by the host app (via dlsym) after loading UnityFramework.
-void QanivaRegisterHostHandler(QanivaHostHandler handler) {
+QANIVA_EXPORT void QanivaRegisterHostHandler(QanivaHostHandler handler) {
   sHostHandler = handler;
 }
 
 /// Called by Unity C# (NativeUnityBridge, DllImport "__Internal").
-void _QanivaBridge_SendToHost(const char *json) {
+QANIVA_EXPORT void _QanivaBridge_SendToHost(const char *json) {
   if (sHostHandler != NULL) {
     sHostHandler(json);
   } else {
