@@ -14,7 +14,9 @@
 │                          ▼                                    │
 │  Unity 6 / URP simulation runtime                             │
 │   room · patient · monitor · camera · animation adapters      │
-│                          │ PlayerAction                        │
+│   interactive UI (UI Toolkit): tabs · action list · vitals ·  │
+│   case log · exit  — renders GetActionAvailability()/timeline │
+│                          │ PlayerAction (user tap)             │
 │                          ▼                                    │
 │  IClinicalRuntime  ──►  Qaniva.Clinical.Core.dll (pure C#)     │
 │   CaseDefinition · PatientState · RuleEvaluator ·             │

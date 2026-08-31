@@ -21,6 +21,7 @@ pass.
 | Mobile native build | `apps/mobile/ios` | xcodebuild (simulator, `CODE_SIGNING_ALLOWED=NO`) | **no** (macOS runner; run locally) |
 | Unity EditMode | `unity/.../Scripts/Tests` | Unity Test Runner (`-runTests -testPlatform EditMode`) | **no** (needs a licensed Editor — run locally) |
 | Unity real-engine integration | `RealClinicalRuntimeTests` (needs `QANIVA_HAS_CLINICAL_CORE` + synced DLL) | Unity Test Runner | **no** (same) |
+| Unity PlayMode (interactive UI) | `InteractiveUiPlayModeTests` — real UI buttons pressed via event dispatch; golden parity, hidden/disabled rendering, double-tap guard, no-autoplay-in-interactive | Unity Test Runner (`-testPlatform PlayMode`) | **no** (same) |
 | Device perf, e2e beta | — | manual | release |
 
 ## Commands
@@ -39,6 +40,8 @@ Unity EditMode tests from the command line (Editor required; adjust the version)
   -runTests -testPlatform EditMode \
   -testResults "$PWD/unity-editmode-results.xml" -logFile -
 ```
+
+PlayMode (interactive UI) tests: same command with `-testPlatform PlayMode`.
 
 Mobile native build (proves the host + native module compile — a TS typecheck is
 NOT evidence of mobile integration):

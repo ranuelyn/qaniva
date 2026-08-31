@@ -28,7 +28,7 @@ and no shared global state between the runtimes.
 
 | Direction | Type | Payload | Meaning |
 | --- | --- | --- | --- |
-| RN → Unity | `START_SIMULATION` | `caseId, caseVersion, attemptId, locale, difficulty, seed` | load + init + render |
+| RN → Unity | `START_SIMULATION` | `caseId, caseVersion, attemptId, locale, difficulty, seed, mode` | load + init + render. `mode` (default `interactive`) selects the runtime mode — see [simulation-ui.md](simulation-ui.md); e2e modes are test-only. |
 | RN → Unity | `PAUSE_SIMULATION` / `RESUME_SIMULATION` | `{}` | app lifecycle |
 | RN → Unity | `EXIT_SIMULATION` | `reason` (`user_quit`/`app_background`/`host_navigation`) | tear down |
 | Unity → RN | `SIMULATION_READY` | `caseId, attemptId, warmupSec` | first frame rendered |

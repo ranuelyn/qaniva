@@ -26,8 +26,9 @@ Engine · BE Backend · CNT Clinical Content · QA QA/Skeptic · REL Release.
 - **Stale framework risk** — Unity-side changes require re-running
   `scripts/export-unity-ios.sh`; the app otherwise runs an old simulation binary
   silently. (Documented in local-development.md; consider a build-stamp check.)
-- **`IntegrationAutoPlayer` must die with QAN-006** — it exists only so the proof
-  can complete a case without an action UI.
+- ~~`IntegrationAutoPlayer` must die with QAN-006~~ — resolved differently: kept as
+  the `e2e_autoplay`-mode regression driver, double-gated (scripting define +
+  typed runtime mode) and PlayMode-tested inert in `interactive` mode.
 
 ## Already delivered by the foundation
 
@@ -49,8 +50,9 @@ tests); ADRs 001–007; docs; CI for the TS workspace + engine.
 | QAN-003 | Real `ClinicalRuntime` inside Unity | UNI+ENG | **DONE** (2026-08-31) | `QANIVA_HAS_CLINICAL_CORE` persisted in ProjectSettings; EditMode `RealClinicalRuntimeTests` (4 tests) run the demo ideal path through the real `Qaniva.Clinical.Core.dll` to the committed golden (complete / 80 / `fe2191ff…`), assert cross-run determinism and rejected-action state invariance. 13/13 EditMode green. | — |
 | QAN-004 | Native "Unity as a Library" embed | MOB+UNI | **PARTIAL — iOS simulator DONE; device + Android OPEN** | Full round trip verified live on iPhone 16 Pro **simulator**: RN → `QanivaUnityBridge` (runtime-loaded UnityFramework, dlsym handler) → real engine → `SIMULATION_READY`/`SIMULATION_COMPLETED` → RN Results rendering the golden payload. Lifecycle RN→Unity→RN→Unity→RN verified (initialise-once runtime, both runs deterministic-identical). NOT yet: physical-device run (device offline/signing), orientation/audio/memory soak, Android transport. | QAN-001 |
 | QAN-005 | Native transport selection in RN | MOB | **DONE** (2026-08-31) | `selectUnityTransport()` uses the native module when present (verified on simulator); `FakeUnityBridge` only without the module, with console warning + on-screen badge; screens unchanged between transports; vitest keeps using the fake. | QAN-004 |
-| QAN-006 | In-simulation action UI in Unity (5 main actions) | UNI | OPEN | Action drawer calls `SubmitPlayerAction`; rejects show feedback; actions from `GetAvailableActionIds`. **Must remove `IntegrationAutoPlayer` + the `QANIVA_INTEGRATION_AUTOPLAY` define.** | QAN-003 |
+| QAN-006 | Interactive in-simulation action UI | UNI | **DONE** (2026-08-31) | UI Toolkit surface (tabs Patient/Examine/Orders/Treat/More, action list, vitals, case log, result banner, exit) rendering the engine's canonical `GetActionAvailability()` projection (hidden / visible+disabled with engine reason / enabled — new clinical-core API, offerable==Visible&&Enabled by construction). Verified: 18 EditMode + 4 PlayMode tests incl. `ManualUiPlayReproducesTheGoldenReplay` (real UI buttons via event dispatch reproduce golden `fe2191ff…`, COMPLETED exactly once) and on-simulator: interactive launch idles (byte-identical screenshots 15s apart), `e2e_ui` run walks the REAL UI — abort run (2 actions + real Exit → EXIT_REQUESTED → RN back) then completion run → RN Results with the golden payload. `IntegrationAutoPlayer` kept but double-gated (define + `mode==e2e_autoplay`); interactive mode PlayMode-tested to never auto-play. See docs/architecture/simulation-ui.md. | QAN-003 |
 | QAN-007 | Attempt event-log upload from the client | MOB+BE | OPEN | Client posts events to `POST /attempts/:id/events` during/after a run. | — |
+| QAN-006b | Parameterized action input (dose/route pickers) | UNI | OPEN | The demo case proves the loop with parameterless submits; `give_atropine`'s optional `dose_mg` param needs a small generic picker (enum/number) before parameterized cases ship. | QAN-006 |
 | QAN-008 | iOS **device** run + lifecycle hardening (from QAN-004) | MOB+UNI | OPEN | Round trip on a physical iPhone (needs the device connected + signing); orientation, audio focus, memory/thermal soak, background/foreground transitions. | QAN-004 |
 | QAN-009 | Android Unity-as-a-Library transport | MOB+UNI | OPEN | Mirror of ADR-008 on Android: `UnityPlayer` host + `UnitySendMessage` in / Java plugin out; round trip on emulator + device. | QAN-004 |
 
