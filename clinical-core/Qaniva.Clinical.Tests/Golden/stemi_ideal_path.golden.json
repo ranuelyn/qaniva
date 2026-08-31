@@ -1,0 +1,146 @@
+{
+  "replayHash": "6cd7ec024acbf915383315bbb5d094eeebbffaf6529e6b664ca8688c83c13e5d",
+  "finalStateHash": "9f2d7c30af67f810c592e2dd2f1c13f3228dbae94c63d2e4e9c9af05f5c6fa11",
+  "outcome": "complete",
+  "terminalStateId": "handoff_cath_lab",
+  "simTimeSec": 320,
+  "vitals": {
+    "hr": 96,
+    "sbpMmHg": 118,
+    "dbpMmHg": 76,
+    "spo2": 96,
+    "rrPerMin": 18,
+    "tempC": 36.8
+  },
+  "circulation": "poor_perfusion",
+  "neuro": "alert",
+  "flags": [
+    "asa_given",
+    "cath_activated",
+    "dispo_cath",
+    "ecg_done",
+    "iv_access",
+    "monitor_on",
+    "p2y12_given",
+    "statin_given",
+    "ufh_given"
+  ],
+  "disclosedFacts": [
+    "ecg_tracing",
+    "hx_pain_character",
+    "hx_risk_factors",
+    "hx_safety_negatives"
+  ],
+  "score": {
+    "total": 88,
+    "critical": 50,
+    "timing": 10,
+    "efficiency": 0,
+    "treatment": 18,
+    "disposition": 10,
+    "missedCriterionIds": []
+  },
+  "timeline": [
+    {
+      "seq": 0,
+      "simTimeSec": 45,
+      "actionId": "focused_history",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "49cf1f7b19405ba3e0c8b7548d11120d70d2e8e55313e112ae81825eb98c7833",
+      "afterHash": "e268b42d499e04660bc3a64c2cc25a89e317df53a61290b3b29ed90b0b88d81d"
+    },
+    {
+      "seq": 1,
+      "simTimeSec": 65,
+      "actionId": "attach_monitor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "e268b42d499e04660bc3a64c2cc25a89e317df53a61290b3b29ed90b0b88d81d",
+      "afterHash": "67e3ecdbee816765e00f8a3eb6ac9e3720636c6bab8ba5e342c117c2438742fe"
+    },
+    {
+      "seq": 2,
+      "simTimeSec": 125,
+      "actionId": "ecg_12lead",
+      "classification": "Correct",
+      "scoreDelta": 15,
+      "triggeredRuleIds": [],
+      "beforeHash": "67e3ecdbee816765e00f8a3eb6ac9e3720636c6bab8ba5e342c117c2438742fe",
+      "afterHash": "4c31667e09ad1640293e1d960fb6991f04ea601c94cfc0caa5e0fb24a189d94d"
+    },
+    {
+      "seq": 3,
+      "simTimeSec": 145,
+      "actionId": "give_aspirin",
+      "classification": "Correct",
+      "scoreDelta": 10,
+      "triggeredRuleIds": [],
+      "beforeHash": "4c31667e09ad1640293e1d960fb6991f04ea601c94cfc0caa5e0fb24a189d94d",
+      "afterHash": "e2788034b74f22326b389f344defe4d114da620f77d45bbf0d8594554478e05e"
+    },
+    {
+      "seq": 4,
+      "simTimeSec": 205,
+      "actionId": "iv_access",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "e2788034b74f22326b389f344defe4d114da620f77d45bbf0d8594554478e05e",
+      "afterHash": "690c3194ac8b39ee518a55a35bded8168b0ac300d2270c2954b6d2728e392343"
+    },
+    {
+      "seq": 5,
+      "simTimeSec": 225,
+      "actionId": "give_ticagrelor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "690c3194ac8b39ee518a55a35bded8168b0ac300d2270c2954b6d2728e392343",
+      "afterHash": "e74900ed3e4f39770b170ea4e425d2c71b0ac43851e778f1e1bd704e53dbd39c"
+    },
+    {
+      "seq": 6,
+      "simTimeSec": 245,
+      "actionId": "give_heparin_ufh",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "e74900ed3e4f39770b170ea4e425d2c71b0ac43851e778f1e1bd704e53dbd39c",
+      "afterHash": "52bef8f8499059fb25f14c0d2abbc84a99fd620ce99898eafaf2dd9aa978532e"
+    },
+    {
+      "seq": 7,
+      "simTimeSec": 275,
+      "actionId": "activate_cath_lab",
+      "classification": "Correct",
+      "scoreDelta": 25,
+      "triggeredRuleIds": [],
+      "beforeHash": "52bef8f8499059fb25f14c0d2abbc84a99fd620ce99898eafaf2dd9aa978532e",
+      "afterHash": "40847e09f9a499d37d37a52797b43062b608952a2cb299a1fcd3502c21e4c022"
+    },
+    {
+      "seq": 8,
+      "simTimeSec": 290,
+      "actionId": "start_statin",
+      "classification": "Correct",
+      "scoreDelta": 3,
+      "triggeredRuleIds": [],
+      "beforeHash": "40847e09f9a499d37d37a52797b43062b608952a2cb299a1fcd3502c21e4c022",
+      "afterHash": "b7b2893dd410f4f183dfeb0d4c834f9cd26a0dc3ca23729fc118b048acd11867"
+    },
+    {
+      "seq": 9,
+      "simTimeSec": 320,
+      "actionId": "disposition_cath_lab",
+      "classification": "Correct",
+      "scoreDelta": 10,
+      "triggeredRuleIds": [],
+      "beforeHash": "b7b2893dd410f4f183dfeb0d4c834f9cd26a0dc3ca23729fc118b048acd11867",
+      "afterHash": "9f2d7c30af67f810c592e2dd2f1c13f3228dbae94c63d2e4e9c9af05f5c6fa11"
+    }
+  ],
+  "rejections": []
+}

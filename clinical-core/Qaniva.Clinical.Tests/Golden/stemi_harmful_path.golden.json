@@ -1,0 +1,127 @@
+{
+  "replayHash": "ca47ff886d74358379f87a883789b2b59f323956a763d6d22aed9603e1fed9ef",
+  "finalStateHash": "95f79fe8c3e0a50bfec7856832ee917a7d8bfb62c428877d9338f20e02060152",
+  "outcome": "complete",
+  "terminalStateId": "handoff_cath_lab",
+  "simTimeSec": 265,
+  "vitals": {
+    "hr": 96,
+    "sbpMmHg": 118,
+    "dbpMmHg": 76,
+    "spo2": 96,
+    "rrPerMin": 18,
+    "tempC": 36.8
+  },
+  "circulation": "poor_perfusion",
+  "neuro": "alert",
+  "flags": [
+    "asa_given",
+    "cath_activated",
+    "dispo_cath",
+    "ecg_done",
+    "iv_access",
+    "lytic_given",
+    "monitor_on",
+    "nsaid_given"
+  ],
+  "disclosedFacts": [
+    "ecg_tracing"
+  ],
+  "score": {
+    "total": 50,
+    "critical": 30,
+    "timing": 10,
+    "efficiency": 0,
+    "treatment": 0,
+    "disposition": 10,
+    "missedCriterionIds": [
+      "c_p2y12_loading",
+      "c_anticoagulation",
+      "c_statin_started",
+      "c_focused_history"
+    ]
+  },
+  "timeline": [
+    {
+      "seq": 0,
+      "simTimeSec": 20,
+      "actionId": "attach_monitor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "49cf1f7b19405ba3e0c8b7548d11120d70d2e8e55313e112ae81825eb98c7833",
+      "afterHash": "a9a54865e86c1926bcf177189f0effb1ec911bac43c6c9f9f3c6fb3c47bb8843"
+    },
+    {
+      "seq": 1,
+      "simTimeSec": 80,
+      "actionId": "ecg_12lead",
+      "classification": "Correct",
+      "scoreDelta": 15,
+      "triggeredRuleIds": [],
+      "beforeHash": "a9a54865e86c1926bcf177189f0effb1ec911bac43c6c9f9f3c6fb3c47bb8843",
+      "afterHash": "3c7948b27d46bce03ee5975706fa6d6083096c3790e5fce6b9ff77fdffba44c3"
+    },
+    {
+      "seq": 2,
+      "simTimeSec": 95,
+      "actionId": "give_nsaid_analgesia",
+      "classification": "Harmful",
+      "scoreDelta": -10,
+      "triggeredRuleIds": [],
+      "beforeHash": "3c7948b27d46bce03ee5975706fa6d6083096c3790e5fce6b9ff77fdffba44c3",
+      "afterHash": "05ee82753a689634e7b0669fbdd2abe72535e40a8c61fc8923c21a0e6238ff20"
+    },
+    {
+      "seq": 3,
+      "simTimeSec": 125,
+      "actionId": "give_fibrinolytic",
+      "classification": "Harmful",
+      "scoreDelta": -10,
+      "triggeredRuleIds": [],
+      "beforeHash": "05ee82753a689634e7b0669fbdd2abe72535e40a8c61fc8923c21a0e6238ff20",
+      "afterHash": "ff05b1f407c8e1f1f8c270cf6517ca217edb2207cdd092668dcbfd9d531199fd"
+    },
+    {
+      "seq": 4,
+      "simTimeSec": 145,
+      "actionId": "give_aspirin",
+      "classification": "Correct",
+      "scoreDelta": 10,
+      "triggeredRuleIds": [],
+      "beforeHash": "ff05b1f407c8e1f1f8c270cf6517ca217edb2207cdd092668dcbfd9d531199fd",
+      "afterHash": "7c0b6e00d2ba5be83f3d4ef1778301e5c8b7b782272cef4b62d7641f180806ae"
+    },
+    {
+      "seq": 5,
+      "simTimeSec": 205,
+      "actionId": "iv_access",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "7c0b6e00d2ba5be83f3d4ef1778301e5c8b7b782272cef4b62d7641f180806ae",
+      "afterHash": "c413cb47534ad699d843b78b6e7f21b3c375be0afbeaa440a8fe623521ec9fe5"
+    },
+    {
+      "seq": 6,
+      "simTimeSec": 235,
+      "actionId": "activate_cath_lab",
+      "classification": "Correct",
+      "scoreDelta": 25,
+      "triggeredRuleIds": [],
+      "beforeHash": "c413cb47534ad699d843b78b6e7f21b3c375be0afbeaa440a8fe623521ec9fe5",
+      "afterHash": "a574bd6fbea07112e7da91a0f8c0863a6ba71399b56dc02b87cbd6d7e1e0e7cc"
+    },
+    {
+      "seq": 7,
+      "simTimeSec": 265,
+      "actionId": "disposition_cath_lab",
+      "classification": "Correct",
+      "scoreDelta": 10,
+      "triggeredRuleIds": [],
+      "beforeHash": "a574bd6fbea07112e7da91a0f8c0863a6ba71399b56dc02b87cbd6d7e1e0e7cc",
+      "afterHash": "95f79fe8c3e0a50bfec7856832ee917a7d8bfb62c428877d9338f20e02060152"
+    }
+  ],
+  "rejections": []
+}

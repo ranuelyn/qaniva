@@ -1,0 +1,17 @@
+{
+  "caseId": "stemi_anterior_001",
+  "caseVersion": 1,
+  "seed": 20260831,
+  "steps": [
+    { "action": "attach_monitor" },
+    { "action": "give_aspirin" },
+    { "action": "focused_history" },
+    { "action": "ecg_12lead" },
+    { "action": "iv_access" },
+    { "action": "give_prasugrel" },
+    { "action": "give_heparin_ufh" },
+    { "action": "activate_cath_lab" },
+    { "action": "start_statin" },
+    { "action": "disposition_cath_lab" }
+  ]
+}

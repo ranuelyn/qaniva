@@ -1,0 +1,13 @@
+{
+  "caseId": "stemi_anterior_001",
+  "caseVersion": 1,
+  "seed": 20260831,
+  "steps": [
+    { "action": "focused_history" },
+    { "action": "attach_monitor" },
+    { "action": "ecg_12lead" },
+    { "waitSec": 600 },
+    { "action": "give_nitroglycerin_sl" },
+    { "waitSec": 400 }
+  ]
+}

@@ -105,6 +105,16 @@ records:
     reviewRequired: true
     notes: 'Drives the ECG asset spec; the asset itself needs clinician verification.'
 
+  - id: EV-STEMI-016
+    topic: monitoring
+    claim: >-
+      Early IV access is part of standard initial ACS/STEMI management
+      (medication delivery, resuscitation readiness).
+    source: [ESC2023]
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Added during implementation: the evidence-per-criterion validation requires an explicit record for the IV-access criterion.'
+
   - id: EV-STEMI-020
     topic: reperfusion
     claim: >-

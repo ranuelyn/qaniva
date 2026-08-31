@@ -1,0 +1,245 @@
+{
+  "replayHash": "a44c51873eb87e8867e2fbed30eb332e55f932bdf238473fe4eb8bb26632c7f2",
+  "finalStateHash": "4c94c8e93a3026c1fbffdb19e9a650799fc5da498bbe5b933ecd5d30226e3cf2",
+  "outcome": "complete",
+  "terminalStateId": "handoff_cath_lab",
+  "simTimeSec": 705,
+  "vitals": {
+    "hr": 96,
+    "sbpMmHg": 118,
+    "dbpMmHg": 76,
+    "spo2": 96,
+    "rrPerMin": 18,
+    "tempC": 36.8
+  },
+  "circulation": "poor_perfusion",
+  "neuro": "alert",
+  "flags": [
+    "asa_given",
+    "cath_activated",
+    "cxr_ordered",
+    "differential_recorded",
+    "dispo_cath",
+    "ecg_done",
+    "iv_access",
+    "labs_sent",
+    "monitor_on",
+    "p2y12_given",
+    "reassured",
+    "statin_given",
+    "troponin_sent",
+    "ufh_given"
+  ],
+  "disclosedFacts": [
+    "cxr_result",
+    "ecg_tracing",
+    "hx_allergies",
+    "hx_pain_character",
+    "hx_risk_factors",
+    "hx_safety_negatives"
+  ],
+  "score": {
+    "total": 79.5,
+    "critical": 41.5,
+    "timing": 10,
+    "efficiency": 0,
+    "treatment": 18,
+    "disposition": 10,
+    "missedCriterionIds": []
+  },
+  "timeline": [
+    {
+      "seq": 0,
+      "simTimeSec": 45,
+      "actionId": "focused_history",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "49cf1f7b19405ba3e0c8b7548d11120d70d2e8e55313e112ae81825eb98c7833",
+      "afterHash": "e268b42d499e04660bc3a64c2cc25a89e317df53a61290b3b29ed90b0b88d81d"
+    },
+    {
+      "seq": 1,
+      "simTimeSec": 60,
+      "actionId": "ask_allergies",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "e268b42d499e04660bc3a64c2cc25a89e317df53a61290b3b29ed90b0b88d81d",
+      "afterHash": "33b21aa9a5d564911a9e9ac39589f0bc335cdcb432a3a00e42234d55667dd141"
+    },
+    {
+      "seq": 2,
+      "simTimeSec": 90,
+      "actionId": "exam_cardiac",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "33b21aa9a5d564911a9e9ac39589f0bc335cdcb432a3a00e42234d55667dd141",
+      "afterHash": "6af908d50f0efcc76e06be293b8bc630a7be7524719a56b23854ad73affdd869"
+    },
+    {
+      "seq": 3,
+      "simTimeSec": 120,
+      "actionId": "exam_lungs",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "6af908d50f0efcc76e06be293b8bc630a7be7524719a56b23854ad73affdd869",
+      "afterHash": "5d7b186877a2bf69c638ab553f9ff52c412a1d26a1887a25c3cd7fd232c9b698"
+    },
+    {
+      "seq": 4,
+      "simTimeSec": 140,
+      "actionId": "reassure_patient",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "5d7b186877a2bf69c638ab553f9ff52c412a1d26a1887a25c3cd7fd232c9b698",
+      "afterHash": "8e02debac62483ab7c469ba3ae28cbd1268336d2defa8f7af254fe1e91420576"
+    },
+    {
+      "seq": 5,
+      "simTimeSec": 160,
+      "actionId": "record_differential",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "8e02debac62483ab7c469ba3ae28cbd1268336d2defa8f7af254fe1e91420576",
+      "afterHash": "d04ad503f08bb026bb6254a22d465f34d7bf69b7a474b1bdf5c62f3e88cb4fe0"
+    },
+    {
+      "seq": 6,
+      "simTimeSec": 180,
+      "actionId": "order_baseline_labs",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "d04ad503f08bb026bb6254a22d465f34d7bf69b7a474b1bdf5c62f3e88cb4fe0",
+      "afterHash": "9ec5522267150b97f38eb88749dd16f1d649ab2f4451f84de4569f495753415d"
+    },
+    {
+      "seq": 7,
+      "simTimeSec": 210,
+      "actionId": "cxr_portable",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "9ec5522267150b97f38eb88749dd16f1d649ab2f4451f84de4569f495753415d",
+      "afterHash": "0770caef97aebda6547fd7f7ad56bfd3608c97138e61e5a9563ad6b652f491e2"
+    },
+    {
+      "seq": 8,
+      "simTimeSec": 230,
+      "actionId": "attach_monitor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "0770caef97aebda6547fd7f7ad56bfd3608c97138e61e5a9563ad6b652f491e2",
+      "afterHash": "179add55ce3b50353cdddd0f065d817236d3d58b93288829c9abbac34fc671a4"
+    },
+    {
+      "seq": 9,
+      "simTimeSec": 290,
+      "actionId": "iv_access",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "179add55ce3b50353cdddd0f065d817236d3d58b93288829c9abbac34fc671a4",
+      "afterHash": "cf03eb6b0474c32b9daf3473a5f3dd804026363fc2f9df6b1ed975476ee47c3e"
+    },
+    {
+      "seq": 10,
+      "simTimeSec": 310,
+      "actionId": "order_troponin",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "cf03eb6b0474c32b9daf3473a5f3dd804026363fc2f9df6b1ed975476ee47c3e",
+      "afterHash": "4348540174e5dd3e16783a33cec88886581afcd8de66ab9e7b2d78eedc80f808"
+    },
+    {
+      "seq": 11,
+      "simTimeSec": 370,
+      "actionId": "ecg_12lead",
+      "classification": "Delayed",
+      "scoreDelta": 11.5,
+      "triggeredRuleIds": [],
+      "beforeHash": "4348540174e5dd3e16783a33cec88886581afcd8de66ab9e7b2d78eedc80f808",
+      "afterHash": "36c69b3902b2ee6c6c09d3eeaef7545be8a794fe842329859d66ec3588d17c86"
+    },
+    {
+      "seq": 12,
+      "simTimeSec": 390,
+      "actionId": "give_aspirin",
+      "classification": "Correct",
+      "scoreDelta": 10,
+      "triggeredRuleIds": [],
+      "beforeHash": "36c69b3902b2ee6c6c09d3eeaef7545be8a794fe842329859d66ec3588d17c86",
+      "afterHash": "045542e2e1bcce1f64c11931e880f14e0f4ecc4a8a46977283d5bb846e06010b"
+    },
+    {
+      "seq": 13,
+      "simTimeSec": 410,
+      "actionId": "give_ticagrelor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "045542e2e1bcce1f64c11931e880f14e0f4ecc4a8a46977283d5bb846e06010b",
+      "afterHash": "50b0af1d44d274ee26d1baa9c58542e9f5bceade31fba5574d9da116f0a44be8"
+    },
+    {
+      "seq": 14,
+      "simTimeSec": 430,
+      "actionId": "give_heparin_ufh",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "50b0af1d44d274ee26d1baa9c58542e9f5bceade31fba5574d9da116f0a44be8",
+      "afterHash": "1150d1a2361ecb35d17b608310e232c83bdb27b6b97c3d2a9ab3fb4c732c0e89"
+    },
+    {
+      "seq": 15,
+      "simTimeSec": 630,
+      "actionId": "__wait__",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [
+        "cxr_returns"
+      ],
+      "beforeHash": "1150d1a2361ecb35d17b608310e232c83bdb27b6b97c3d2a9ab3fb4c732c0e89",
+      "afterHash": "5f833d7762678219c356d2570c0747014c31af11f082476e6e8d9788694a90eb"
+    },
+    {
+      "seq": 16,
+      "simTimeSec": 660,
+      "actionId": "activate_cath_lab",
+      "classification": "Delayed",
+      "scoreDelta": 20,
+      "triggeredRuleIds": [],
+      "beforeHash": "5f833d7762678219c356d2570c0747014c31af11f082476e6e8d9788694a90eb",
+      "afterHash": "ecd6b4e18f355d6dde7bfefc1cd56bcb042cd9173b82fa5eee0b9958b6023873"
+    },
+    {
+      "seq": 17,
+      "simTimeSec": 675,
+      "actionId": "start_statin",
+      "classification": "Correct",
+      "scoreDelta": 3,
+      "triggeredRuleIds": [],
+      "beforeHash": "ecd6b4e18f355d6dde7bfefc1cd56bcb042cd9173b82fa5eee0b9958b6023873",
+      "afterHash": "54494f5c52b6233bfa856f2712271e7a9c54350c4a1073ea9754deb6ff338f9f"
+    },
+    {
+      "seq": 18,
+      "simTimeSec": 705,
+      "actionId": "disposition_cath_lab",
+      "classification": "Correct",
+      "scoreDelta": 10,
+      "triggeredRuleIds": [],
+      "beforeHash": "54494f5c52b6233bfa856f2712271e7a9c54350c4a1073ea9754deb6ff338f9f",
+      "afterHash": "4c94c8e93a3026c1fbffdb19e9a650799fc5da498bbe5b933ecd5d30226e3cf2"
+    }
+  ],
+  "rejections": []
+}

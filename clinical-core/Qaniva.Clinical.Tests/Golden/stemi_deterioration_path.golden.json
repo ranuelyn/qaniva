@@ -1,0 +1,115 @@
+{
+  "replayHash": "3fd25264fdff43679b5e6f6dfa6ff6b89ee4b1f1722c173f2b904c245c1ebee4",
+  "finalStateHash": "4122b20767d7cf89e7953e02615b144fe5ffb5ed6ecc88c6ed45756a446bfe06",
+  "outcome": "deteriorated",
+  "terminalStateId": "vf_arrest_takeover",
+  "simTimeSec": 1140,
+  "vitals": {
+    "hr": 108,
+    "sbpMmHg": 81,
+    "dbpMmHg": 66,
+    "spo2": 96,
+    "rrPerMin": 18,
+    "tempC": 36.8
+  },
+  "circulation": "arrest",
+  "neuro": "unresponsive",
+  "flags": [
+    "deteriorated",
+    "ecg_done",
+    "monitor_on",
+    "vf_arrest"
+  ],
+  "disclosedFacts": [
+    "ecg_tracing",
+    "hx_pain_character",
+    "hx_risk_factors",
+    "hx_safety_negatives"
+  ],
+  "score": {
+    "total": 17,
+    "critical": 7,
+    "timing": 5,
+    "efficiency": 0,
+    "treatment": 5,
+    "disposition": 0,
+    "missedCriterionIds": [
+      "c_aspirin_loading",
+      "c_cath_lab_activation",
+      "c_p2y12_loading",
+      "c_anticoagulation",
+      "c_statin_started",
+      "c_iv_access",
+      "c_disposition_cath_lab"
+    ]
+  },
+  "timeline": [
+    {
+      "seq": 0,
+      "simTimeSec": 45,
+      "actionId": "focused_history",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "49cf1f7b19405ba3e0c8b7548d11120d70d2e8e55313e112ae81825eb98c7833",
+      "afterHash": "e268b42d499e04660bc3a64c2cc25a89e317df53a61290b3b29ed90b0b88d81d"
+    },
+    {
+      "seq": 1,
+      "simTimeSec": 65,
+      "actionId": "attach_monitor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "e268b42d499e04660bc3a64c2cc25a89e317df53a61290b3b29ed90b0b88d81d",
+      "afterHash": "67e3ecdbee816765e00f8a3eb6ac9e3720636c6bab8ba5e342c117c2438742fe"
+    },
+    {
+      "seq": 2,
+      "simTimeSec": 125,
+      "actionId": "ecg_12lead",
+      "classification": "Correct",
+      "scoreDelta": 15,
+      "triggeredRuleIds": [],
+      "beforeHash": "67e3ecdbee816765e00f8a3eb6ac9e3720636c6bab8ba5e342c117c2438742fe",
+      "afterHash": "4c31667e09ad1640293e1d960fb6991f04ea601c94cfc0caa5e0fb24a189d94d"
+    },
+    {
+      "seq": 3,
+      "simTimeSec": 725,
+      "actionId": "__wait__",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [
+        "t1_ischemia_worsens"
+      ],
+      "beforeHash": "4c31667e09ad1640293e1d960fb6991f04ea601c94cfc0caa5e0fb24a189d94d",
+      "afterHash": "657eca9fea171ce2720566c3abaeb6807775623a80cd35e652a0e21ec674c308"
+    },
+    {
+      "seq": 4,
+      "simTimeSec": 740,
+      "actionId": "give_nitroglycerin_sl",
+      "classification": "Harmful",
+      "scoreDelta": -8,
+      "triggeredRuleIds": [
+        "ntg_bp_response"
+      ],
+      "beforeHash": "657eca9fea171ce2720566c3abaeb6807775623a80cd35e652a0e21ec674c308",
+      "afterHash": "88823e9a05c567d039c3a6494beb09804a7dcd17f853156c02ccd3618362af6a"
+    },
+    {
+      "seq": 5,
+      "simTimeSec": 1140,
+      "actionId": "__wait__",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [
+        "t2_vf_arrest"
+      ],
+      "beforeHash": "88823e9a05c567d039c3a6494beb09804a7dcd17f853156c02ccd3618362af6a",
+      "afterHash": "4122b20767d7cf89e7953e02615b144fe5ffb5ed6ecc88c6ed45756a446bfe06"
+    }
+  ],
+  "rejections": []
+}

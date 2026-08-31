@@ -1,0 +1,205 @@
+{
+  "replayHash": "388238582bb52e69edac2acd1ed4dbdd0576605483811608bdf138c2e8e3fd1e",
+  "finalStateHash": "9054ad16e1721132eb38f8e84a107b2f6eb742d46401f76f0930d372ba8b37c6",
+  "outcome": "complete",
+  "terminalStateId": "handoff_cath_lab",
+  "simTimeSec": 425,
+  "vitals": {
+    "hr": 96,
+    "sbpMmHg": 118,
+    "dbpMmHg": 76,
+    "spo2": 98,
+    "rrPerMin": 18,
+    "tempC": 36.8
+  },
+  "circulation": "poor_perfusion",
+  "neuro": "alert",
+  "flags": [
+    "asa_given",
+    "cath_activated",
+    "cxr_ordered",
+    "dispo_cath",
+    "ecg_done",
+    "iv_access",
+    "labs_sent",
+    "monitor_on",
+    "morphine_given",
+    "o2_given",
+    "p2y12_clopidogrel_given",
+    "troponin_sent",
+    "ufh_given"
+  ],
+  "disclosedFacts": [
+    "ecg_tracing",
+    "hx_pain_character",
+    "hx_risk_factors",
+    "hx_safety_negatives"
+  ],
+  "score": {
+    "total": 78,
+    "critical": 50,
+    "timing": 10,
+    "efficiency": -2,
+    "treatment": 10,
+    "disposition": 10,
+    "missedCriterionIds": [
+      "c_p2y12_loading",
+      "c_statin_started"
+    ]
+  },
+  "timeline": [
+    {
+      "seq": 0,
+      "simTimeSec": 45,
+      "actionId": "focused_history",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "49cf1f7b19405ba3e0c8b7548d11120d70d2e8e55313e112ae81825eb98c7833",
+      "afterHash": "e268b42d499e04660bc3a64c2cc25a89e317df53a61290b3b29ed90b0b88d81d"
+    },
+    {
+      "seq": 1,
+      "simTimeSec": 65,
+      "actionId": "attach_monitor",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "e268b42d499e04660bc3a64c2cc25a89e317df53a61290b3b29ed90b0b88d81d",
+      "afterHash": "67e3ecdbee816765e00f8a3eb6ac9e3720636c6bab8ba5e342c117c2438742fe"
+    },
+    {
+      "seq": 2,
+      "simTimeSec": 80,
+      "actionId": "give_oxygen",
+      "classification": "Harmful",
+      "scoreDelta": -2,
+      "triggeredRuleIds": [],
+      "beforeHash": "67e3ecdbee816765e00f8a3eb6ac9e3720636c6bab8ba5e342c117c2438742fe",
+      "afterHash": "6485b980447ff9a06a0880a6c8af3e5993654ea64ea5c9065b36dd471e27730a"
+    },
+    {
+      "seq": 3,
+      "simTimeSec": 140,
+      "actionId": "ecg_12lead",
+      "classification": "Correct",
+      "scoreDelta": 15,
+      "triggeredRuleIds": [],
+      "beforeHash": "6485b980447ff9a06a0880a6c8af3e5993654ea64ea5c9065b36dd471e27730a",
+      "afterHash": "aa41206c3c248315674f6fb98781cda8ea84644670059b74751b4105e5017b35"
+    },
+    {
+      "seq": 4,
+      "simTimeSec": 160,
+      "actionId": "give_aspirin",
+      "classification": "Correct",
+      "scoreDelta": 10,
+      "triggeredRuleIds": [],
+      "beforeHash": "aa41206c3c248315674f6fb98781cda8ea84644670059b74751b4105e5017b35",
+      "afterHash": "cce62f45d4216834cb92535a21b193b7c0a25c111612ed385dd99c47562e1bba"
+    },
+    {
+      "seq": 5,
+      "simTimeSec": 220,
+      "actionId": "iv_access",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "cce62f45d4216834cb92535a21b193b7c0a25c111612ed385dd99c47562e1bba",
+      "afterHash": "6c458fb1b9f36fa59573e19f517c502a4851596e4e091998a23b6715ae02a434"
+    },
+    {
+      "seq": 6,
+      "simTimeSec": 240,
+      "actionId": "give_morphine",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "6c458fb1b9f36fa59573e19f517c502a4851596e4e091998a23b6715ae02a434",
+      "afterHash": "cdf84815c88fc061e0aae1a51bf7aaf56383dd4a51a42400ecc5f8d7ecbba669"
+    },
+    {
+      "seq": 7,
+      "simTimeSec": 255,
+      "actionId": "give_nitroglycerin_sl",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [
+        "ntg_processed"
+      ],
+      "beforeHash": "cdf84815c88fc061e0aae1a51bf7aaf56383dd4a51a42400ecc5f8d7ecbba669",
+      "afterHash": "5958d7a596d12d643a618dd842ec731f6376dbbf1789e86201636bde5c8ba019"
+    },
+    {
+      "seq": 8,
+      "simTimeSec": 275,
+      "actionId": "give_clopidogrel",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "5958d7a596d12d643a618dd842ec731f6376dbbf1789e86201636bde5c8ba019",
+      "afterHash": "17da1b3513fa85144a075fa536c6434b6eb16cab610f3849a09b63b77a553bf6"
+    },
+    {
+      "seq": 9,
+      "simTimeSec": 295,
+      "actionId": "order_troponin",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "17da1b3513fa85144a075fa536c6434b6eb16cab610f3849a09b63b77a553bf6",
+      "afterHash": "c835a0406b3d5d2a7e9777291b57d8673479433ac29d8aebcbc2aed8771a2b9c"
+    },
+    {
+      "seq": 10,
+      "simTimeSec": 315,
+      "actionId": "order_baseline_labs",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "c835a0406b3d5d2a7e9777291b57d8673479433ac29d8aebcbc2aed8771a2b9c",
+      "afterHash": "4c19527c46248669072e5cec3b721db092b3cc34e209bc4bfc2c4ac9ca4ad3dc"
+    },
+    {
+      "seq": 11,
+      "simTimeSec": 345,
+      "actionId": "cxr_portable",
+      "classification": "Neutral",
+      "scoreDelta": 0,
+      "triggeredRuleIds": [],
+      "beforeHash": "4c19527c46248669072e5cec3b721db092b3cc34e209bc4bfc2c4ac9ca4ad3dc",
+      "afterHash": "4c915e662f6e198c515948bc4df72c6e90133aaa313b6cb97ac16d97f7034aff"
+    },
+    {
+      "seq": 12,
+      "simTimeSec": 365,
+      "actionId": "give_heparin_ufh",
+      "classification": "Correct",
+      "scoreDelta": 5,
+      "triggeredRuleIds": [],
+      "beforeHash": "4c915e662f6e198c515948bc4df72c6e90133aaa313b6cb97ac16d97f7034aff",
+      "afterHash": "f23ae5477e6360b602b264528469301b2957cb91b0e8fbf4fe8b610016393c5f"
+    },
+    {
+      "seq": 13,
+      "simTimeSec": 395,
+      "actionId": "activate_cath_lab",
+      "classification": "Correct",
+      "scoreDelta": 25,
+      "triggeredRuleIds": [],
+      "beforeHash": "f23ae5477e6360b602b264528469301b2957cb91b0e8fbf4fe8b610016393c5f",
+      "afterHash": "2b4ba3066e6532db9282f553b804416f5b4393b8c9b9032a39733935a5e8d454"
+    },
+    {
+      "seq": 14,
+      "simTimeSec": 425,
+      "actionId": "disposition_cath_lab",
+      "classification": "Correct",
+      "scoreDelta": 10,
+      "triggeredRuleIds": [],
+      "beforeHash": "2b4ba3066e6532db9282f553b804416f5b4393b8c9b9032a39733935a5e8d454",
+      "afterHash": "9054ad16e1721132eb38f8e84a107b2f6eb742d46401f76f0930d372ba8b37c6"
+    }
+  ],
+  "rejections": []
+}

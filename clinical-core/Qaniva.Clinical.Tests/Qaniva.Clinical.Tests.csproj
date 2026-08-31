@@ -23,6 +23,9 @@
     <None Include="../../packages/case-schema/fixtures/demo_sync_bradycardia_001/v1/case.json"
           Link="TestData/case.json"
           CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../packages/case-schema/fixtures/stemi_anterior_001/v1/case.json"
+          Link="TestData/stemi_case.json"
+          CopyToOutputDirectory="PreserveNewest" />
     <None Include="Golden/**/*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 

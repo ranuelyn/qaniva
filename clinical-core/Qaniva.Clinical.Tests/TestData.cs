@@ -13,9 +13,13 @@ internal static class TestData
 
     public static string CasePath => Path.Combine(BaseDir, "TestData", "case.json");
 
+    public static string StemiCasePath => Path.Combine(BaseDir, "TestData", "stemi_case.json");
+
     public static string GoldenDir => Path.Combine(BaseDir, "Golden");
 
     public static CaseDefinition DemoCase() => CaseLoader.FromFile(CasePath);
+
+    public static CaseDefinition StemiCase() => CaseLoader.FromFile(StemiCasePath);
 
     public static AttemptScript LoadScript(string fileName)
     {
