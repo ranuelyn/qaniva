@@ -5,10 +5,18 @@
   "metadata": {
     "title": "FICTIONAL DEMO — Adult with a slow pulse and dizziness",
     "chiefComplaint": "Feeling dizzy and weak for the last hour",
+    "briefing": [
+      "You will be taken to the full-screen 3D simulation. Assess the patient, order and treat, then choose a disposition.",
+      "This fictional demo case exercises the engine end to end. No diagnosis is shown up front."
+    ],
     "specialty": "emergency_medicine",
     "estimatedMinutes": 8,
     "authors": ["qaniva-foundation"],
-    "clinicalReview": { "status": "not_reviewed", "reviewer": null, "date": null },
+    "clinicalReview": {
+      "status": "not_reviewed",
+      "reviewer": null,
+      "date": null
+    },
     "fictional": true
   },
   "learningObjectives": [
@@ -34,7 +42,14 @@
     "backgroundFacts": ["Walked into triage, then felt too weak to stand", "No chest pain reported"]
   },
   "initialState": {
-    "vitals": { "hr": 38, "sbpMmHg": 84, "dbpMmHg": 52, "spo2": 95, "rrPerMin": 18, "tempC": 36.7 },
+    "vitals": {
+      "hr": 38,
+      "sbpMmHg": 84,
+      "dbpMmHg": 52,
+      "spo2": 95,
+      "rrPerMin": 18,
+      "tempC": 36.7
+    },
     "rhythm": "demo_bradycardia",
     "airway": "patent",
     "breathing": "spontaneous",
@@ -70,7 +85,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "monitor_on" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "monitor_on"
+        }
+      ],
       "resultTemplateId": "monitor_attached",
       "criterionIds": ["time_to_monitor"]
     },
@@ -84,8 +104,14 @@
       "preconditions": [],
       "params": [],
       "effects": [
-        { "op": "disclose", "factId": "onset_1h" },
-        { "op": "disclose", "factId": "no_med_allergies" }
+        {
+          "op": "disclose",
+          "factId": "onset_1h"
+        },
+        {
+          "op": "disclose",
+          "factId": "no_med_allergies"
+        }
       ],
       "resultTemplateId": null,
       "criterionIds": []
@@ -100,8 +126,14 @@
       "preconditions": [],
       "params": [],
       "effects": [
-        { "op": "setFlag", "flag": "ecg_done" },
-        { "op": "disclose", "factId": "ecg_shows_brady" }
+        {
+          "op": "setFlag",
+          "flag": "ecg_done"
+        },
+        {
+          "op": "disclose",
+          "factId": "ecg_shows_brady"
+        }
       ],
       "resultTemplateId": "ecg_result_brady",
       "criterionIds": ["time_to_ecg"]
@@ -115,7 +147,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "iv_access" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "iv_access"
+        }
+      ],
       "resultTemplateId": null,
       "criterionIds": []
     },
@@ -127,12 +164,35 @@
       "visibility": "always",
       "visibleWhen": null,
       "preconditions": ["flag('iv_access')"],
-      "params": [{ "name": "dose_mg", "kind": "number", "min": 0.5, "max": 3, "unit": "mg" }],
+      "params": [
+        {
+          "name": "dose_mg",
+          "kind": "number",
+          "min": 0.5,
+          "max": 3,
+          "unit": "mg"
+        }
+      ],
       "effects": [
-        { "op": "adjust", "target": "vitals.hr", "value": 30 },
-        { "op": "adjust", "target": "vitals.sbpMmHg", "value": 22 },
-        { "op": "setEnum", "target": "circulation", "value": "normal" },
-        { "op": "setFlag", "flag": "atropine_given" }
+        {
+          "op": "adjust",
+          "target": "vitals.hr",
+          "value": 30
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.sbpMmHg",
+          "value": 22
+        },
+        {
+          "op": "setEnum",
+          "target": "circulation",
+          "value": "normal"
+        },
+        {
+          "op": "setFlag",
+          "flag": "atropine_given"
+        }
       ],
       "resultTemplateId": "first_line_effect",
       "criterionIds": ["give_first_line"]
@@ -147,10 +207,25 @@
       "preconditions": ["flag('monitor_on')"],
       "params": [],
       "effects": [
-        { "op": "adjust", "target": "vitals.hr", "value": 35 },
-        { "op": "adjust", "target": "vitals.sbpMmHg", "value": 18 },
-        { "op": "setEnum", "target": "circulation", "value": "normal" },
-        { "op": "setFlag", "flag": "pacing_started" }
+        {
+          "op": "adjust",
+          "target": "vitals.hr",
+          "value": 35
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.sbpMmHg",
+          "value": 18
+        },
+        {
+          "op": "setEnum",
+          "target": "circulation",
+          "value": "normal"
+        },
+        {
+          "op": "setFlag",
+          "flag": "pacing_started"
+        }
       ],
       "resultTemplateId": "pacing_effect",
       "criterionIds": ["rescue_pacing"]
@@ -165,9 +240,20 @@
       "preconditions": [],
       "params": [],
       "effects": [
-        { "op": "adjust", "target": "vitals.hr", "value": -12 },
-        { "op": "adjust", "target": "vitals.sbpMmHg", "value": -10 },
-        { "op": "setFlag", "flag": "harmful_given" }
+        {
+          "op": "adjust",
+          "target": "vitals.hr",
+          "value": -12
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.sbpMmHg",
+          "value": -10
+        },
+        {
+          "op": "setFlag",
+          "flag": "harmful_given"
+        }
       ],
       "resultTemplateId": "harmful_effect",
       "criterionIds": ["avoid_contraindicated"]
@@ -181,7 +267,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('ecg_done')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "cardiology_consulted" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "cardiology_consulted"
+        }
+      ],
       "resultTemplateId": null,
       "criterionIds": ["consult_appropriately"]
     },
@@ -194,7 +285,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('atropine_given') || flag('pacing_started')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "disposition_selected" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "disposition_selected"
+        }
+      ],
       "resultTemplateId": null,
       "criterionIds": ["appropriate_disposition"]
     }
@@ -207,10 +303,25 @@
       "once": true,
       "delaySec": 0,
       "effects": [
-        { "op": "adjust", "target": "vitals.hr", "value": -15 },
-        { "op": "adjust", "target": "vitals.sbpMmHg", "value": -20 },
-        { "op": "setEnum", "target": "circulation", "value": "shock" },
-        { "op": "setFlag", "flag": "deteriorating" }
+        {
+          "op": "adjust",
+          "target": "vitals.hr",
+          "value": -15
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.sbpMmHg",
+          "value": -20
+        },
+        {
+          "op": "setEnum",
+          "target": "circulation",
+          "value": "shock"
+        },
+        {
+          "op": "setFlag",
+          "flag": "deteriorating"
+        }
       ],
       "presentationCue": "distress_severe",
       "terminalState": null
@@ -221,7 +332,12 @@
       "priority": 50,
       "once": true,
       "delaySec": 0,
-      "effects": [{ "op": "setFlag", "flag": "stabilized" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "stabilized"
+        }
+      ],
       "presentationCue": "recovery",
       "terminalState": null
     },
@@ -232,8 +348,15 @@
       "once": true,
       "delaySec": 0,
       "effects": [
-        { "op": "setEnum", "target": "circulation", "value": "arrest" },
-        { "op": "setFlag", "flag": "arrested" }
+        {
+          "op": "setEnum",
+          "target": "circulation",
+          "value": "arrest"
+        },
+        {
+          "op": "setFlag",
+          "flag": "arrested"
+        }
       ],
       "presentationCue": "arrest",
       "terminalState": "arrest_death"
@@ -245,7 +368,10 @@
       "label": "Attached a cardiac monitor early",
       "criticality": "minor",
       "acceptedActions": ["attach_monitor"],
-      "timingWindow": { "fullCreditBeforeSec": 60, "zeroCreditAfterSec": 240 },
+      "timingWindow": {
+        "fullCreditBeforeSec": 60,
+        "zeroCreditAfterSec": 240
+      },
       "stateConstraints": [],
       "points": 5,
       "category": "timing",
@@ -258,7 +384,10 @@
       "label": "Obtained a 12-lead ECG promptly",
       "criticality": "major",
       "acceptedActions": ["ecg_12lead"],
-      "timingWindow": { "fullCreditBeforeSec": 120, "zeroCreditAfterSec": 360 },
+      "timingWindow": {
+        "fullCreditBeforeSec": 120,
+        "zeroCreditAfterSec": 360
+      },
       "stateConstraints": [],
       "points": 15,
       "category": "timing",

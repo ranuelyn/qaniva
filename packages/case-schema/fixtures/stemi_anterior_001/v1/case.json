@@ -6,6 +6,14 @@
     "title": "Crushing chest pain in a 54-year-old",
     "clinicalVersion": "0.1-draft",
     "chiefComplaint": "Severe central chest pain for the last 90 minutes",
+    "briefing": [
+      "Role: you are the ED doctor receiving this patient in the resuscitation room.",
+      "Setting: an urban PCI-capable hospital, weekday daytime. The cath lab is operational; cardiology and interventional cardiology are on call.",
+      "Resources: monitor/defibrillator, ED drug stock, laboratory, portable X-ray, a resus nurse.",
+      "Triage note: \"54M, severe central chest pain for 90 minutes, sweaty. Triage category 2 — taken to resus.\"",
+      "Your task: assess and manage the patient until a disposition decision. Time advances with your actions — it matters.",
+      "This is an educational simulation of a fictional patient. Act as you would clinically."
+    ],
     "specialty": "emergency_medicine",
     "estimatedMinutes": 10,
     "authors": ["qaniva-clinical-content (AI-assisted, evidence-ledger-backed)"],

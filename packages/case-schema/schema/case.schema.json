@@ -111,6 +111,11 @@
           "description": "Human-readable clinical content version, e.g. '0.1-draft'. Distinct from the integer `version`: it communicates review maturity (implemented != clinically validated)."
         },
         "chiefComplaint": { "type": "string", "minLength": 3 },
+        "briefing": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 3 },
+          "description": "Learner-facing prebrief lines (INACSL-style: role, setting, resources, handoff, task, fiction contract). Authored case content — product shells must render this instead of keeping briefing text in app code. Must not spoil the diagnosis."
+        },
         "specialty": { "type": "string", "minLength": 2 },
         "estimatedMinutes": { "type": "integer", "minimum": 1, "maximum": 60 },
         "authors": {

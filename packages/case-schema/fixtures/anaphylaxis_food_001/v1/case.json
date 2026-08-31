@@ -6,6 +6,14 @@
     "title": "Sudden rash and wheeze after lunch",
     "clinicalVersion": "0.1-draft",
     "chiefComplaint": "Rash, facial swelling and difficulty breathing for 25 minutes",
+    "briefing": [
+      "Role: you are the ED doctor receiving this patient in the resuscitation room.",
+      "Setting: an urban hospital ED, weekday lunchtime. Resus is stocked; ICU and anesthesia are on call.",
+      "Resources: monitor/defibrillator, ED drug stock incl. emergency medications, oxygen, IV fluids, a resus nurse.",
+      "Triage note: \"24F, sudden rash, lip swelling and wheeze ~25 minutes after eating at a restaurant. Triage category 2 — taken to resus.\"",
+      "Your task: assess and manage the patient until a disposition decision. Time advances with your actions — it matters.",
+      "This is an educational simulation of a fictional patient. Act as you would clinically."
+    ],
     "specialty": "emergency_medicine",
     "estimatedMinutes": 8,
     "authors": ["qaniva-clinical-content (AI-assisted, evidence-ledger-backed)"],
@@ -104,9 +112,18 @@
       "preconditions": [],
       "params": [],
       "effects": [
-        { "op": "disclose", "factId": "hx_exposure" },
-        { "op": "disclose", "factId": "hx_known_allergy" },
-        { "op": "disclose", "factId": "hx_asthma_risk" }
+        {
+          "op": "disclose",
+          "factId": "hx_exposure"
+        },
+        {
+          "op": "disclose",
+          "factId": "hx_known_allergy"
+        },
+        {
+          "op": "disclose",
+          "factId": "hx_asthma_risk"
+        }
       ],
       "resultTemplateId": null,
       "criterionIds": ["c_focused_history"]
@@ -120,7 +137,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "disclose", "factId": "hx_med_negatives" }],
+      "effects": [
+        {
+          "op": "disclose",
+          "factId": "hx_med_negatives"
+        }
+      ],
       "resultTemplateId": null,
       "criterionIds": []
     },
@@ -133,7 +155,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "reassured" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "reassured"
+        }
+      ],
       "resultTemplateId": "reassured_note",
       "criterionIds": []
     },
@@ -146,7 +173,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "monitor_on" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "monitor_on"
+        }
+      ],
       "resultTemplateId": "monitor_attached",
       "criterionIds": ["c_early_monitoring"]
     },
@@ -187,7 +219,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "iv_access" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "iv_access"
+        }
+      ],
       "resultTemplateId": null,
       "criterionIds": ["c_iv_access"]
     },
@@ -200,7 +237,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "tryptase_sent" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "tryptase_sent"
+        }
+      ],
       "resultTemplateId": "tryptase_pending",
       "criterionIds": []
     },
@@ -213,7 +255,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "labs_sent" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "labs_sent"
+        }
+      ],
       "resultTemplateId": "labs_sent_note",
       "criterionIds": []
     },
@@ -226,7 +273,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "epi_im_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "epi_im_given"
+        }
+      ],
       "resultTemplateId": "epi_im_given_note",
       "criterionIds": ["c_epi_im_timely"],
       "repeatable": true
@@ -240,7 +292,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "epi_iv_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "epi_iv_given"
+        }
+      ],
       "resultTemplateId": "epi_iv_given_note",
       "criterionIds": ["c_iv_bolus_epi"]
     },
@@ -254,8 +311,15 @@
       "preconditions": [],
       "params": [],
       "effects": [
-        { "op": "adjust", "target": "vitals.spo2", "value": 3 },
-        { "op": "setFlag", "flag": "o2_given" }
+        {
+          "op": "adjust",
+          "target": "vitals.spo2",
+          "value": 3
+        },
+        {
+          "op": "setFlag",
+          "flag": "o2_given"
+        }
       ],
       "resultTemplateId": "oxygen_given_note",
       "criterionIds": ["c_oxygen_support"]
@@ -269,7 +333,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('iv_access')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "fluids_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "fluids_given"
+        }
+      ],
       "resultTemplateId": "fluids_given_note",
       "criterionIds": ["c_fluid_bolus"]
     },
@@ -282,7 +351,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "positioned" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "positioned"
+        }
+      ],
       "resultTemplateId": "positioned_note",
       "criterionIds": ["c_positioning"]
     },
@@ -295,7 +369,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "antihistamine_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "antihistamine_given"
+        }
+      ],
       "resultTemplateId": "antihistamine_note",
       "criterionIds": []
     },
@@ -308,7 +387,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "steroid_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "steroid_given"
+        }
+      ],
       "resultTemplateId": "steroid_note",
       "criterionIds": []
     },
@@ -321,7 +405,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "neb_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "neb_given"
+        }
+      ],
       "resultTemplateId": "neb_note",
       "criterionIds": []
     },
@@ -334,7 +423,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('epi_im_given')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "dispo_obs" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "dispo_obs"
+        }
+      ],
       "resultTemplateId": null,
       "criterionIds": ["c_disposition"]
     },
@@ -347,7 +441,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('epi_im_given')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "dispo_admit" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "dispo_admit"
+        }
+      ],
       "resultTemplateId": null,
       "criterionIds": ["c_disposition"]
     },
@@ -360,7 +459,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "discharged" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "discharged"
+        }
+      ],
       "resultTemplateId": null,
       "criterionIds": []
     }
@@ -373,8 +477,16 @@
       "once": true,
       "delaySec": 0,
       "effects": [
-        { "op": "adjust", "target": "vitals.hr", "value": 38 },
-        { "op": "adjust", "target": "vitals.sbpMmHg", "value": 30 }
+        {
+          "op": "adjust",
+          "target": "vitals.hr",
+          "value": 38
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.sbpMmHg",
+          "value": 30
+        }
       ],
       "presentationCue": null,
       "debriefText": "Undiluted IV bolus epinephrine caused a heart-rate and blood-pressure surge — IM dosing into the thigh is the safe route in a patient with a pulse.",
@@ -387,14 +499,45 @@
       "once": true,
       "delaySec": 60,
       "effects": [
-        { "op": "adjust", "target": "vitals.sbpMmHg", "value": 14 },
-        { "op": "adjust", "target": "vitals.dbpMmHg", "value": 8 },
-        { "op": "adjust", "target": "vitals.spo2", "value": 4 },
-        { "op": "adjust", "target": "vitals.hr", "value": -10 },
-        { "op": "adjust", "target": "vitals.rrPerMin", "value": -6 },
-        { "op": "setEnum", "target": "breathing", "value": "spontaneous" },
-        { "op": "setEnum", "target": "airway", "value": "patent" },
-        { "op": "setFlag", "flag": "responding" }
+        {
+          "op": "adjust",
+          "target": "vitals.sbpMmHg",
+          "value": 14
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.dbpMmHg",
+          "value": 8
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.spo2",
+          "value": 4
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.hr",
+          "value": -10
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.rrPerMin",
+          "value": -6
+        },
+        {
+          "op": "setEnum",
+          "target": "breathing",
+          "value": "spontaneous"
+        },
+        {
+          "op": "setEnum",
+          "target": "airway",
+          "value": "patent"
+        },
+        {
+          "op": "setFlag",
+          "flag": "responding"
+        }
       ],
       "presentationCue": "recovery",
       "debriefText": "Intramuscular epinephrine took effect — the breathing eased and the blood pressure recovered.",
@@ -407,8 +550,16 @@
       "once": true,
       "delaySec": 120,
       "effects": [
-        { "op": "adjust", "target": "vitals.sbpMmHg", "value": 8 },
-        { "op": "adjust", "target": "vitals.dbpMmHg", "value": 4 }
+        {
+          "op": "adjust",
+          "target": "vitals.sbpMmHg",
+          "value": 8
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.dbpMmHg",
+          "value": 4
+        }
       ],
       "presentationCue": null,
       "debriefText": null,
@@ -421,12 +572,35 @@
       "once": true,
       "delaySec": 0,
       "effects": [
-        { "op": "adjust", "target": "vitals.spo2", "value": -6 },
-        { "op": "adjust", "target": "vitals.hr", "value": 14 },
-        { "op": "adjust", "target": "vitals.sbpMmHg", "value": -16 },
-        { "op": "adjust", "target": "vitals.dbpMmHg", "value": -8 },
-        { "op": "adjust", "target": "vitals.rrPerMin", "value": 6 },
-        { "op": "setFlag", "flag": "deteriorated" }
+        {
+          "op": "adjust",
+          "target": "vitals.spo2",
+          "value": -6
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.hr",
+          "value": 14
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.sbpMmHg",
+          "value": -16
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.dbpMmHg",
+          "value": -8
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.rrPerMin",
+          "value": 6
+        },
+        {
+          "op": "setFlag",
+          "flag": "deteriorated"
+        }
       ],
       "presentationCue": "distress_severe",
       "debriefText": "Epinephrine was not given in time — the airway swelling and bronchospasm progressed.",
@@ -439,11 +613,30 @@
       "once": true,
       "delaySec": 0,
       "effects": [
-        { "op": "setEnum", "target": "airway", "value": "obstructed" },
-        { "op": "setEnum", "target": "breathing", "value": "apneic" },
-        { "op": "setEnum", "target": "circulation", "value": "arrest" },
-        { "op": "setEnum", "target": "neuro", "value": "unresponsive" },
-        { "op": "setFlag", "flag": "peri_arrest" }
+        {
+          "op": "setEnum",
+          "target": "airway",
+          "value": "obstructed"
+        },
+        {
+          "op": "setEnum",
+          "target": "breathing",
+          "value": "apneic"
+        },
+        {
+          "op": "setEnum",
+          "target": "circulation",
+          "value": "arrest"
+        },
+        {
+          "op": "setEnum",
+          "target": "neuro",
+          "value": "unresponsive"
+        },
+        {
+          "op": "setFlag",
+          "flag": "peri_arrest"
+        }
       ],
       "presentationCue": "arrest",
       "debriefText": "Untreated anaphylaxis progressed to airway obstruction and cardiovascular collapse — the resus team takes over.",
@@ -456,8 +649,14 @@
       "once": true,
       "delaySec": 900,
       "effects": [
-        { "op": "disclose", "factId": "tryptase_result" },
-        { "op": "setFlag", "flag": "tryptase_resulted" }
+        {
+          "op": "disclose",
+          "factId": "tryptase_result"
+        },
+        {
+          "op": "setFlag",
+          "flag": "tryptase_resulted"
+        }
       ],
       "presentationCue": null,
       "debriefText": null,
@@ -469,7 +668,12 @@
       "priority": 20,
       "once": true,
       "delaySec": 600,
-      "effects": [{ "op": "disclose", "factId": "labs_result" }],
+      "effects": [
+        {
+          "op": "disclose",
+          "factId": "labs_result"
+        }
+      ],
       "presentationCue": null,
       "debriefText": null,
       "terminalState": null
@@ -481,7 +685,10 @@
       "label": "Gave IM epinephrine promptly",
       "criticality": "critical",
       "acceptedActions": ["give_epinephrine_im"],
-      "timingWindow": { "fullCreditBeforeSec": 240, "zeroCreditAfterSec": 480 },
+      "timingWindow": {
+        "fullCreditBeforeSec": 240,
+        "zeroCreditAfterSec": 480
+      },
       "stateConstraints": [],
       "points": 30,
       "category": "critical",
@@ -506,7 +713,10 @@
       "label": "Attached monitoring early",
       "criticality": "major",
       "acceptedActions": ["attach_monitor"],
-      "timingWindow": { "fullCreditBeforeSec": 240, "zeroCreditAfterSec": 480 },
+      "timingWindow": {
+        "fullCreditBeforeSec": 240,
+        "zeroCreditAfterSec": 480
+      },
       "stateConstraints": [],
       "points": 5,
       "category": "timing",
@@ -519,7 +729,10 @@
       "label": "Obtained IV access",
       "criticality": "minor",
       "acceptedActions": ["iv_access"],
-      "timingWindow": { "fullCreditBeforeSec": 600, "zeroCreditAfterSec": 900 },
+      "timingWindow": {
+        "fullCreditBeforeSec": 600,
+        "zeroCreditAfterSec": 900
+      },
       "stateConstraints": [],
       "points": 5,
       "category": "timing",
@@ -670,18 +883,42 @@
       "id": "tryptase_pending",
       "text": "Serum tryptase sent (drawn now). The result returns after the acute phase."
     },
-    { "id": "labs_sent_note", "text": "CBC, electrolytes and creatinine sent." },
+    {
+      "id": "labs_sent_note",
+      "text": "CBC, electrolytes and creatinine sent."
+    },
     {
       "id": "epi_im_given_note",
       "text": "Epinephrine 0.5 mg given IM into the anterolateral thigh."
     },
-    { "id": "epi_iv_given_note", "text": "Epinephrine 1 mg pushed IV, undiluted." },
-    { "id": "oxygen_given_note", "text": "High-flow oxygen applied via non-rebreather mask." },
-    { "id": "fluids_given_note", "text": "Rapid IV crystalloid bolus running." },
-    { "id": "positioned_note", "text": "She is laid flat with her legs raised." },
-    { "id": "antihistamine_note", "text": "IV antihistamine given." },
-    { "id": "steroid_note", "text": "IV corticosteroid given." },
-    { "id": "neb_note", "text": "Salbutamol nebulizer running for the wheeze." }
+    {
+      "id": "epi_iv_given_note",
+      "text": "Epinephrine 1 mg pushed IV, undiluted."
+    },
+    {
+      "id": "oxygen_given_note",
+      "text": "High-flow oxygen applied via non-rebreather mask."
+    },
+    {
+      "id": "fluids_given_note",
+      "text": "Rapid IV crystalloid bolus running."
+    },
+    {
+      "id": "positioned_note",
+      "text": "She is laid flat with her legs raised."
+    },
+    {
+      "id": "antihistamine_note",
+      "text": "IV antihistamine given."
+    },
+    {
+      "id": "steroid_note",
+      "text": "IV corticosteroid given."
+    },
+    {
+      "id": "neb_note",
+      "text": "Salbutamol nebulizer running for the wheeze."
+    }
   ],
   "references": [
     {
