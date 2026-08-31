@@ -24,10 +24,10 @@ namespace Qaniva.Presentation
     /// </summary>
     public sealed class PatientVisualController : MonoBehaviour
     {
-        private static readonly Color SkinNormal = new Color(0.87f, 0.72f, 0.62f);
-        private static readonly Color SkinDistressed = new Color(0.84f, 0.76f, 0.70f); // paler
-        private static readonly Color SkinUnconscious = new Color(0.80f, 0.76f, 0.72f);
-        private static readonly Color SkinUnresponsive = new Color(0.72f, 0.74f, 0.78f); // grey
+        private static readonly Color SkinNormal = new Color(0.70f, 0.50f, 0.38f);
+        private static readonly Color SkinDistressed = new Color(0.65f, 0.52f, 0.45f); // paler
+        private static readonly Color SkinUnconscious = new Color(0.60f, 0.54f, 0.50f);
+        private static readonly Color SkinUnresponsive = new Color(0.52f, 0.55f, 0.60f); // grey
 
         /// <summary>Presentation-only clamp: canonical RR is NEVER mutated; the
         /// visual breathing rate is limited so extreme canonical values cannot

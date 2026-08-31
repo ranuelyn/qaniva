@@ -96,7 +96,15 @@ namespace Qaniva.Bridge
         public List<TimelineEntryDto> timeline = new List<TimelineEntryDto>();
         public List<CriterionResultDto> criteria = new List<CriterionResultDto>();
         public DebriefContentDto debrief = new DebriefContentDto();
+        public List<CaseReferenceDto> references = new List<CaseReferenceDto>();
         public string replayHash = "";
+    }
+
+    [Serializable]
+    public sealed class CaseReferenceDto
+    {
+        public string label = "";
+        public string citation = "";
     }
 
     [Serializable]
@@ -111,6 +119,8 @@ namespace Qaniva.Bridge
         public int creditedAtSec = -1;
         public double awardedPoints;
         public double maxPoints;
+        public List<string> evidenceRefs = new List<string>();
+        public List<string> acceptedActionLabels = new List<string>();
     }
 
     [Serializable]
@@ -139,5 +149,6 @@ namespace Qaniva.Bridge
         public string actionId = "";
         public string label = "";
         public string classification = "neutral";
+        public List<string> stateChanges = new List<string>();
     }
 }

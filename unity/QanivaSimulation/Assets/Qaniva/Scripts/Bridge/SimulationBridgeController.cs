@@ -254,6 +254,10 @@ namespace Qaniva.Bridge
                     commonErrors = new List<string>(summary.DebriefCommonErrors),
                 },
             };
+            foreach (var r in summary.References)
+            {
+                dto.references.Add(new CaseReferenceDto { label = r.Label, citation = r.Citation });
+            }
             foreach (var c in summary.Criteria)
             {
                 dto.criteria.Add(new CriterionResultDto
@@ -267,6 +271,8 @@ namespace Qaniva.Bridge
                     creditedAtSec = c.CreditedAtSec,
                     awardedPoints = c.AwardedPoints,
                     maxPoints = c.MaxPoints,
+                    evidenceRefs = new List<string>(c.EvidenceRefs),
+                    acceptedActionLabels = new List<string>(c.AcceptedActionLabels),
                 });
             }
             foreach (var e in summary.Timeline)
@@ -278,6 +284,7 @@ namespace Qaniva.Bridge
                     actionId = e.ActionId,
                     label = e.Label,
                     classification = e.Classification.ToLowerInvariant(),
+                    stateChanges = new List<string>(e.StateChanges),
                 });
             }
 

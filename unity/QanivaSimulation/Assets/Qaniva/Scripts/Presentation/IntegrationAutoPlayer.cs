@@ -32,10 +32,20 @@ namespace Qaniva.Presentation
             "activate_cath_lab", "start_statin", "disposition_cath_lab",
         };
 
+        // Mirrors .../Golden/ana_optimal_path.script.json.
+        internal static readonly string[] AnaphylaxisIdealPath =
+        {
+            "focused_history", "attach_monitor", "give_epinephrine_im",
+            "position_supine_legs_raised", "give_oxygen", "iv_access",
+            "give_fluid_bolus", "exam_lungs", "disposition_observation",
+        };
+
         /// <summary>The e2e drivers' ideal action sequence for a case (test data,
         /// mirrored from the committed golden scripts — never clinical logic).</summary>
         internal static string[] IdealPathFor(string caseId) =>
-            caseId == "stemi_anterior_001" ? StemiIdealPath : IdealPath;
+            caseId == "stemi_anterior_001" ? StemiIdealPath
+            : caseId == "anaphylaxis_food_001" ? AnaphylaxisIdealPath
+            : IdealPath;
 
         /// <summary>Single place that decides whether this driver may act (unit-tested).</summary>
         public static bool ShouldRunFor(string mode) => mode == BridgeProtocol.Modes.E2eAutoplay;

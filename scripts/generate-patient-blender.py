@@ -81,6 +81,44 @@ def add_prim(name, kind, loc, scale, material):
     return o
 
 
+def make_blanket():
+    """Draped blanket sheet modeled in standing space (covers feet->waist once
+    the prefab lays the rig supine): center follows the legs, edges fall toward
+    the mattress plane. Weighted rigidly to Hips by the caller."""
+    import math
+    mesh = bpy.data.meshes.new("BlanketMesh")
+    obj = bpy.data.objects.new("BlanketMesh", mesh)
+    bpy.context.collection.objects.link(obj)
+    nx, nz = 17, 25
+    xs = [(-0.34 + 0.68 * i / (nx - 1)) for i in range(nx)]
+    zs = [(0.015 + 0.945 * j / (nz - 1)) for j in range(nz)]
+    verts = []
+    for z in zs:
+        for x in xs:
+            leg_bump = 0.065 * math.exp(-((abs(x) - 0.115) ** 2) / (2 * 0.055 ** 2))
+            body = -(0.045 + leg_bump)
+            edge = min(1.0, max(0.0, (abs(x) - 0.20) / 0.13))
+            y = body * (1 - edge) + 0.03 * edge
+            y += 0.006 * math.sin(x * 34) * math.sin(z * 21)  # fabric ripples
+            verts.append((x, y, z))
+    faces = []
+    for j in range(nz - 1):
+        for i in range(nx - 1):
+            a = j * nx + i
+            faces.append((a, a + 1, a + nx + 1, a + nx))
+    mesh.from_pydata(verts, [], faces)
+    bpy.context.view_layer.objects.active = obj
+    obj.select_set(True)
+    sol = obj.modifiers.new("Sol", 'SOLIDIFY')
+    sol.thickness = 0.018
+    sub = obj.modifiers.new("Sub", 'SUBSURF')
+    sub.levels = 1
+    sub.render_levels = 1
+    bpy.ops.object.shade_smooth()
+    apply_modifiers(obj)
+    return obj
+
+
 def build():
     clear_scene()
 
@@ -120,18 +158,21 @@ def build():
     skin_mat = make_material("PatientSkinMat", (0.68, 0.44, 0.32))
     gown_mat = make_material("PatientGownMat", (0.55, 0.68, 0.72))
     hair_mat = make_material("PatientHairMat", (0.12, 0.10, 0.09))
+    blanket_mat = make_material("PatientBlanketMat", (0.40, 0.53, 0.76))
     gown.data.materials.append(gown_mat)
     skinp.data.materials.append(skin_mat)
+    blanket = make_blanket()
+    blanket.data.materials.append(blanket_mat)
 
     # face details (closed eyes — the patient is supine and unwell) + hair cap
     details = [
-        add_prim("EyeL", 'cube', (-0.035, -0.082, 1.615), (0.016, 0.004, 0.0035), hair_mat),
-        add_prim("EyeR", 'cube', (0.035, -0.082, 1.615), (0.016, 0.004, 0.0035), hair_mat),
-        add_prim("BrowL", 'cube', (-0.036, -0.080, 1.643), (0.019, 0.004, 0.004), hair_mat),
-        add_prim("BrowR", 'cube', (0.036, -0.080, 1.643), (0.019, 0.004, 0.004), hair_mat),
-        add_prim("Nose", 'sphere', (0, -0.092, 1.585), (0.013, 0.016, 0.020), skin_mat),
-        add_prim("Mouth", 'cube', (0, -0.086, 1.545), (0.020, 0.003, 0.003), hair_mat),
-        add_prim("Hair", 'sphere', (0, 0.030, 1.632), (0.100, 0.102, 0.085), hair_mat),
+        add_prim("EyeL", 'cube', (-0.033, -0.076, 1.612), (0.014, 0.0025, 0.003), hair_mat),
+        add_prim("EyeR", 'cube', (0.033, -0.076, 1.612), (0.014, 0.0025, 0.003), hair_mat),
+        add_prim("Nose", 'sphere', (0, -0.088, 1.585), (0.012, 0.014, 0.018), skin_mat),
+        add_prim("Mouth", 'cube', (0, -0.080, 1.548), (0.015, 0.0025, 0.002), hair_mat),
+        add_prim("EarL", 'sphere', (-0.090, 0.008, 1.592), (0.010, 0.018, 0.024), skin_mat),
+        add_prim("EarR", 'sphere', (0.090, 0.008, 1.592), (0.010, 0.018, 0.024), skin_mat),
+        add_prim("Hair", 'sphere', (0, 0.028, 1.616), (0.101, 0.100, 0.086), hair_mat),
     ]
     bpy.ops.object.select_all(action='DESELECT')
     for o in details + [skinp]:
@@ -176,9 +217,17 @@ def build():
     bpy.ops.object.select_all(action='DESELECT')
     gown.select_set(True)
     skinp.select_set(True)
+    blanket.select_set(True)
     arm.select_set(True)
     bpy.context.view_layer.objects.active = arm
     bpy.ops.object.parent_set(type='ARMATURE_AUTO')
+
+    # the blanket rides the Hips rigidly (it is bedding, not anatomy)
+    bvg = blanket.vertex_groups
+    for g in list(bvg):
+        bvg.remove(g)
+    hips_grp = bvg.new(name="Hips")
+    hips_grp.add(list(range(len(blanket.data.vertices))), 1.0, 'REPLACE')
 
     mids = {b.name: arm.matrix_world @ ((b.head_local + b.tail_local) / 2)
             for b in arm.data.bones}
@@ -204,6 +253,7 @@ def build():
     bpy.ops.object.select_all(action='DESELECT')
     gown.select_set(True)
     skinp.select_set(True)
+    blanket.select_set(True)
     arm.select_set(True)
     bpy.ops.export_scene.fbx(
         filepath=str(out),

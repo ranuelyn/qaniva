@@ -52,6 +52,7 @@ namespace Qaniva.Presentation
         private ResultViewerPresenter _resultViewer;
         private string _openableAssetId;
         private string _openableAssetLabel;
+        private string _openableAssetStatus;
         private VisualElement _completionPanel;
         private Label _completionDetail;
 
@@ -93,7 +94,7 @@ namespace Qaniva.Presentation
             {
                 if (!string.IsNullOrEmpty(_openableAssetId))
                 {
-                    _resultViewer.Open(_openableAssetId, _openableAssetLabel);
+                    _resultViewer.Open(_openableAssetId, _openableAssetLabel, _openableAssetStatus);
                 }
             };
             _completionPanel = root.Q<VisualElement>("completion-panel");
@@ -138,6 +139,7 @@ namespace Qaniva.Presentation
             _resultViewer.Close();
             _openableAssetId = null;
             _openableAssetLabel = null;
+            _openableAssetStatus = null;
             _completionPanel.AddToClassList("hidden");
             _completionDetail.text = "";
             _timeline.Hide();
@@ -210,6 +212,7 @@ namespace Qaniva.Presentation
                 _openableAssetLabel = string.IsNullOrEmpty(outcome.ResultAssetLabel)
                     ? actionId
                     : outcome.ResultAssetLabel;
+                _openableAssetStatus = outcome.ResultAssetClinicalStatus;
                 if (string.IsNullOrEmpty(_openableAssetId))
                 {
                     _resultViewButton.AddToClassList("hidden");
@@ -217,7 +220,7 @@ namespace Qaniva.Presentation
                 else
                 {
                     _resultViewButton.RemoveFromClassList("hidden");
-                    _resultViewer.Open(_openableAssetId, _openableAssetLabel);
+                    _resultViewer.Open(_openableAssetId, _openableAssetLabel, _openableAssetStatus);
                 }
             }
             else

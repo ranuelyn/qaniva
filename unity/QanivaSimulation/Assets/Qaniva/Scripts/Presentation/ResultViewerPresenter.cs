@@ -51,8 +51,11 @@ namespace Qaniva.Presentation
         public bool IsOpen => _panel != null && !_panel.ClassListContains("hidden");
 
         /// <summary>Opens the viewer for a result asset id. Missing assets fail loudly
-        /// in the viewer itself (never a silent blank screen).</summary>
-        public void Open(string assetId, string label)
+        /// in the viewer itself (never a silent blank screen). A non-verified
+        /// asset (provenance clinicalStatus != clinician_verified) shows a
+        /// persistent provenance note so a placeholder can never be presented as
+        /// verified diagnostic content.</summary>
+        public void Open(string assetId, string label, string clinicalStatus = null)
         {
             if (_panel == null)
             {
@@ -72,7 +75,11 @@ namespace Qaniva.Presentation
             }
             else
             {
-                _note.text = "";
+                _note.text = clinicalStatus == "placeholder_replacement_required"
+                    ? "Schematic training placeholder — NOT a verified diagnostic tracing (clinical verification pending)."
+                    : clinicalStatus == "clinician_verified"
+                        ? ""
+                        : "Provenance not verified.";
                 _image.style.backgroundImage = new StyleBackground(_texture);
                 SetZoom(1f);
             }

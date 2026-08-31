@@ -82,7 +82,7 @@ namespace Qaniva.EditorTools
             Make("Mattress", new Color(0.18f, 0.47f, 0.44f), 0f, 0.25f);
             Make("Blanket", new Color(0.40f, 0.53f, 0.76f), 0f, 0.15f);
             Make("Gown", new Color(0.50f, 0.62f, 0.70f), 0f, 0.20f);
-            Make("Skin", new Color(0.87f, 0.72f, 0.62f), 0f, 0.30f);
+            Make("Skin", new Color(0.78f, 0.60f, 0.48f), 0f, 0.22f);
             Make("ScreenDark", new Color(0.03f, 0.05f, 0.06f), 0f, 0.70f);
             Make("AccentTeal", new Color(0.12f, 0.43f, 0.55f), 0f, 0.35f);
             Make("IvBag", new Color(0.85f, 0.90f, 0.92f, 1f), 0f, 0.6f);
@@ -230,6 +230,7 @@ namespace Qaniva.EditorTools
                 ("PatientSkinMat", "Skin"),
                 ("PatientGownMat", "Gown"),
                 ("PatientHairMat", "Hair"),
+                ("PatientBlanketMat", "Blanket"),
             })
             {
                 importer.AddRemap(
@@ -260,10 +261,9 @@ namespace Qaniva.EditorTools
                 }
             }
 
-            // Bed dressing shared with the primitive patient look. The blanket sits
-            // OVER the legs (covers the lower body up to the waist).
+            // Pillow stays a primitive; the draped blanket is part of the FBX now
+            // (BlanketMesh, modeled in Blender and weighted to the Hips bone).
             Box("Pillow", root.transform, new Vector3(0f, 0.05f, 0.92f), new Vector3(0.42f, 0.07f, 0.20f), "PlasticLight");
-            Box("Blanket", root.transform, new Vector3(0f, 0.19f, -0.44f), new Vector3(0.56f, 0.12f, 0.78f), "Blanket");
 
             Anchor("AnchorHead", root.transform, new Vector3(0f, 0.20f, 0.80f));
             Anchor("AnchorChest", root.transform, new Vector3(0f, 0.22f, 0.35f));
@@ -399,7 +399,7 @@ namespace Qaniva.EditorTools
             key.transform.localEulerAngles = new Vector3(52f, -28f, 0f);
             var keyLight = key.AddComponent<Light>();
             keyLight.type = LightType.Directional;
-            keyLight.intensity = 0.85f;
+            keyLight.intensity = 0.76f;
             keyLight.color = new Color(1f, 0.985f, 0.95f);
             keyLight.shadows = LightShadows.Soft;
 

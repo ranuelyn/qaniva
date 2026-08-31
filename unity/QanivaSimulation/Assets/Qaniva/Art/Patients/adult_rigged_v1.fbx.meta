@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: PatientBlanketMat
+    second: {fileID: 2100000, guid: c0634af2725514eadb82af98f2cb729b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: PatientGownMat
     second: {fileID: 2100000, guid: 3538cf8823de04866b92b12792cfbf83, type: 2}
   - first:

@@ -69,14 +69,30 @@ namespace Qaniva.Clinical.Runtime
             };
 
         public IReadOnlyList<TimelineEntryView> GetTimeline() =>
-            _sim.Timeline.Events.Select(e => new TimelineEntryView
+            _sim.Timeline.Events.Select(MapTimelineEntry).ToList();
+
+        /// <summary>Resolves fired-rule ids to their authored debriefText (case data).</summary>
+        private TimelineEntryView MapTimelineEntry(Qaniva.Clinical.Core.Model.AttemptEvent e)
+        {
+            var stateChanges = new List<string>();
+            foreach (var ruleId in e.TriggeredRuleIds)
+            {
+                var rule = _case.TransitionRules.Find(r => r.Id == ruleId);
+                if (!string.IsNullOrEmpty(rule?.DebriefText))
+                {
+                    stateChanges.Add(rule.DebriefText);
+                }
+            }
+            return new TimelineEntryView
             {
                 Seq = e.Seq,
                 SimTimeSec = e.SimTimeSec,
                 ActionId = e.ActionId,
                 Label = e.Label,
                 Classification = e.Classification.ToString(),
-            }).ToList();
+                StateChanges = stateChanges,
+            };
+        }
 
         public ActionOutcomeView ApplyAction(string actionId, IReadOnlyDictionary<string, string> parameters)
         {
@@ -98,6 +114,7 @@ namespace Qaniva.Clinical.Runtime
                 ResultText = result.ResultText,
                 ResultAssetId = result.ResultAssetId,
                 ResultAssetLabel = result.ResultAssetLabel,
+                ResultAssetClinicalStatus = result.ResultAssetClinicalStatus,
                 NewlyDisclosedFacts = result.NewlyDisclosedFacts
                     .Select(f => new DisclosedFactView { Id = f.Id, Text = f.Text })
                     .ToList(),
@@ -144,18 +161,17 @@ namespace Qaniva.Clinical.Runtime
                     CreditedAtSec = c.CreditedAtSec,
                     AwardedPoints = c.AwardedPoints,
                     MaxPoints = c.MaxPoints,
+                    EvidenceRefs = c.EvidenceRefs.ToList(),
+                    AcceptedActionLabels = c.AcceptedActionLabels.ToList(),
                 });
             }
             foreach (var e in _sim.Timeline.Events)
             {
-                summary.Timeline.Add(new TimelineEntryView
-                {
-                    Seq = e.Seq,
-                    SimTimeSec = e.SimTimeSec,
-                    ActionId = e.ActionId,
-                    Label = e.Label,
-                    Classification = e.Classification.ToString(),
-                });
+                summary.Timeline.Add(MapTimelineEntry(e));
+            }
+            foreach (var r in _case.References)
+            {
+                summary.References.Add(new CaseReferenceView { Label = r.Label, Citation = r.Citation });
             }
             return summary;
         }

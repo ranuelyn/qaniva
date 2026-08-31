@@ -61,6 +61,9 @@ namespace Qaniva.Simulation.Core
         /// <summary>Learner-facing label of that asset ("12-lead ECG"), or null.</summary>
         public string ResultAssetLabel;
 
+        /// <summary>Asset provenance.clinicalStatus (e.g. placeholder_replacement_required), or null.</summary>
+        public string ResultAssetClinicalStatus;
+
         /// <summary>Facts disclosed by this step (engine-diffed), with learner-facing text.</summary>
         public List<DisclosedFactView> NewlyDisclosedFacts = new List<DisclosedFactView>();
     }
@@ -86,6 +89,20 @@ namespace Qaniva.Simulation.Core
         public int CreditedAtSec = -1;
         public double AwardedPoints;
         public double MaxPoints;
+
+        /// <summary>Evidence-ledger ids from the rubric (learner-visible traceability).</summary>
+        public List<string> EvidenceRefs = new List<string>();
+
+        /// <summary>Labels of every accepted action (alternatives surface in the debrief).</summary>
+        public List<string> AcceptedActionLabels = new List<string>();
+    }
+
+    /// <summary>A case-authored literature reference (concise; shown in the debrief).</summary>
+    [Serializable]
+    public sealed class CaseReferenceView
+    {
+        public string Label = "";
+        public string Citation = "";
     }
 
     [Serializable]
@@ -96,6 +113,10 @@ namespace Qaniva.Simulation.Core
         public string ActionId = "";
         public string Label = "";
         public string Classification = "Neutral";
+
+        /// <summary>Authored causality texts of rules that fired on this step
+        /// (TransitionRule.debriefText, resolved from case data). Empty when none.</summary>
+        public List<string> StateChanges = new List<string>();
     }
 
     /// <summary>
@@ -150,6 +171,7 @@ namespace Qaniva.Simulation.Core
         public string DebriefSummary = "";
         public List<string> DebriefKeyTeachingPoints = new List<string>();
         public List<string> DebriefCommonErrors = new List<string>();
+        public List<CaseReferenceView> References = new List<CaseReferenceView>();
         public string ReplayHash = "";
     }
 }
