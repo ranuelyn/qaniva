@@ -148,8 +148,8 @@ public sealed class Simulation
             scoring.Classification);
 
         var template = ResolveResultTemplate(action);
-        string? assetLabel = template?.AssetId is { } assetId
-            ? _case.ResultAssets.FirstOrDefault(a => a.Id == assetId)?.Label
+        ResultAsset? asset = template?.AssetId is { } assetId
+            ? _case.ResultAssets.FirstOrDefault(a => a.Id == assetId)
             : null;
         return ActionResult.Ok(
             evt,
@@ -157,7 +157,8 @@ public sealed class Simulation
             CollectCues(fired),
             template?.Text,
             template?.AssetId,
-            assetLabel,
+            asset?.Label,
+            asset?.Provenance?.ClinicalStatus,
             CollectNewDisclosures(disclosedBefore));
     }
 

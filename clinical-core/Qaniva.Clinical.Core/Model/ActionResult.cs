@@ -14,6 +14,7 @@ public sealed class ActionResult
         string? resultText = null,
         string? resultAssetId = null,
         string? resultAssetLabel = null,
+        string? resultAssetClinicalStatus = null,
         IReadOnlyList<DisclosedFact>? newlyDisclosedFacts = null)
     {
         Accepted = accepted;
@@ -24,6 +25,7 @@ public sealed class ActionResult
         ResultText = resultText;
         ResultAssetId = resultAssetId;
         ResultAssetLabel = resultAssetLabel;
+        ResultAssetClinicalStatus = resultAssetClinicalStatus;
         NewlyDisclosedFacts = newlyDisclosedFacts ?? new List<DisclosedFact>();
     }
 
@@ -50,6 +52,9 @@ public sealed class ActionResult
     /// <summary>Learner-facing label of that asset (from the case's resultAssets), or null.</summary>
     public string? ResultAssetLabel { get; }
 
+    /// <summary>The asset's provenance.clinicalStatus (e.g. placeholder_replacement_required), or null.</summary>
+    public string? ResultAssetClinicalStatus { get; }
+
     /// <summary>Facts whose disclosure was caused by this step (action or triggered rules), in disclosure order.</summary>
     public IReadOnlyList<DisclosedFact> NewlyDisclosedFacts { get; }
 
@@ -62,8 +67,9 @@ public sealed class ActionResult
         string? resultText = null,
         string? resultAssetId = null,
         string? resultAssetLabel = null,
+        string? resultAssetClinicalStatus = null,
         IReadOnlyList<DisclosedFact>? newlyDisclosedFacts = null) =>
-        new(true, null, evt, terminated, presentationCues, resultText, resultAssetId, resultAssetLabel, newlyDisclosedFacts);
+        new(true, null, evt, terminated, presentationCues, resultText, resultAssetId, resultAssetLabel, resultAssetClinicalStatus, newlyDisclosedFacts);
 }
 
 /// <summary>A hidden fact that became disclosed, with its learner-facing text.</summary>

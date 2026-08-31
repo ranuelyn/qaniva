@@ -314,6 +314,10 @@
         "delaySec": { "type": "integer", "minimum": 0, "default": 0 },
         "effects": { "type": "array", "items": { "$ref": "#/$defs/effect" } },
         "presentationCue": { "type": ["string", "null"] },
+        "debriefText": {
+          "type": ["string", "null"],
+          "description": "Optional learner-facing explanation shown when this rule fires (timeline/debrief causality, e.g. 'No reperfusion decision was made in time — the ischemia progressed'). Authored, deterministic content — never AI-generated."
+        },
         "terminalState": {
           "type": ["string", "null"],
           "description": "If set, matches a terminalStates[].id and ends the attempt."

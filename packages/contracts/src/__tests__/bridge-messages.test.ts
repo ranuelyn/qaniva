@@ -49,6 +49,7 @@ const COMPLETED: UnityToRnMessage = {
           actionId: 'ecg_12lead',
           label: '12-lead ECG',
           classification: 'correct',
+          stateChanges: [],
         },
       ],
       criteria: [
@@ -62,6 +63,8 @@ const COMPLETED: UnityToRnMessage = {
           creditedAtSec: 132,
           awardedPoints: 15,
           maxPoints: 15,
+          evidenceRefs: ['EV-STEMI-010'],
+          acceptedActionLabels: ['Obtain a 12-lead ECG'],
         },
       ],
       debrief: {
@@ -69,6 +72,7 @@ const COMPLETED: UnityToRnMessage = {
         keyTeachingPoints: ['Obtain the ECG early'],
         commonErrors: ['Waiting on labs before the ECG'],
       },
+      references: [{ label: 'Guideline', citation: 'Fictional Society 2026' }],
       replayHash: 'deadbeefcafe',
     },
   },

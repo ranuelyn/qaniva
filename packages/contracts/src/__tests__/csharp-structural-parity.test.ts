@@ -14,6 +14,7 @@ import {
   timelineEntrySchema,
   criterionResultSchema,
   debriefContentSchema,
+  caseReferenceSchema,
 } from '../index';
 
 /**
@@ -160,6 +161,7 @@ const NESTED_CLASS_FOR: Array<{ shape: z.ZodRawShape; csClass: string }> = [
   { shape: timelineEntrySchema.shape, csClass: 'TimelineEntryDto' },
   { shape: criterionResultSchema.shape, csClass: 'CriterionResultDto' },
   { shape: debriefContentSchema.shape, csClass: 'DebriefContentDto' },
+  { shape: caseReferenceSchema.shape, csClass: 'CaseReferenceDto' },
 ];
 
 function csClassForShape(shape: z.ZodRawShape): string | undefined {

@@ -54,9 +54,40 @@ export const caseCompleteEvent = z.object({
   event: z.literal('case_complete'),
   caseId: z.string().min(1),
   caseVersion: z.number().int().positive(),
-  terminalOutcome: z.enum(['complete', 'discharge', 'admit', 'death', 'aborted']),
+  terminalOutcome: z.enum([
+    'complete',
+    'partial',
+    'deteriorated',
+    'discharge',
+    'admit',
+    'death',
+    'aborted',
+  ]),
   totalScore: z.number(),
   durationRealSec: z.number().nonnegative(),
+});
+
+export const appOpenEvent = z.object({
+  ...base,
+  event: z.literal('app_open'),
+});
+
+export const caseViewedEvent = z.object({
+  ...base,
+  event: z.literal('case_viewed'),
+  caseId: z.string().min(1),
+});
+
+export const caseAbortEvent = z.object({
+  ...base,
+  event: z.literal('case_abort'),
+  caseId: z.string().min(1),
+});
+
+export const debriefViewedEvent = z.object({
+  ...base,
+  event: z.literal('debrief_viewed'),
+  caseId: z.string().min(1),
 });
 
 export const replayStartEvent = z.object({
@@ -75,6 +106,10 @@ export const feedbackSubmitEvent = z.object({
 });
 
 export const analyticsEventSchema = z.discriminatedUnion('event', [
+  appOpenEvent,
+  caseViewedEvent,
+  caseAbortEvent,
+  debriefViewedEvent,
   caseStartEvent,
   actionTakenEvent,
   criticalActionLatencyEvent,

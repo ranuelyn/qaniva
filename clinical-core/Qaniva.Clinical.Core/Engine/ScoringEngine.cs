@@ -169,6 +169,13 @@ public sealed class ScoringEngine
                 classification = outcome.TimingMultiplier >= 0.999 ? "correct" : "delayed";
             }
 
+            var acceptedLabels = new List<string>();
+            foreach (var actionId in criterion.AcceptedActions)
+            {
+                var action = _case.AvailableActions.Find(a => a.Id == actionId);
+                acceptedLabels.Add(action?.Label ?? actionId);
+            }
+
             results.Add(new CriterionResult(
                 criterion.Id,
                 criterion.Label,
@@ -179,7 +186,9 @@ public sealed class ScoringEngine
                 outcome.Credited,
                 outcome.Credited ? outcome.CreditedAtSec : -1,
                 outcome.Credited ? outcome.AwardedPoints : 0,
-                criterion.Harmful ? -criterion.Points : criterion.Points));
+                criterion.Harmful ? -criterion.Points : criterion.Points,
+                new List<string>(criterion.EvidenceRefs),
+                acceptedLabels));
         }
         return results;
     }
@@ -243,7 +252,9 @@ public sealed class CriterionResult
         bool credited,
         int creditedAtSec,
         double awardedPoints,
-        double maxPoints)
+        double maxPoints,
+        IReadOnlyList<string> evidenceRefs,
+        IReadOnlyList<string> acceptedActionLabels)
     {
         Id = id;
         Label = label;
@@ -255,6 +266,8 @@ public sealed class CriterionResult
         CreditedAtSec = creditedAtSec;
         AwardedPoints = awardedPoints;
         MaxPoints = maxPoints;
+        EvidenceRefs = evidenceRefs;
+        AcceptedActionLabels = acceptedActionLabels;
     }
 
     public string Id { get; }
@@ -270,6 +283,12 @@ public sealed class CriterionResult
     public double AwardedPoints { get; }
     /// <summary>Positive max for scored criteria; negative magnitude for harmful penalties.</summary>
     public double MaxPoints { get; }
+
+    /// <summary>Evidence-ledger ids from the case rubric (learner-visible traceability).</summary>
+    public IReadOnlyList<string> EvidenceRefs { get; }
+
+    /// <summary>Labels of every accepted action (alternatives surface in the debrief).</summary>
+    public IReadOnlyList<string> AcceptedActionLabels { get; }
 }
 
 public readonly struct ActionScoring

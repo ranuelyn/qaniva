@@ -48,6 +48,16 @@ public sealed class ResultAsset
     /// <summary>image (only kind for now)</summary>
     public string Kind { get; set; } = "image";
     public string Label { get; set; } = "";
+    public ResultAssetProvenance? Provenance { get; set; }
+}
+
+/// <summary>License/verification provenance of a result asset (schema `resultAsset.provenance`).</summary>
+public sealed class ResultAssetProvenance
+{
+    public string Source { get; set; } = "";
+    public string License { get; set; } = "";
+    /// <summary>placeholder_replacement_required | clinician_verified</summary>
+    public string ClinicalStatus { get; set; } = "";
 }
 
 public sealed class CaseMetadata
@@ -168,6 +178,8 @@ public sealed class TransitionRule
     public int DelaySec { get; set; }
     public List<Effect> Effects { get; set; } = new();
     public string? PresentationCue { get; set; }
+    /// <summary>Learner-facing causality text shown when the rule fires (authored, deterministic).</summary>
+    public string? DebriefText { get; set; }
     public string? TerminalState { get; set; }
 }
 

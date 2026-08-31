@@ -19,6 +19,12 @@ export const timelineEntrySchema = z.object({
   label: z.string().min(1),
   /** Classification produced by the deterministic engine — never by an LLM. */
   classification: z.enum(['neutral', 'correct', 'delayed', 'missed', 'harmful']),
+  /**
+   * Authored causality texts of transition rules that fired on this step
+   * (case data `transitionRules[].debriefText`, resolved by the engine adapter).
+   * Empty for steps with no meaningful state change.
+   */
+  stateChanges: z.array(z.string()),
 });
 export type TimelineEntry = z.infer<typeof timelineEntrySchema>;
 
@@ -44,8 +50,19 @@ export const criterionResultSchema = z.object({
   awardedPoints: z.number(),
   /** Positive max for scored criteria; negative magnitude for harmful penalties. */
   maxPoints: z.number(),
+  /** Evidence-ledger ids from the case rubric (learner-visible traceability). */
+  evidenceRefs: z.array(z.string()),
+  /** Labels of every accepted action — >1 label means accepted alternatives exist. */
+  acceptedActionLabels: z.array(z.string()),
 });
 export type CriterionResult = z.infer<typeof criterionResultSchema>;
+
+/** A case-authored literature reference (concise; rendered in the debrief). */
+export const caseReferenceSchema = z.object({
+  label: z.string().min(1),
+  citation: z.string().min(1),
+});
+export type CaseReference = z.infer<typeof caseReferenceSchema>;
 
 /** Case-authored debrief narrative metadata (rephrased at most — never invented — by AI). */
 export const debriefContentSchema = z.object({
@@ -87,6 +104,8 @@ export const attemptSummarySchema = z.object({
   /** Per-criterion debrief outcomes, in case-definition order. */
   criteria: z.array(criterionResultSchema),
   debrief: debriefContentSchema,
+  /** The case's authored references (guideline organization/year — concise). */
+  references: z.array(caseReferenceSchema),
   /**
    * Hash of (caseVersion + ordered actionIds + seed + finalStateHash).
    * RN and backend use this to detect a determinism regression between runs.

@@ -67,6 +67,7 @@ describe('Qaniva API (integration)', () => {
           actionId: 'attach_monitor',
           label: 'Attach cardiac monitor',
           classification: 'correct',
+          stateChanges: [],
         },
       ],
       criteria: [
@@ -80,6 +81,8 @@ describe('Qaniva API (integration)', () => {
           creditedAtSec: 20,
           awardedPoints: 5,
           maxPoints: 5,
+          evidenceRefs: ['EV-DEMO-001'],
+          acceptedActionLabels: ['Attach cardiac monitor'],
         },
       ],
       debrief: {
@@ -87,6 +90,7 @@ describe('Qaniva API (integration)', () => {
         keyTeachingPoints: ['Monitor early'],
         commonErrors: [],
       },
+      references: [{ label: 'Demo', citation: 'Internal fictional demo case' }],
       replayHash: 'abcabcabc123',
     };
 
