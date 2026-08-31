@@ -1,5 +1,6 @@
 import { NativeEventEmitter, NativeModules } from 'react-native';
 import {
+  PROTOCOL_VERSION,
   decodeUnityToRn,
   encodeMessage,
   type RnToUnityMessage,
@@ -43,11 +44,25 @@ export class NativeUnityBridgeTransport {
     const json = encodeMessage(message);
     if (message.type === 'START_SIMULATION' && !this.started) {
       this.started = true;
+      const attemptId = message.payload.attemptId;
       void this.native
         .startUnity()
         .then(() => this.native.sendToUnity(json))
         .catch((err: unknown) => {
           console.error('[NativeUnityBridge] startUnity failed', err);
+          // Surface the failure through the normal protocol so the UI reaches
+          // the failed state instead of spinning forever.
+          this.emitLocal({
+            protocolVersion: PROTOCOL_VERSION,
+            messageId: '00000000-0000-4000-8000-00000000dead',
+            sentAt: new Date().toISOString(),
+            type: 'SIMULATION_FAILED',
+            payload: {
+              attemptId,
+              code: 'RENDER_ERROR',
+              message: err instanceof Error ? err.message : 'Unity runtime failed to start',
+            },
+          });
         });
       return;
     }
@@ -83,5 +98,9 @@ export class NativeUnityBridgeTransport {
     // The Unity runtime intentionally stays warm (initialise-once lifecycle);
     // hide returns control to the RN window.
     this.native.hideUnity();
+  }
+
+  private emitLocal(message: UnityToRnMessage): void {
+    this.handlers.forEach((h) => h(message));
   }
 }
