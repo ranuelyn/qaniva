@@ -69,6 +69,24 @@ describe('Qaniva API (integration)', () => {
           classification: 'correct',
         },
       ],
+      criteria: [
+        {
+          id: 'time_to_monitor',
+          label: 'Attached a cardiac monitor early',
+          category: 'timing',
+          criticality: 'minor',
+          harmful: false,
+          classification: 'correct',
+          creditedAtSec: 20,
+          awardedPoints: 5,
+          maxPoints: 5,
+        },
+      ],
+      debrief: {
+        summary: 'Deterministic engine debrief facts.',
+        keyTeachingPoints: ['Monitor early'],
+        commonErrors: [],
+      },
       replayHash: 'abcabcabc123',
     };
 

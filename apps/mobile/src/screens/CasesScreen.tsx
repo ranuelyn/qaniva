@@ -5,7 +5,17 @@ import { Body, Card, Screen, Title } from '@/components/ui';
 import type { ScreenProps } from '@/navigation/types';
 
 // Offline fallback so the shell is usable before the backend is running.
+// Mirrors packages/case-schema/fixtures metadata (the API serves the same set).
 const FALLBACK: CaseManifestEntry[] = [
+  {
+    id: 'stemi_anterior_001',
+    version: 1,
+    title: 'Crushing chest pain in a 54-year-old',
+    chiefComplaint: 'Severe central chest pain for the last 90 minutes',
+    specialty: 'emergency_medicine',
+    estimatedMinutes: 10,
+    clinicalReviewStatus: 'mvp_demo_approved',
+  },
   {
     id: 'demo_sync_bradycardia_001',
     version: 1,

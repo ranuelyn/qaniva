@@ -12,6 +12,8 @@ import {
   attemptSummarySchema,
   scoreBreakdownSchema,
   timelineEntrySchema,
+  criterionResultSchema,
+  debriefContentSchema,
 } from '../index';
 
 /**
@@ -156,6 +158,8 @@ const NESTED_CLASS_FOR: Array<{ shape: z.ZodRawShape; csClass: string }> = [
   { shape: attemptSummarySchema.shape, csClass: 'AttemptSummaryDto' },
   { shape: scoreBreakdownSchema.shape, csClass: 'ScoreBreakdownDto' },
   { shape: timelineEntrySchema.shape, csClass: 'TimelineEntryDto' },
+  { shape: criterionResultSchema.shape, csClass: 'CriterionResultDto' },
+  { shape: debriefContentSchema.shape, csClass: 'DebriefContentDto' },
 ];
 
 function csClassForShape(shape: z.ZodRawShape): string | undefined {

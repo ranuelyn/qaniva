@@ -61,6 +61,24 @@ export function buildDeterministicSummary(input: {
         classification: 'correct',
       },
     ],
+    criteria: [
+      {
+        id: 'time_to_ecg',
+        label: 'Obtained a 12-lead ECG promptly',
+        category: 'timing',
+        criticality: 'major',
+        harmful: false,
+        classification: 'correct',
+        creditedAtSec: 110,
+        awardedPoints: 15,
+        maxPoints: 15,
+      },
+    ],
+    debrief: {
+      summary: 'Deterministic fake summary (native Unity module not present).',
+      keyTeachingPoints: ['This is the offline fake bridge — run on the simulator for the real engine.'],
+      commonErrors: [],
+    },
     replayHash: `fake-${input.caseId}-${input.seed}`,
   };
 }

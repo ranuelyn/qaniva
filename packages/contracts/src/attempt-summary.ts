@@ -22,6 +22,39 @@ export const timelineEntrySchema = z.object({
 });
 export type TimelineEntry = z.infer<typeof timelineEntrySchema>;
 
+/**
+ * One rubric criterion's final, deterministic outcome — the substance of the
+ * debrief. Produced by the engine's ScoringEngine, never by an LLM.
+ */
+export const criterionResultSchema = z.object({
+  id: z.string().min(1),
+  /** Learner-facing criterion label from the case definition. */
+  label: z.string().min(1),
+  /** Rubric bucket: critical | timing | efficiency | treatment | disposition. */
+  category: z.string().min(1),
+  criticality: z.enum(['critical', 'major', 'minor']),
+  harmful: z.boolean(),
+  /**
+   * Non-harmful criteria: correct | delayed | missed.
+   * Harmful criteria: harmful (performed) | avoided (not performed).
+   */
+  classification: z.enum(['correct', 'delayed', 'missed', 'harmful', 'avoided']),
+  /** Sim-clock seconds when credited; -1 when never credited. */
+  creditedAtSec: z.number().int(),
+  awardedPoints: z.number(),
+  /** Positive max for scored criteria; negative magnitude for harmful penalties. */
+  maxPoints: z.number(),
+});
+export type CriterionResult = z.infer<typeof criterionResultSchema>;
+
+/** Case-authored debrief narrative metadata (rephrased at most — never invented — by AI). */
+export const debriefContentSchema = z.object({
+  summary: z.string(),
+  keyTeachingPoints: z.array(z.string()),
+  commonErrors: z.array(z.string()),
+});
+export type DebriefContent = z.infer<typeof debriefContentSchema>;
+
 export const scoreBreakdownSchema = z.object({
   critical: z.number(),
   timing: z.number(),
@@ -39,10 +72,21 @@ export const attemptSummarySchema = z.object({
   seed: z.number().int().nonnegative(),
   startedAt: z.string().datetime(),
   completedAt: z.string().datetime(),
-  terminalState: z.enum(['complete', 'discharge', 'admit', 'death', 'aborted']),
+  terminalState: z.enum([
+    'complete',
+    'partial',
+    'deteriorated',
+    'discharge',
+    'admit',
+    'death',
+    'aborted',
+  ]),
   totalScore: z.number(),
   scoreBreakdown: scoreBreakdownSchema,
   timeline: z.array(timelineEntrySchema),
+  /** Per-criterion debrief outcomes, in case-definition order. */
+  criteria: z.array(criterionResultSchema),
+  debrief: debriefContentSchema,
   /**
    * Hash of (caseVersion + ordered actionIds + seed + finalStateHash).
    * RN and backend use this to detect a determinism regression between runs.
