@@ -119,9 +119,18 @@
       "preconditions": [],
       "params": [],
       "effects": [
-        { "op": "disclose", "factId": "hx_pain_character" },
-        { "op": "disclose", "factId": "hx_risk_factors" },
-        { "op": "disclose", "factId": "hx_safety_negatives" }
+        {
+          "op": "disclose",
+          "factId": "hx_pain_character"
+        },
+        {
+          "op": "disclose",
+          "factId": "hx_risk_factors"
+        },
+        {
+          "op": "disclose",
+          "factId": "hx_safety_negatives"
+        }
       ],
       "resultTemplateId": null,
       "criterionIds": ["c_focused_history"]
@@ -135,7 +144,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "disclose", "factId": "hx_allergies" }],
+      "effects": [
+        {
+          "op": "disclose",
+          "factId": "hx_allergies"
+        }
+      ],
       "resultTemplateId": null,
       "criterionIds": []
     },
@@ -148,7 +162,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "reassured" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "reassured"
+        }
+      ],
       "resultTemplateId": "reassured_note",
       "criterionIds": []
     },
@@ -161,7 +180,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "differential_recorded" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "differential_recorded"
+        }
+      ],
       "resultTemplateId": "ddx_recorded",
       "criterionIds": []
     },
@@ -174,7 +198,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "monitor_on" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "monitor_on"
+        }
+      ],
       "resultTemplateId": "monitor_attached",
       "criterionIds": ["c_early_monitoring"]
     },
@@ -216,8 +245,14 @@
       "preconditions": [],
       "params": [],
       "effects": [
-        { "op": "setFlag", "flag": "ecg_done" },
-        { "op": "disclose", "factId": "ecg_tracing" }
+        {
+          "op": "setFlag",
+          "flag": "ecg_done"
+        },
+        {
+          "op": "disclose",
+          "factId": "ecg_tracing"
+        }
       ],
       "resultTemplateId": "ecg_result",
       "criterionIds": ["c_time_to_ecg"]
@@ -231,7 +266,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "iv_access" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "iv_access"
+        }
+      ],
       "resultTemplateId": null,
       "criterionIds": ["c_iv_access"]
     },
@@ -244,7 +284,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "troponin_sent" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "troponin_sent"
+        }
+      ],
       "resultTemplateId": "troponin_pending",
       "criterionIds": []
     },
@@ -257,7 +302,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "labs_sent" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "labs_sent"
+        }
+      ],
       "resultTemplateId": "labs_sent_note",
       "criterionIds": []
     },
@@ -270,7 +320,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "cxr_ordered" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "cxr_ordered"
+        }
+      ],
       "resultTemplateId": "cxr_ordered_note",
       "criterionIds": []
     },
@@ -283,7 +338,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "asa_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "asa_given"
+        }
+      ],
       "resultTemplateId": "aspirin_given",
       "criterionIds": ["c_aspirin_loading"]
     },
@@ -296,7 +356,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('ecg_done')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "p2y12_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "p2y12_given"
+        }
+      ],
       "resultTemplateId": "ticagrelor_given",
       "criterionIds": ["c_p2y12_loading"]
     },
@@ -309,7 +374,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('ecg_done')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "p2y12_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "p2y12_given"
+        }
+      ],
       "resultTemplateId": "prasugrel_given",
       "criterionIds": ["c_p2y12_loading"]
     },
@@ -322,7 +392,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('ecg_done')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "p2y12_clopidogrel_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "p2y12_clopidogrel_given"
+        }
+      ],
       "resultTemplateId": "clopidogrel_given",
       "criterionIds": []
     },
@@ -335,7 +410,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('ecg_done')", "flag('iv_access')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "ufh_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "ufh_given"
+        }
+      ],
       "resultTemplateId": "ufh_given",
       "criterionIds": ["c_anticoagulation"]
     },
@@ -349,8 +429,15 @@
       "preconditions": [],
       "params": [],
       "effects": [
-        { "op": "adjust", "target": "painScore", "value": -2 },
-        { "op": "setFlag", "flag": "ntg_active" }
+        {
+          "op": "adjust",
+          "target": "painScore",
+          "value": -2
+        },
+        {
+          "op": "setFlag",
+          "flag": "ntg_active"
+        }
       ],
       "resultTemplateId": "ntg_given",
       "criterionIds": ["c_nitrate_in_hypotension"],
@@ -366,8 +453,15 @@
       "preconditions": ["flag('iv_access')"],
       "params": [],
       "effects": [
-        { "op": "adjust", "target": "painScore", "value": -4 },
-        { "op": "setFlag", "flag": "morphine_given" }
+        {
+          "op": "adjust",
+          "target": "painScore",
+          "value": -4
+        },
+        {
+          "op": "setFlag",
+          "flag": "morphine_given"
+        }
       ],
       "resultTemplateId": "morphine_given",
       "criterionIds": []
@@ -382,8 +476,15 @@
       "preconditions": [],
       "params": [],
       "effects": [
-        { "op": "adjust", "target": "vitals.spo2", "value": 2 },
-        { "op": "setFlag", "flag": "o2_given" }
+        {
+          "op": "adjust",
+          "target": "vitals.spo2",
+          "value": 2
+        },
+        {
+          "op": "setFlag",
+          "flag": "o2_given"
+        }
       ],
       "resultTemplateId": "oxygen_given",
       "criterionIds": ["c_unnecessary_oxygen"]
@@ -398,8 +499,15 @@
       "preconditions": [],
       "params": [],
       "effects": [
-        { "op": "adjust", "target": "painScore", "value": -2 },
-        { "op": "setFlag", "flag": "nsaid_given" }
+        {
+          "op": "adjust",
+          "target": "painScore",
+          "value": -2
+        },
+        {
+          "op": "setFlag",
+          "flag": "nsaid_given"
+        }
       ],
       "resultTemplateId": "nsaid_given",
       "criterionIds": ["c_nsaid_in_acs"]
@@ -413,7 +521,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('ecg_done')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "lytic_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "lytic_given"
+        }
+      ],
       "resultTemplateId": "lytic_given",
       "criterionIds": ["c_lytic_with_pci_available"]
     },
@@ -426,7 +539,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('ecg_done')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "statin_given" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "statin_given"
+        }
+      ],
       "resultTemplateId": "statin_given",
       "criterionIds": ["c_statin_started"]
     },
@@ -439,7 +557,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('ecg_done')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "cath_activated" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "cath_activated"
+        }
+      ],
       "resultTemplateId": "cath_activation",
       "criterionIds": ["c_cath_lab_activation"]
     },
@@ -452,7 +575,12 @@
       "visibleWhen": null,
       "preconditions": ["flag('cath_activated')"],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "dispo_cath" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "dispo_cath"
+        }
+      ],
       "resultTemplateId": null,
       "criterionIds": ["c_disposition_cath_lab"]
     },
@@ -465,7 +593,12 @@
       "visibleWhen": null,
       "preconditions": [],
       "params": [],
-      "effects": [{ "op": "setFlag", "flag": "discharged" }],
+      "effects": [
+        {
+          "op": "setFlag",
+          "flag": "discharged"
+        }
+      ],
       "resultTemplateId": null,
       "criterionIds": []
     }
@@ -478,11 +611,19 @@
       "once": false,
       "delaySec": 0,
       "effects": [
-        { "op": "adjust", "target": "vitals.sbpMmHg", "value": -15 },
-        { "op": "clearFlag", "flag": "ntg_active" }
+        {
+          "op": "adjust",
+          "target": "vitals.sbpMmHg",
+          "value": -15
+        },
+        {
+          "op": "clearFlag",
+          "flag": "ntg_active"
+        }
       ],
       "presentationCue": null,
-      "terminalState": null
+      "terminalState": null,
+      "debriefText": "Nitroglycerin was given while the patient was already hypotensive — the blood pressure dropped further."
     },
     {
       "id": "ntg_processed",
@@ -490,7 +631,12 @@
       "priority": 10,
       "once": false,
       "delaySec": 0,
-      "effects": [{ "op": "clearFlag", "flag": "ntg_active" }],
+      "effects": [
+        {
+          "op": "clearFlag",
+          "flag": "ntg_active"
+        }
+      ],
       "presentationCue": null,
       "terminalState": null
     },
@@ -501,14 +647,34 @@
       "once": true,
       "delaySec": 0,
       "effects": [
-        { "op": "adjust", "target": "vitals.hr", "value": 12 },
-        { "op": "adjust", "target": "vitals.sbpMmHg", "value": -22 },
-        { "op": "adjust", "target": "vitals.dbpMmHg", "value": -10 },
-        { "op": "adjust", "target": "painScore", "value": 1 },
-        { "op": "setFlag", "flag": "deteriorated" }
+        {
+          "op": "adjust",
+          "target": "vitals.hr",
+          "value": 12
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.sbpMmHg",
+          "value": -22
+        },
+        {
+          "op": "adjust",
+          "target": "vitals.dbpMmHg",
+          "value": -10
+        },
+        {
+          "op": "adjust",
+          "target": "painScore",
+          "value": 1
+        },
+        {
+          "op": "setFlag",
+          "flag": "deteriorated"
+        }
       ],
       "presentationCue": "distress_severe",
-      "terminalState": null
+      "terminalState": null,
+      "debriefText": "No reperfusion decision was made in time — the untreated ischemia progressed (heart rate up, blood pressure down, pain worse)."
     },
     {
       "id": "t2_vf_arrest",
@@ -517,13 +683,28 @@
       "once": true,
       "delaySec": 0,
       "effects": [
-        { "op": "setEnum", "target": "circulation", "value": "arrest" },
-        { "op": "setEnum", "target": "neuro", "value": "unresponsive" },
-        { "op": "setRhythm", "value": "ventricular_fibrillation" },
-        { "op": "setFlag", "flag": "vf_arrest" }
+        {
+          "op": "setEnum",
+          "target": "circulation",
+          "value": "arrest"
+        },
+        {
+          "op": "setEnum",
+          "target": "neuro",
+          "value": "unresponsive"
+        },
+        {
+          "op": "setRhythm",
+          "value": "ventricular_fibrillation"
+        },
+        {
+          "op": "setFlag",
+          "flag": "vf_arrest"
+        }
       ],
       "presentationCue": "arrest",
-      "terminalState": "vf_arrest_takeover"
+      "terminalState": "vf_arrest_takeover",
+      "debriefText": "Prolonged untreated ischemia ended in ventricular fibrillation — the resus team takes over."
     },
     {
       "id": "troponin_returns",
@@ -532,8 +713,14 @@
       "once": true,
       "delaySec": 1200,
       "effects": [
-        { "op": "disclose", "factId": "troponin_result" },
-        { "op": "setFlag", "flag": "troponin_resulted" }
+        {
+          "op": "disclose",
+          "factId": "troponin_result"
+        },
+        {
+          "op": "setFlag",
+          "flag": "troponin_resulted"
+        }
       ],
       "presentationCue": null,
       "terminalState": null
@@ -544,7 +731,12 @@
       "priority": 20,
       "once": true,
       "delaySec": 600,
-      "effects": [{ "op": "disclose", "factId": "labs_result" }],
+      "effects": [
+        {
+          "op": "disclose",
+          "factId": "labs_result"
+        }
+      ],
       "presentationCue": null,
       "terminalState": null
     },
@@ -554,7 +746,12 @@
       "priority": 20,
       "once": true,
       "delaySec": 300,
-      "effects": [{ "op": "disclose", "factId": "cxr_result" }],
+      "effects": [
+        {
+          "op": "disclose",
+          "factId": "cxr_result"
+        }
+      ],
       "presentationCue": null,
       "terminalState": null
     },
@@ -565,8 +762,14 @@
       "once": true,
       "delaySec": 60,
       "effects": [
-        { "op": "disclose", "factId": "cath_response" },
-        { "op": "setFlag", "flag": "cath_confirmed" }
+        {
+          "op": "disclose",
+          "factId": "cath_response"
+        },
+        {
+          "op": "setFlag",
+          "flag": "cath_confirmed"
+        }
       ],
       "presentationCue": null,
       "terminalState": null
@@ -578,7 +781,10 @@
       "label": "Obtained the 12-lead ECG promptly",
       "criticality": "critical",
       "acceptedActions": ["ecg_12lead"],
-      "timingWindow": { "fullCreditBeforeSec": 300, "zeroCreditAfterSec": 600 },
+      "timingWindow": {
+        "fullCreditBeforeSec": 300,
+        "zeroCreditAfterSec": 600
+      },
       "stateConstraints": [],
       "points": 15,
       "category": "critical",
@@ -591,7 +797,10 @@
       "label": "Gave the aspirin loading dose early",
       "criticality": "critical",
       "acceptedActions": ["give_aspirin"],
-      "timingWindow": { "fullCreditBeforeSec": 480, "zeroCreditAfterSec": 720 },
+      "timingWindow": {
+        "fullCreditBeforeSec": 480,
+        "zeroCreditAfterSec": 720
+      },
       "stateConstraints": [],
       "points": 10,
       "category": "critical",
@@ -604,7 +813,10 @@
       "label": "Activated the cath lab within the target window",
       "criticality": "critical",
       "acceptedActions": ["activate_cath_lab"],
-      "timingWindow": { "fullCreditBeforeSec": 600, "zeroCreditAfterSec": 900 },
+      "timingWindow": {
+        "fullCreditBeforeSec": 600,
+        "zeroCreditAfterSec": 900
+      },
       "stateConstraints": [],
       "points": 25,
       "category": "critical",
@@ -653,7 +865,10 @@
       "label": "Attached monitoring + defib pads early",
       "criticality": "major",
       "acceptedActions": ["attach_monitor"],
-      "timingWindow": { "fullCreditBeforeSec": 240, "zeroCreditAfterSec": 480 },
+      "timingWindow": {
+        "fullCreditBeforeSec": 240,
+        "zeroCreditAfterSec": 480
+      },
       "stateConstraints": [],
       "points": 5,
       "category": "timing",
@@ -666,7 +881,10 @@
       "label": "Obtained IV access",
       "criticality": "minor",
       "acceptedActions": ["iv_access"],
-      "timingWindow": { "fullCreditBeforeSec": 600, "zeroCreditAfterSec": 900 },
+      "timingWindow": {
+        "fullCreditBeforeSec": 600,
+        "zeroCreditAfterSec": 900
+      },
       "stateConstraints": [],
       "points": 5,
       "category": "timing",
@@ -820,19 +1038,58 @@
       "id": "troponin_pending",
       "text": "hs-troponin sent (drawn now). Lab turnaround is about 20 minutes."
     },
-    { "id": "labs_sent_note", "text": "CBC, electrolytes, creatinine and coagulation panel sent." },
-    { "id": "cxr_ordered_note", "text": "Portable chest X-ray requested." },
-    { "id": "aspirin_given", "text": "Aspirin 300 mg given — chewed, non-enteric-coated." },
-    { "id": "ticagrelor_given", "text": "Ticagrelor 180 mg loading dose given." },
-    { "id": "prasugrel_given", "text": "Prasugrel 60 mg loading dose given." },
-    { "id": "clopidogrel_given", "text": "Clopidogrel 600 mg loading dose given." },
-    { "id": "ufh_given", "text": "Unfractionated heparin given — weight-based IV bolus." },
-    { "id": "ntg_given", "text": "Nitroglycerin 0.4 mg given sublingually." },
-    { "id": "morphine_given", "text": "Morphine given IV, titrated to pain." },
-    { "id": "oxygen_given", "text": "Oxygen applied via face mask." },
-    { "id": "nsaid_given", "text": "IV NSAID analgesia given." },
-    { "id": "lytic_given", "text": "Tenecteplase bolus administered." },
-    { "id": "statin_given", "text": "High-intensity statin given." },
+    {
+      "id": "labs_sent_note",
+      "text": "CBC, electrolytes, creatinine and coagulation panel sent."
+    },
+    {
+      "id": "cxr_ordered_note",
+      "text": "Portable chest X-ray requested."
+    },
+    {
+      "id": "aspirin_given",
+      "text": "Aspirin 300 mg given — chewed, non-enteric-coated."
+    },
+    {
+      "id": "ticagrelor_given",
+      "text": "Ticagrelor 180 mg loading dose given."
+    },
+    {
+      "id": "prasugrel_given",
+      "text": "Prasugrel 60 mg loading dose given."
+    },
+    {
+      "id": "clopidogrel_given",
+      "text": "Clopidogrel 600 mg loading dose given."
+    },
+    {
+      "id": "ufh_given",
+      "text": "Unfractionated heparin given — weight-based IV bolus."
+    },
+    {
+      "id": "ntg_given",
+      "text": "Nitroglycerin 0.4 mg given sublingually."
+    },
+    {
+      "id": "morphine_given",
+      "text": "Morphine given IV, titrated to pain."
+    },
+    {
+      "id": "oxygen_given",
+      "text": "Oxygen applied via face mask."
+    },
+    {
+      "id": "nsaid_given",
+      "text": "IV NSAID analgesia given."
+    },
+    {
+      "id": "lytic_given",
+      "text": "Tenecteplase bolus administered."
+    },
+    {
+      "id": "statin_given",
+      "text": "High-intensity statin given."
+    },
     {
       "id": "cath_activation",
       "text": "Cath lab activation call placed to interventional cardiology."
