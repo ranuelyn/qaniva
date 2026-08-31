@@ -86,9 +86,38 @@ namespace Qaniva.EditorTools
         }
 
         /// <summary>
-        /// Adds QANIVA_HAS_CLINICAL_CORE (real engine) and — until QAN-006 ships a
-        /// real action UI — QANIVA_INTEGRATION_AUTOPLAY (demo ideal-path driver)
-        /// for iOS + Standalone + Android. Idempotent.
+        /// Creates the runtime PanelSettings asset for the UI Toolkit simulation UI
+        /// (uxml/uss/tss are committed text files; PanelSettings must be an asset).
+        /// Idempotent.
+        /// </summary>
+        public static void CreateUiAssets()
+        {
+            const string panelPath = "Assets/Qaniva/Resources/Qaniva/UI/QanivaPanelSettings.asset";
+            var panel = AssetDatabase.LoadAssetAtPath<UnityEngine.UIElements.PanelSettings>(panelPath);
+            if (panel == null)
+            {
+                panel = ScriptableObject.CreateInstance<UnityEngine.UIElements.PanelSettings>();
+                AssetDatabase.CreateAsset(panel, panelPath);
+            }
+            var theme = AssetDatabase.LoadAssetAtPath<UnityEngine.UIElements.ThemeStyleSheet>(
+                "Assets/Qaniva/Resources/Qaniva/UI/QanivaTheme.tss");
+            if (theme == null)
+            {
+                throw new Exception("QanivaTheme.tss not imported — is the UI folder present?");
+            }
+            panel.themeStyleSheet = theme;
+            panel.scaleMode = UnityEngine.UIElements.PanelScaleMode.ScaleWithScreenSize;
+            panel.referenceResolution = new Vector2Int(1206, 2622); // iPhone 16 Pro native
+            panel.match = 0.5f;
+            EditorUtility.SetDirty(panel);
+            AssetDatabase.SaveAssets();
+            Debug.Log("[QanivaBuild] PanelSettings ready at " + panelPath);
+        }
+
+        /// <summary>
+        /// Adds QANIVA_HAS_CLINICAL_CORE (real engine) and QANIVA_INTEGRATION_AUTOPLAY
+        /// (compiles the mode-gated e2e drivers; inert unless the host sends an e2e
+        /// mode) for iOS + Standalone + Android. Idempotent.
         /// </summary>
         public static void EnableClinicalCoreDefine()
         {

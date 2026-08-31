@@ -33,8 +33,9 @@ once generated), `ProjectSettings/*`.
   - `QANIVA_HAS_CLINICAL_CORE` defined → real `ClinicalRuntime` over the synced
     `Qaniva.Clinical.Core.dll`;
   - otherwise → `StubClinicalRuntime` with a loud warning (dev stand-in only).
-- `IntegrationHud` self-attaches (AfterSceneLoad) and renders the live engine
-  snapshot as text — the minimal integration visual until QAN-002's real room.
+- `SimulationUiController` self-attaches (AfterSceneLoad) and builds the
+  interactive UI Toolkit surface (vitals, category tabs, action list, case log,
+  exit) — see the "Interactive simulation UI" section below.
 - The GameObject name `SimulationBridge` is part of the native contract
   (`sendMessageToGO` target); change it only together with
   `apps/mobile/modules/unity-host`.
@@ -78,9 +79,19 @@ trusting a device/simulator run. The sync script always rebuilds from source
 
 | File | Needs | Proves |
 | --- | --- | --- |
-| `BridgeCodecTests` | — | envelope codec, protocol-version + channel rejection |
-| `SimulationBridgeControllerTests` | — | START→READY→COMPLETED over fake transport + stub runtime |
-| `RealClinicalRuntimeTests` | synced DLL + `QANIVA_HAS_CLINICAL_CORE` | the same round trip over the **real engine**, locked to the committed golden (score 80, `replayHash fe2191ff…`), determinism across runs, rejected-action state invariance |
+| `BridgeCodecTests` (EditMode) | — | envelope codec, protocol-version + channel rejection |
+| `SimulationBridgeControllerTests` (EditMode) | — | START→READY→COMPLETED, duplicate-START idempotency, completion exactly-once, availability/timeline pass-through, RequestExit, e2e-driver mode gates |
+| `RealClinicalRuntimeTests` (EditMode) | synced DLL + `QANIVA_HAS_CLINICAL_CORE` | the round trip over the **real engine**, locked to the committed golden (score 80, `replayHash fe2191ff…`), determinism across runs, rejected-action state invariance |
+| `InteractiveUiPlayModeTests` (PlayMode) | same | the INTERACTIVE path: real UI buttons pressed through event dispatch reproduce the golden replay; hidden/disabled rendering from the engine projection; double-tap guard; interactive mode never auto-plays |
+
+## Interactive simulation UI
+
+The in-simulation UI (UI Toolkit — committed `uxml`/`uss`/`tss` under
+`Assets/Qaniva/Resources/Qaniva/UI/` + a generated `QanivaPanelSettings.asset`)
+renders the engine's canonical action availability, vitals and timeline, and
+routes taps into `SubmitPlayerAction`. Runtime modes (`interactive` default,
+`e2e_autoplay`, `e2e_ui`) and the whole flow are documented in
+[docs/architecture/simulation-ui.md](../../docs/architecture/simulation-ui.md).
 
 ## Still manual (QAN-002, later)
 

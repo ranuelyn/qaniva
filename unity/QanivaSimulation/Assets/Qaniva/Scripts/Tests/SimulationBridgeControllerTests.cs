@@ -126,6 +126,85 @@ namespace Qaniva.Simulation.Tests
         }
 
         [Test]
+        public void CompletionIsEmittedExactlyOnce()
+        {
+            StartSimulation();
+            _bridge.Clear();
+
+            // Stub terminates after 4 accepted actions; submit extra ones after.
+            for (int i = 0; i < 6; i++)
+            {
+                _controller.SubmitPlayerAction("treat", new Dictionary<string, string>());
+            }
+            // A late duplicate START retry after completion must not re-emit either.
+            StartSimulation();
+
+            int completed = 0;
+            foreach (var raw in _bridge.Sent)
+            {
+                var (type, _) = BridgeMessageCodec.DecodeEnvelope(raw, BridgeMessageCodec.UnityToRnTypes);
+                if (type == BridgeProtocol.UnityToRn.SimulationCompleted)
+                {
+                    completed++;
+                }
+            }
+            Assert.AreEqual(1, completed, "SIMULATION_COMPLETED must be emitted exactly once per attempt");
+        }
+
+        [Test]
+        public void ExposesRuntimeAvailabilityAndTimelineToTheUi()
+        {
+            StartSimulation();
+
+            var availability = _controller.GetActionAvailability();
+            Assert.IsTrue(availability.Count > 0, "availability projection must be exposed");
+            foreach (var a in availability)
+            {
+                Assert.IsTrue(a.Visible && a.Enabled, "stub exposes enabled actions");
+            }
+
+            _controller.SubmitPlayerAction("treat", new Dictionary<string, string>());
+            var timeline = _controller.GetTimeline();
+            Assert.AreEqual(1, timeline.Count, "canonical timeline must be exposed");
+            Assert.AreEqual("treat", timeline[0].ActionId);
+        }
+
+        [Test]
+        public void StartPayloadModeDefaultsToInteractiveAndIsExposed()
+        {
+            StartSimulation(); // helper sends no mode -> C# field default
+            Assert.AreEqual(BridgeProtocol.Modes.Interactive, _controller.CurrentMode);
+        }
+
+        [Test]
+        public void RequestExitEmitsExitRequestedNotCompleted()
+        {
+            StartSimulation();
+            _bridge.Clear();
+
+            _controller.RequestExit();
+
+            Assert.AreEqual(1, _bridge.Sent.Count);
+            var (type, _) = BridgeMessageCodec.DecodeEnvelope(_bridge.Sent[0], BridgeMessageCodec.UnityToRnTypes);
+            Assert.AreEqual(BridgeProtocol.UnityToRn.ExitRequested, type,
+                "user abort must emit EXIT_REQUESTED and never SIMULATION_COMPLETED");
+        }
+
+#if QANIVA_INTEGRATION_AUTOPLAY
+        [Test]
+        public void E2eDriversAreInertOutsideTheirOwnMode()
+        {
+            Assert.IsFalse(Qaniva.Presentation.IntegrationAutoPlayer.ShouldRunFor(BridgeProtocol.Modes.Interactive));
+            Assert.IsFalse(Qaniva.Presentation.IntegrationAutoPlayer.ShouldRunFor(BridgeProtocol.Modes.E2eUi));
+            Assert.IsTrue(Qaniva.Presentation.IntegrationAutoPlayer.ShouldRunFor(BridgeProtocol.Modes.E2eAutoplay));
+
+            Assert.IsFalse(Qaniva.Presentation.InteractiveE2eDriver.ShouldRunFor(BridgeProtocol.Modes.Interactive));
+            Assert.IsFalse(Qaniva.Presentation.InteractiveE2eDriver.ShouldRunFor(BridgeProtocol.Modes.E2eAutoplay));
+            Assert.IsTrue(Qaniva.Presentation.InteractiveE2eDriver.ShouldRunFor(BridgeProtocol.Modes.E2eUi));
+        }
+#endif
+
+        [Test]
         public void MalformedHostMessageProducesSimulationFailed()
         {
             _bridge.PushFromHost("{ not json");

@@ -1,0 +1,26 @@
+{
+  "name": "Qaniva.Simulation.PlayModeTests",
+  "rootNamespace": "Qaniva.Simulation.PlayModeTests",
+  "references": [
+    "Qaniva.Simulation.Core",
+    "Qaniva.Bridge",
+    "Qaniva.Presentation",
+    "Qaniva.Clinical.Runtime",
+    "UnityEngine.TestRunner",
+    "Newtonsoft.Json"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "nunit.framework.dll",
+    "Newtonsoft.Json.dll"
+  ],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

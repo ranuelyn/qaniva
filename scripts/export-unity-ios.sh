@@ -39,9 +39,10 @@ run_unity() {
     -logFile - "$@" 2>&1 | tail -40
 }
 
-echo "==> configuring URP + QANIVA_HAS_CLINICAL_CORE define + minimal scene"
+echo "==> configuring URP + defines + UI assets + minimal scene"
 run_unity Qaniva.EditorTools.QanivaBuild.ConfigureUrp
 run_unity Qaniva.EditorTools.QanivaBuild.EnableClinicalCoreDefine
+run_unity Qaniva.EditorTools.QanivaBuild.CreateUiAssets
 run_unity Qaniva.EditorTools.QanivaBuild.CreateMinimalScene
 
 echo "==> exporting iOS Xcode project -> $EXPORT_DIR"

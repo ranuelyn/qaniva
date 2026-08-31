@@ -42,6 +42,26 @@ namespace Qaniva.Bridge
         public IReadOnlyList<string> GetAvailableActionIds() =>
             IsTerminated ? new List<string>() : new List<string> { "attach_monitor", "assess_patient", "treat", "disposition" };
 
+        public IReadOnlyList<ActionAvailabilityView> GetActionAvailability()
+        {
+            var list = new List<ActionAvailabilityView>();
+            foreach (var id in GetAvailableActionIds())
+            {
+                list.Add(new ActionAvailabilityView
+                {
+                    ActionId = id,
+                    Label = id,
+                    Type = "examine",
+                    Visible = true,
+                    Enabled = true,
+                    DisabledReason = null,
+                });
+            }
+            return list;
+        }
+
+        public IReadOnlyList<TimelineEntryView> GetTimeline() => new List<TimelineEntryView>(_timeline);
+
         public ActionOutcomeView ApplyAction(string actionId, IReadOnlyDictionary<string, string> parameters)
         {
             if (IsTerminated)

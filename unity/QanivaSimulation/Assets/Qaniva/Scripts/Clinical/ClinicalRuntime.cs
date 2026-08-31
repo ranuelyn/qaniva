@@ -46,6 +46,27 @@ namespace Qaniva.Clinical.Runtime
         public IReadOnlyList<string> GetAvailableActionIds() =>
             _sim.GetAvailableActions().Select(a => a.Id).ToList();
 
+        public IReadOnlyList<ActionAvailabilityView> GetActionAvailability() =>
+            _sim.GetActionAvailability().Select(a => new ActionAvailabilityView
+            {
+                ActionId = a.ActionId,
+                Label = a.Label,
+                Type = a.Type,
+                Visible = a.Visible,
+                Enabled = a.Enabled,
+                DisabledReason = a.DisabledReason,
+            }).ToList();
+
+        public IReadOnlyList<TimelineEntryView> GetTimeline() =>
+            _sim.Timeline.Events.Select(e => new TimelineEntryView
+            {
+                Seq = e.Seq,
+                SimTimeSec = e.SimTimeSec,
+                ActionId = e.ActionId,
+                Label = e.Label,
+                Classification = e.Classification.ToString(),
+            }).ToList();
+
         public ActionOutcomeView ApplyAction(string actionId, IReadOnlyDictionary<string, string> parameters)
         {
             var result = _sim.ApplyAction(actionId, (IReadOnlyDictionary<string, string>)parameters);

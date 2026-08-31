@@ -19,6 +19,16 @@ namespace Qaniva.Simulation.Core
 
         IReadOnlyList<string> GetAvailableActionIds();
 
+        /// <summary>
+        /// The engine's canonical hidden/disabled/enabled projection for every
+        /// action (empty once terminated). The interaction UI renders exactly this;
+        /// it never re-derives visibility or precondition logic.
+        /// </summary>
+        IReadOnlyList<ActionAvailabilityView> GetActionAvailability();
+
+        /// <summary>The canonical attempt timeline so far (engine-owned history).</summary>
+        IReadOnlyList<TimelineEntryView> GetTimeline();
+
         ActionOutcomeView ApplyAction(string actionId, IReadOnlyDictionary<string, string> parameters);
 
         SimulationSnapshotView AdvanceTime(int seconds);

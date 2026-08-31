@@ -63,6 +63,23 @@ namespace Qaniva.Simulation.Core
         public string Classification = "Neutral";
     }
 
+    /// <summary>
+    /// Canonical hidden / visible+disabled / enabled projection of one action,
+    /// computed by the engine (never by UI). Visible==false means do not render;
+    /// Visible &amp;&amp; !Enabled means render greyed with DisabledReason.
+    /// </summary>
+    [Serializable]
+    public sealed class ActionAvailabilityView
+    {
+        public string ActionId = "";
+        public string Label = "";
+        /// <summary>Case action type: examine|order|medication|procedure|consult|disposition|communication.</summary>
+        public string Type = "";
+        public bool Visible;
+        public bool Enabled;
+        public string DisabledReason;
+    }
+
     [Serializable]
     public sealed class AttemptSummaryView
     {

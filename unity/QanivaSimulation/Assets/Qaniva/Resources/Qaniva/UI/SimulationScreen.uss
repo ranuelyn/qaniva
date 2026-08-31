@@ -1,0 +1,157 @@
+/* Qaniva simulation UI — plain, functional, phone-portrait, big tap targets. */
+
+.root {
+  flex-grow: 1;
+  justify-content: flex-start;
+}
+
+.safe-top { height: 54px; }
+.safe-bottom { height: 24px; }
+
+.vitals-bar {
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: rgba(10, 14, 20, 0.92);
+  padding: 10px 14px;
+}
+
+.vital {
+  color: rgb(120, 220, 160);
+  font-size: 30px;
+  -unity-font-style: bold;
+}
+
+.clock { color: rgb(240, 240, 240); }
+
+.status-bar {
+  background-color: rgba(10, 14, 20, 0.75);
+  padding: 4px 14px;
+}
+
+.patient-status {
+  color: rgb(170, 185, 200);
+  font-size: 24px;
+}
+
+.scene-spacer { flex-grow: 1; }
+
+.result-banner {
+  background-color: rgba(24, 32, 44, 0.95);
+  border-left-width: 6px;
+  border-left-color: rgb(59, 167, 255);
+  margin: 8px 12px;
+  padding: 10px 14px;
+}
+
+.result-text {
+  color: rgb(235, 240, 245);
+  font-size: 26px;
+  white-space: normal;
+}
+
+.completion-panel {
+  background-color: rgba(20, 60, 40, 0.95);
+  margin: 8px 12px;
+  padding: 14px;
+  border-radius: 10px;
+}
+
+.completion-title {
+  color: rgb(120, 230, 170);
+  font-size: 34px;
+  -unity-font-style: bold;
+}
+
+.completion-detail {
+  color: rgb(220, 235, 225);
+  font-size: 26px;
+  white-space: normal;
+}
+
+.timeline-panel {
+  background-color: rgba(12, 16, 24, 0.96);
+  margin: 8px 12px;
+  padding: 8px;
+  max-height: 420px;
+  border-radius: 10px;
+}
+
+.timeline-entry {
+  color: rgb(200, 210, 220);
+  font-size: 24px;
+  padding: 6px 8px;
+  white-space: normal;
+}
+
+.action-area {
+  background-color: rgba(10, 14, 20, 0.96);
+  padding: 8px 10px 4px 10px;
+}
+
+.category-tabs {
+  flex-direction: row;
+  margin-bottom: 8px;
+}
+
+.category-tab {
+  flex-grow: 1;
+  height: 64px;
+  margin: 0 3px;
+  font-size: 26px;
+  color: rgb(170, 185, 200);
+  background-color: rgb(26, 33, 44);
+  border-width: 0;
+  border-radius: 8px;
+}
+
+.category-tab-active {
+  background-color: rgb(45, 90, 150);
+  color: rgb(255, 255, 255);
+  -unity-font-style: bold;
+}
+
+.action-list { max-height: 460px; }
+
+.action-button {
+  height: 84px;
+  margin: 5px 2px;
+  font-size: 28px;
+  color: rgb(240, 244, 248);
+  background-color: rgb(37, 52, 71);
+  border-width: 0;
+  border-radius: 10px;
+  -unity-text-align: middle-left;
+  padding-left: 18px;
+}
+
+.action-button-disabled {
+  background-color: rgb(26, 30, 38);
+  color: rgb(110, 120, 132);
+}
+
+.action-disabled-reason {
+  color: rgb(140, 130, 90);
+  font-size: 21px;
+  margin: -4px 2px 4px 20px;
+  white-space: normal;
+}
+
+.footer {
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.footer-button {
+  height: 60px;
+  min-width: 200px;
+  font-size: 25px;
+  color: rgb(200, 210, 220);
+  background-color: rgb(30, 38, 50);
+  border-width: 0;
+  border-radius: 8px;
+}
+
+.exit { color: rgb(255, 130, 140); }
+
+.hidden { display: none; }

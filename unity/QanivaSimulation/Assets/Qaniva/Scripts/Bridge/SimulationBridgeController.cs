@@ -26,6 +26,7 @@ namespace Qaniva.Bridge
         private long _seed;
         private string _startedAtIso;
         private bool _paused;
+        private bool _completed;
         private float _startRealtime;
 
         /// <summary>Raised after EXIT_REQUESTED is sent so the host app can unload Unity.</summary>
@@ -34,6 +35,15 @@ namespace Qaniva.Bridge
         /// <summary>Latest snapshot from the engine, for presentation adapters to bind to.</summary>
         public SimulationSnapshotView CurrentSnapshot { get; private set; }
         public event Action<SimulationSnapshotView> SnapshotUpdated;
+
+        /// <summary>
+        /// Runtime mode from START_SIMULATION (BridgeProtocol.Modes.*). Production
+        /// launches are always Interactive; the e2e modes only arm test drivers.
+        /// </summary>
+        public string CurrentMode { get; private set; } = BridgeProtocol.Modes.Interactive;
+
+        /// <summary>Raised when a NEW simulation has been loaded and initialised.</summary>
+        public event Action SimulationStarted;
 
         /// <summary>Explicit wiring for tests / custom hosts.</summary>
         public void Configure(IUnityBridge bridge, IClinicalRuntime runtime, ICaseProvider caseProvider)
@@ -119,6 +129,8 @@ namespace Qaniva.Bridge
             _startedAtIso = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
             _startRealtime = Time.realtimeSinceStartup;
             _paused = false;
+            _completed = false;
+            CurrentMode = string.IsNullOrEmpty(p.mode) ? BridgeProtocol.Modes.Interactive : p.mode;
 
             try
             {
@@ -126,6 +138,7 @@ namespace Qaniva.Bridge
                 _runtime.LoadCase(caseJson, unchecked((ulong)p.seed));
                 CurrentSnapshot = _runtime.Initialize();
                 SnapshotUpdated?.Invoke(CurrentSnapshot);
+                SimulationStarted?.Invoke();
             }
             catch (Exception ex)
             {
@@ -158,6 +171,20 @@ namespace Qaniva.Bridge
 
         // --- driven by the in-simulation UI -----------------------------
 
+        /// <summary>
+        /// User abort from the in-simulation UI. Emits EXIT_REQUESTED (never
+        /// SIMULATION_COMPLETED — an aborted attempt has no engine terminal state).
+        /// </summary>
+        public void RequestExit() => HandleExit();
+
+        /// <summary>Engine's canonical hidden/disabled/enabled action projection.</summary>
+        public IReadOnlyList<ActionAvailabilityView> GetActionAvailability() =>
+            _runtime?.GetActionAvailability() ?? new List<ActionAvailabilityView>();
+
+        /// <summary>Engine's canonical attempt timeline so far.</summary>
+        public IReadOnlyList<TimelineEntryView> GetTimeline() =>
+            _runtime?.GetTimeline() ?? new List<TimelineEntryView>();
+
         public ActionOutcomeView SubmitPlayerAction(string actionId, IReadOnlyDictionary<string, string> parameters = null)
         {
             if (_paused || _runtime == null || _runtime.IsTerminated)
@@ -185,6 +212,14 @@ namespace Qaniva.Bridge
 
         private void CompleteSimulation()
         {
+            // Exactly-once: whatever path notices the terminal state first wins;
+            // later calls (late submits, host retries) must not re-emit.
+            if (_completed)
+            {
+                return;
+            }
+            _completed = true;
+
             var summary = _runtime.BuildAttemptSummary();
             var dto = new AttemptSummaryDto
             {
