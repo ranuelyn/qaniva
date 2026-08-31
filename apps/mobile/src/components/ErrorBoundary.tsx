@@ -43,6 +43,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: spacing.lg,
   },
-  title: { ...typography.title, color: colors.danger, marginBottom: spacing.sm },
+  title: { ...typography.screenTitle, color: colors.danger, marginBottom: spacing.sm },
   body: { ...typography.body, color: colors.textMuted, textAlign: 'center' },
 });
