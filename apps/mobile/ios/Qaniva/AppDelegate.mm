@@ -13,7 +13,13 @@
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
 
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+  BOOL result = [super application:application didFinishLaunchingWithOptions:launchOptions];
+  // Qaniva brand ink behind the RN root — no white flash between the native
+  // splash and the first JS frame.
+  UIColor *ink = [UIColor colorWithRed:0.055 green:0.067 blue:0.086 alpha:1.0];
+  self.window.backgroundColor = ink;
+  self.window.rootViewController.view.backgroundColor = ink;
+  return result;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
