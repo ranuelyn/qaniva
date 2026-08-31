@@ -52,6 +52,7 @@ export function buildDeterministicSummary(input: {
         actionId: 'attach_monitor',
         label: 'Attach cardiac monitor',
         classification: 'correct',
+        stateChanges: [],
       },
       {
         seq: 1,
@@ -59,6 +60,7 @@ export function buildDeterministicSummary(input: {
         actionId: 'ecg_12lead',
         label: '12-lead ECG',
         classification: 'correct',
+        stateChanges: [],
       },
     ],
     criteria: [
@@ -72,6 +74,8 @@ export function buildDeterministicSummary(input: {
         creditedAtSec: 110,
         awardedPoints: 15,
         maxPoints: 15,
+        evidenceRefs: [],
+        acceptedActionLabels: ['12-lead ECG'],
       },
     ],
     debrief: {
@@ -79,6 +83,7 @@ export function buildDeterministicSummary(input: {
       keyTeachingPoints: ['This is the offline fake bridge — run on the simulator for the real engine.'],
       commonErrors: [],
     },
+    references: [],
     replayHash: `fake-${input.caseId}-${input.seed}`,
   };
 }
