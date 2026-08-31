@@ -9,20 +9,30 @@ import type { ScreenProps } from '@/navigation/types';
  * nothing about the interactive flow.
  */
 const E2E_AUTOSTART_CASE = process.env.EXPO_PUBLIC_E2E_AUTOSTART ?? '';
+/** Up to 2 runs so the scripted proof also exercises RN->Unity->RN->Unity->RN. */
+const E2E_MAX_RUNS = 2;
 
 export function HomeScreen({ navigation }: ScreenProps<'Home'>) {
-  const autostarted = useRef(false);
+  const runs = useRef(0);
   useEffect(() => {
-    if (E2E_AUTOSTART_CASE && !autostarted.current) {
-      autostarted.current = true;
+    if (!E2E_AUTOSTART_CASE) return;
+    const kick = () => {
+      if (runs.current >= E2E_MAX_RUNS) return;
+      runs.current += 1;
       navigation.navigate('Simulation', {
         caseId: E2E_AUTOSTART_CASE,
         caseVersion: 1,
-        attemptId: '22222222-2222-4222-8222-222222222222',
+        // Distinct attemptId per run: Unity treats a repeated attemptId as a
+        // host retry (idempotent START), which would skip the second run.
+        attemptId: `22222222-2222-4222-8222-22222222222${runs.current}`,
         seed: 20260830,
-        title: `E2E ${E2E_AUTOSTART_CASE}`,
+        title: `E2E run ${runs.current}`,
       });
-    }
+    };
+    // The initial mount also emits 'focus', so the listener alone covers both
+    // the first run and each return to Home (calling kick() here too would burn
+    // the whole run budget at startup).
+    return navigation.addListener('focus', kick);
   }, [navigation]);
 
   return (

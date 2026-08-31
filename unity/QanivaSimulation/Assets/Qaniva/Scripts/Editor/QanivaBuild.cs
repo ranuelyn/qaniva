@@ -85,17 +85,22 @@ namespace Qaniva.EditorTools
             Debug.Log("[QanivaBuild] URP pipeline asset assigned (graphics + quality settings)");
         }
 
-        /// <summary>Adds QANIVA_HAS_CLINICAL_CORE for iOS + Standalone (idempotent).</summary>
+        /// <summary>
+        /// Adds QANIVA_HAS_CLINICAL_CORE (real engine) and — until QAN-006 ships a
+        /// real action UI — QANIVA_INTEGRATION_AUTOPLAY (demo ideal-path driver)
+        /// for iOS + Standalone + Android. Idempotent.
+        /// </summary>
         public static void EnableClinicalCoreDefine()
         {
+            string[] wanted = { ClinicalCoreDefine, "QANIVA_INTEGRATION_AUTOPLAY" };
             foreach (var target in new[] { NamedBuildTarget.iOS, NamedBuildTarget.Standalone, NamedBuildTarget.Android })
             {
                 PlayerSettings.GetScriptingDefineSymbols(target, out string[] defines);
-                if (!defines.Contains(ClinicalCoreDefine))
+                var merged = defines.Union(wanted).ToArray();
+                if (merged.Length != defines.Length)
                 {
-                    PlayerSettings.SetScriptingDefineSymbols(
-                        target, defines.Append(ClinicalCoreDefine).ToArray());
-                    Debug.Log($"[QanivaBuild] added {ClinicalCoreDefine} for {target.TargetName}");
+                    PlayerSettings.SetScriptingDefineSymbols(target, merged);
+                    Debug.Log($"[QanivaBuild] defines for {target.TargetName}: {string.Join(";", merged)}");
                 }
             }
             AssetDatabase.SaveAssets();
@@ -119,7 +124,14 @@ namespace Qaniva.EditorTools
             PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.iOS, "app.qaniva.unity");
             PlayerSettings.iOS.targetOSVersionString = "15.1";
             PlayerSettings.iOS.sdkVersion = simulator ? iOSSdkVersion.SimulatorSDK : iOSSdkVersion.DeviceSDK;
-            Debug.Log($"[QanivaBuild] iOS SDK target: {(simulator ? "Simulator" : "Device")}");
+            if (simulator)
+            {
+                // 2 = Universal (x86_64 + arm64). Without this Unity exports the
+                // x64-only simulator UnityRuntime/baselib variants, which cannot
+                // link on an Apple Silicon simulator (arm64).
+                PlayerSettings.SetArchitecture(NamedBuildTarget.iOS, 2);
+            }
+            Debug.Log($"[QanivaBuild] iOS SDK target: {(simulator ? "Simulator (universal arch)" : "Device")}");
 
             var options = new BuildPlayerOptions
             {

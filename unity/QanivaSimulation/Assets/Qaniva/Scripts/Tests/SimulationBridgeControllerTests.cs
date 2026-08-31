@@ -98,6 +98,34 @@ namespace Qaniva.Simulation.Tests
         }
 
         [Test]
+        public void DuplicateStartForSameAttemptReAnnouncesReadyWithoutReload()
+        {
+            StartSimulation();
+            _controller.SubmitPlayerAction("treat", new Dictionary<string, string>());
+            int timelineAfterOneAction = 1;
+            _bridge.Clear();
+
+            // Host retry: same attemptId again mid-run.
+            StartSimulation();
+
+            Assert.AreEqual(1, _bridge.Sent.Count);
+            var (type, _) = BridgeMessageCodec.DecodeEnvelope(_bridge.Sent[0], BridgeMessageCodec.UnityToRnTypes);
+            Assert.AreEqual(BridgeProtocol.UnityToRn.SimulationReady, type, "duplicate START must re-announce READY");
+
+            // The in-flight simulation was NOT reloaded: finishing takes the
+            // remaining 3 actions (stub terminates after 4), not a fresh 4.
+            _bridge.Clear();
+            for (int i = 0; i < 4 - timelineAfterOneAction; i++)
+            {
+                _controller.SubmitPlayerAction("treat", new Dictionary<string, string>());
+            }
+            var (doneType, payload) = BridgeMessageCodec.DecodeEnvelope(_bridge.Sent[0], BridgeMessageCodec.UnityToRnTypes);
+            Assert.AreEqual(BridgeProtocol.UnityToRn.SimulationCompleted, doneType);
+            var completed = BridgeMessageCodec.DecodePayload<SimulationCompletedPayload>(payload);
+            Assert.AreEqual(4, completed.summary.timeline.Count, "timeline must span the ORIGINAL run");
+        }
+
+        [Test]
         public void MalformedHostMessageProducesSimulationFailed()
         {
             _bridge.PushFromHost("{ not json");

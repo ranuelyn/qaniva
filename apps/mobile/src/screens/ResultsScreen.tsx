@@ -1,9 +1,19 @@
+import { useEffect } from 'react';
 import { ScrollView } from 'react-native';
 import { Body, Card, PrimaryButton, Screen, Title } from '@/components/ui';
 import type { ScreenProps } from '@/navigation/types';
 
+/** E2E mode (see HomeScreen): auto-return to Home so the lifecycle loop can run. */
+const E2E_MODE = Boolean(process.env.EXPO_PUBLIC_E2E_AUTOSTART);
+
 export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
   const { title, summary } = route.params;
+
+  useEffect(() => {
+    if (!E2E_MODE) return;
+    const timer = setTimeout(() => navigation.popToTop(), 6000);
+    return () => clearTimeout(timer);
+  }, [navigation]);
 
   return (
     <Screen>

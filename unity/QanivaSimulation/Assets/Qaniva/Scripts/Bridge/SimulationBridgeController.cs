@@ -94,6 +94,24 @@ namespace Qaniva.Bridge
 
         private void HandleStart(StartSimulationPayload p)
         {
+            // The host re-sends START until Unity answers (its runtime boots after
+            // runEmbedded returns, so early sends are dropped). A duplicate START
+            // for the attempt already in flight must NOT reload the simulation —
+            // just re-announce readiness.
+            if (p.attemptId == _attemptId && _runtime != null && !_runtime.IsTerminated
+                && CurrentSnapshot != null)
+            {
+                _bridge.SendToHost(BridgeMessageCodec.Encode(
+                    BridgeProtocol.UnityToRn.SimulationReady,
+                    new SimulationReadyPayload
+                    {
+                        caseId = _caseId,
+                        attemptId = _attemptId,
+                        warmupSec = 0,
+                    }));
+                return;
+            }
+
             _caseId = p.caseId;
             _caseVersion = p.caseVersion;
             _attemptId = p.attemptId;
