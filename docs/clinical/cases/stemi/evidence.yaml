@@ -1,0 +1,425 @@
+# Qaniva evidence ledger — stemi_anterior_001 (DRAFT — clinical review required)
+# One record per canonical-candidate claim. Concise claims only; no copyrighted
+# guideline text is reproduced. `reviewRequired: true` means a clinician must
+# verify the claim against the primary source before it may become engine truth.
+# retrievalPath notes when an exact number reached us via a secondary summary.
+
+meta:
+  caseId: stemi_anterior_001
+  createdAt: '2026-08-31'
+  status: draft_review_required
+  primarySources:
+    - id: AHA2025
+      title: '2025 ACC/AHA/ACEP/NAEMSP/SCAI Guideline for the Management of Patients With Acute Coronary Syndromes'
+      organization: 'ACC/AHA/ACEP/NAEMSP/SCAI'
+      url: 'https://www.ahajournals.org/doi/10.1161/CIR.0000000000001309'
+      publicationYear: 2025
+      jurisdiction: 'US'
+    - id: ESC2023
+      title: '2023 ESC Guidelines for the management of acute coronary syndromes'
+      organization: 'European Society of Cardiology'
+      url: 'https://academic.oup.com/eurheartj/article/44/38/3720/7243210'
+      publicationYear: 2023
+      jurisdiction: 'Europe (adopted by TKD for Turkey)'
+    - id: INACSL2021
+      title: 'Healthcare Simulation Standards of Best Practice'
+      organization: 'INACSL'
+      url: 'https://www.inacsl.org/healthcare-simulation-standards-of-best-practice-'
+      publicationYear: 2021
+      jurisdiction: 'international (simulation education)'
+
+records:
+  - id: EV-STEMI-001
+    topic: presentation
+    claim: >-
+      Typical STEMI presentation: acute retrosternal chest pressure/pain, may
+      radiate to arm/jaw, with diaphoresis, nausea, dyspnea; classic risk
+      factors include smoking, hypertension, hyperlipidemia, diabetes, family
+      history.
+    source: [AHA2025, ESC2023]
+    retrievedAt: '2026-08-31'
+    evidenceClass: 'background/definitional'
+    reviewRequired: true
+    notes: "Used to construct the fictional patient's story; no real patient data."
+
+  - id: EV-STEMI-002
+    topic: presentation
+    claim: >-
+      Atypical presentations (dyspnea-dominant, epigastric pain, weakness) are
+      more frequent in older adults, women and people with diabetes.
+    source: [AHA2025, ESC2023]
+    retrievedAt: '2026-08-31'
+    evidenceClass: 'background'
+    reviewRequired: true
+    notes: 'Out of scope for case v1 (typical presentation chosen deliberately).'
+
+  - id: EV-STEMI-010
+    topic: diagnosis
+    claim: >-
+      A 12-lead ECG should be obtained and interpreted within 10 minutes of
+      first medical contact in suspected ACS.
+    source: [ESC2023, AHA2025]
+    guidelineSection: 'initial evaluation'
+    recommendationClass: 'ESC Class I'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: "Anchor for the case's ECG timing criterion."
+
+  - id: EV-STEMI-011
+    topic: diagnosis
+    claim: >-
+      STEMI diagnosis and reperfusion decisions are made on clinical + ECG
+      grounds; reperfusion must not be delayed to await troponin results.
+    source: [ESC2023, AHA2025]
+    recommendationClass: 'ESC Class I'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Justifies modeling troponin as a delayed-result baseline lab.'
+
+  - id: EV-STEMI-012
+    topic: diagnosis
+    claim: >-
+      STEMI ECG pattern: persistent ST-segment elevation in >=2 contiguous
+      leads (or equivalents) in an appropriate clinical context.
+    source: [ESC2023, AHA2025]
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Exact mm/lead thresholds (V2-V3 age/sex cutoffs) must be verified against the primary text before any threshold enters the case or ECG asset.'
+
+  - id: EV-STEMI-013
+    topic: monitoring
+    claim: >-
+      Continuous ECG monitoring with defibrillator availability is indicated
+      early in STEMI because of early ventricular fibrillation risk.
+    source: [ESC2023]
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+
+  - id: EV-STEMI-014
+    topic: diagnosis
+    claim: >-
+      Anterior STEMI shows ST elevation in V1-V4 (may extend to I/aVL) with
+      reciprocal inferior ST depression, indicating LAD-territory occlusion.
+    source: [ESC2023]
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Drives the ECG asset spec; the asset itself needs clinician verification.'
+
+  - id: EV-STEMI-020
+    topic: reperfusion
+    claim: >-
+      Primary PCI is the preferred reperfusion strategy when it can be
+      performed in a timely manner; at a PCI-capable hospital the AHA target is
+      first-medical-contact-to-first-device <=90 minutes.
+    source: [AHA2025]
+    recommendationClass: 'Class 1'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+
+  - id: EV-STEMI-021
+    topic: reperfusion
+    claim: >-
+      ESC frames the PCI-vs-fibrinolysis decision around a maximum ~120 minutes
+      from STEMI diagnosis to wire crossing; targets are shorter at PCI-capable
+      centers (~60 min) and for transferred patients (~90 min).
+    source: [ESC2023]
+    recommendationClass: 'Class I'
+    retrievedAt: '2026-08-31'
+    retrievalPath: 'open-access full text via summarized fetch; exact table values to be verified by reviewer'
+    reviewRequired: true
+
+  - id: EV-STEMI-022
+    topic: reperfusion
+    claim: >-
+      Reperfusion is indicated for symptom onset within 12 hours with
+      persistent ST elevation.
+    source: [AHA2025, ESC2023]
+    recommendationClass: 'Class 1 / I'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+
+  - id: EV-STEMI-023
+    topic: reperfusion
+    claim: >-
+      Fibrinolysis is indicated when primary PCI cannot be delivered within the
+      guideline window (AHA: anticipated FMC-to-device delay >120 min; give
+      lytic within 30 min of arrival. ESC: bolus within 10 min of diagnosis) in
+      patients <12 h from onset without contraindications, followed by transfer
+      to a PCI-capable center.
+    source: [AHA2025, ESC2023]
+    recommendationClass: 'Class 1 / I'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Divergence D2 (metric framing). In case v1 the cath lab is available, so fibrinolysis is modeled as inappropriate (reviewer Q7).'
+
+  - id: EV-STEMI-024
+    topic: timing
+    claim: >-
+      Each ~30 minutes of primary-PCI delay is associated with ~7.5% relative
+      increase in 1-year mortality.
+    source: [AHA2025]
+    retrievedAt: '2026-08-31'
+    retrievalPath: 'AHA summary material'
+    reviewRequired: true
+    notes: 'Used only as debrief teaching color, never as an in-sim number.'
+
+  - id: EV-STEMI-025
+    topic: reperfusion
+    claim: >-
+      Fibrinolysis carries bleeding risk (incl. intracranial hemorrhage) and has
+      absolute/relative contraindications (prior ICH, ischemic stroke <3 months,
+      active bleeding, suspected dissection, recent surgery/trauma, etc.).
+    source: [ESC2023, AHA2025]
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Contraindication list must be verified verbatim before any future lysis-pathway case.'
+
+  - id: EV-STEMI-026
+    topic: reperfusion
+    claim: >-
+      After fibrinolysis: routine early angiography 2-24 h (pharmaco-invasive);
+      immediate rescue PCI for failed lysis.
+    source: [ESC2023]
+    recommendationClass: 'Class I'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Recorded for the future transfer/lysis case; out of scope v1.'
+
+  - id: EV-STEMI-030
+    topic: medication.aspirin
+    claim: >-
+      Aspirin loading for ACS: AHA 162-325 mg chewed (non-enteric-coated);
+      ESC 150-300 mg oral (or 75-250 mg IV when oral not possible). Class 1/I.
+    source: [AHA2025, ESC2023]
+    recommendationClass: 'Class 1 / I'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Divergence D1. Case v1 displays 300 mg chewed (inside both ranges) — dose text itself is review-gated.'
+
+  - id: EV-STEMI-031
+    topic: medication.p2y12
+    claim: >-
+      In STEMI undergoing PPCI, ticagrelor (180 mg load) or prasugrel (60 mg
+      load) is preferred over clopidogrel (600 mg load reserved for when the
+      others are unavailable/contraindicated or bleeding risk dictates).
+      Prasugrel contraindicated with prior stroke/TIA; dose-reduced >=75 y or
+      <60 kg.
+    source: [AHA2025, ESC2023]
+    recommendationClass: 'Class 1'
+    retrievedAt: '2026-08-31'
+    retrievalPath: 'doses cross-checked against a Tier-C quick reference; verify against primary tables'
+    reviewRequired: true
+
+  - id: EV-STEMI-032
+    topic: medication.anticoagulation
+    claim: >-
+      Anticoagulation is indicated for primary PCI; UFH is the standard (ESC
+      70-100 U/kg IV for PPCI). Enoxaparin/bivalirudin are alternatives;
+      fondaparinux is not recommended as sole anticoagulant for PPCI.
+    source: [ESC2023, AHA2025]
+    recommendationClass: 'Class I'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Divergence D6: ED vs cath-lab administration; learner does not type doses in v1.'
+
+  - id: EV-STEMI-033
+    topic: medication.oxygen
+    claim: >-
+      Supplemental oxygen only for SpO2 <90% (ESC; AHA similar threshold);
+      routine oxygen at normal saturation offers no benefit (Class 3: No
+      Benefit / ESC III).
+    source: [AHA2025, ESC2023]
+    recommendationClass: 'Class 3 No Benefit (routine use)'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Basis for classifying oxygen at SpO2 96% as UNNECESSARY (not harmful).'
+
+  - id: EV-STEMI-034
+    topic: medication.nitrates
+    claim: >-
+      Sublingual nitrates may relieve ischemic pain; contraindicated with
+      hypotension, RV infarction, or recent PDE5-inhibitor use.
+    source: [ESC2023, AHA2025]
+    recommendationClass: 'ESC IIb (retrieved) — verify'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'In v1 (anterior, SBP 118) SL nitrate is NEUTRAL; becomes state-dependent harmful only if hypotension develops.'
+
+  - id: EV-STEMI-035
+    topic: medication.analgesia
+    claim: >-
+      IV opioid (e.g., morphine, titrated) should be considered for severe
+      ischemic chest pain; opioids can delay oral P2Y12 absorption.
+    source: [ESC2023]
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+
+  - id: EV-STEMI-036
+    topic: medication.statin
+    claim: >-
+      High-intensity statin should be started early (in-hospital) in all ACS
+      patients. Class 1/I.
+    source: [AHA2025, ESC2023]
+    recommendationClass: 'Class 1 / I'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Modeled RECOMMENDED without timing pressure in v1.'
+
+  - id: EV-STEMI-037
+    topic: medication.betablocker
+    claim: >-
+      Oral beta-blocker within 24 h in patients without contraindications
+      (heart failure, low output, shock risk, bradycardia/hypotension) — AHA
+      Class 1; early IV beta-blockade is selective in ESC (IIa/IIb, stable
+      patients).
+    source: [AHA2025, ESC2023]
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Divergence D4. Excluded from the acute 10-minute case.'
+
+  - id: EV-STEMI-038
+    topic: medication.nsaid
+    claim: >-
+      NSAIDs (other than aspirin) should not be administered in ACS (harm:
+      increased MACE/rupture risk); discontinue where possible.
+    source: [AHA2025, ESC2023]
+    recommendationClass: 'Class 3: Harm'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: "Basis for the case's HARMFUL analgesia distractor."
+
+  - id: EV-STEMI-039
+    topic: medication.morphine_p2y12
+    claim: >-
+      Morphine delays absorption of oral P2Y12 inhibitors; clinical relevance
+      debated — do not model a canonical harm effect without reviewer approval.
+    source: [ESC2023]
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Debrief-note candidate only; no engine effect proposed.'
+
+  - id: EV-STEMI-040
+    topic: deterioration
+    claim: >-
+      Ventricular fibrillation/tachycardia is the leading mechanism of early
+      out-of-hospital and early in-hospital STEMI death; risk is highest in the
+      first hours.
+    source: [ESC2023]
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Justifies VF arrest as the terminal deterioration for gross delay (timing values are pedagogical compression — reviewer Q4).'
+
+  - id: EV-STEMI-041
+    topic: deterioration
+    claim: >-
+      Ongoing ischemia without reperfusion extends infarction and worsens
+      hemodynamics (pump failure spectrum up to cardiogenic shock).
+    source: [ESC2023, AHA2025]
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: "Justifies the intermediate 'worsening' transition; magnitudes are pedagogical."
+
+  - id: EV-STEMI-042
+    topic: deterioration
+    claim: >-
+      In ACS with cardiogenic shock, emergency culprit-vessel revascularization
+      is indicated; routine non-culprit PCI during the shock procedure is not.
+    source: [AHA2025]
+    recommendationClass: 'Class 1 (culprit) / Class 3 (routine non-culprit in shock)'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Out of scope v1; recorded for a future shock case.'
+
+  - id: EV-STEMI-043
+    topic: revascularization
+    claim: >-
+      Complete revascularization is recommended in STEMI with multivessel
+      disease (single procedure or staged).
+    source: [AHA2025]
+    recommendationClass: 'Class 1'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Out of scope v1 (cath-lab-side decision).'
+
+  - id: EV-STEMI-050
+    topic: disposition
+    claim: >-
+      Correct disposition for a diagnosed STEMI at a PCI-capable center is
+      immediate cath-lab activation with interventional cardiology; post-PCI
+      care occurs in a monitored coronary care setting.
+    source: [AHA2025, ESC2023]
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+
+  - id: EV-STEMI-060
+    topic: localization.turkey
+    claim: >-
+      TKD (Turkish Society of Cardiology) adopts and translates ESC guidelines;
+      Turkish emergency/cardiology education follows ESC framing for ACS.
+    source: [ESC2023]
+    sourceOrganization: 'TKD / acilci.net Turkish translation of ESC 2023'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Proposed default: prefer ESC where divergent (reviewer confirms).'
+
+  - id: EV-STEMI-061
+    topic: localization.turkey
+    claim: >-
+      Turkey's MoH ran the national CVD prevention/control program (action plan
+      2015-2020); Turkish centers report door-to-balloon performance against
+      the <=90 min target in the literature.
+    source: [AHA2025]
+    sourceOrganization: 'T.C. Sağlık Bakanlığı; Turkish registry literature'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'OQ-5: reviewer may supply a current national pathway circular.'
+
+  - id: EV-SIM-001
+    topic: simulation.design
+    claim: >-
+      Simulation design starts from measurable outcomes/objectives; scenario
+      complexity, fidelity, prebriefing and debriefing are designed to serve
+      the objectives, and scenarios are piloted before use.
+    source: [INACSL2021]
+    retrievedAt: '2026-08-31'
+    reviewRequired: false
+    notes: 'Educational-process standard, not clinical truth.'
+
+  - id: EV-COMP-001
+    topic: competitors.fullcode
+    claim: >-
+      Full Code: clinician-authored cases via a template-driven web Creator
+      (~4-6 h/case, board-certified primary author) with per-action
+      critical/recommended/unnecessary/harmful scoring and local-practice
+      customization.
+    sourceOrganization: 'Full Code Medical (official site/FAQ)'
+    sourceUrl: 'https://fullcodemedical.com/educators/'
+    retrievedAt: '2026-08-31'
+    reviewRequired: false
+    notes: 'Process pattern only; no content copied.'
+
+  - id: EV-COMP-002
+    topic: competitors.bodyinteract
+    claim: >-
+      Body Interact: general vs specific-measurable learning objectives,
+      scientific references attached to scenarios, time-stamped action report +
+      untreated-conditions list for debrief, training vs OSCE modes.
+    sourceOrganization: 'Body Interact (official help docs)'
+    sourceUrl: 'https://help.bodyinteract.com/bi-studio-lms/scenario-details-overview-students/'
+    retrievedAt: '2026-08-31'
+    reviewRequired: false
+    notes: 'Process pattern only; no content copied.'
+
+  - id: EV-ASSET-001
+    topic: assets.ecg
+    claim: >-
+      LITFL ECG library permits free educational reproduction only for
+      NOT-FOR-PROFIT use (CC BY-NC-SA variants) — NOT usable in a commercial
+      product. Wikimedia Commons hosts 12-lead ECG images under CC BY 4.0
+      (commercial use allowed with attribution). Any sourced or synthetic ECG
+      requires clinician verification before use.
+    sourceOrganization: 'LITFL; Wikimedia Commons'
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:12_lead_ECG.jpg'
+    retrievedAt: '2026-08-31'
+    reviewRequired: true
+    notes: 'Drives ECG_ASSET_SPEC.md; per-file license re-verification required at acquisition time.'
