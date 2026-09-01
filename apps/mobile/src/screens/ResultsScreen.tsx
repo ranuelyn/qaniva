@@ -1,16 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { AttemptSummary, CriterionResult } from '@qaniva/contracts';
 import {
   Body,
-  Card,
   Caption,
   Eyebrow,
   Numeric,
   PrimaryButton,
   Screen,
-  SecondaryButton,
   SectionHeader,
+  TextButton,
 } from '@/components/ui';
 import { colors, radius, spacing, typography } from '@/theme/tokens';
 import { attemptStore } from '@/storage/asyncStorageKv';
@@ -54,10 +53,6 @@ function durationMin(summary: AttemptSummary): string {
   return `${Math.max(1, Math.round(ms / 60000))} min`;
 }
 
-function evidenceSuffix(c: CriterionResult): string {
-  return c.evidenceRefs.length ? `  ·  Evidence: ${c.evidenceRefs.join(', ')}` : '';
-}
-
 function criterionColor(c: CriterionResult): string {
   if (c.classification === 'harmful') return colors.harmful;
   if (c.classification === 'delayed') return colors.warning;
@@ -74,22 +69,41 @@ function criterionStatus(c: CriterionResult): string {
   return `On time ${clock(c.creditedAtSec)} · ${c.awardedPoints}/${c.maxPoints} pts`;
 }
 
-function CriterionRow({ criterion }: { criterion: CriterionResult }) {
+/**
+ * The single row shape used by EVERY criterion section — label, one accent-
+ * colored status line, one faint meta line (context + evidence ids). Keeping
+ * one shape is what makes the debrief scannable instead of a wall of prose.
+ */
+function CriterionRow({
+  criterion,
+  context,
+  quiet,
+}: {
+  criterion: CriterionResult;
+  context?: string;
+  quiet?: boolean;
+}) {
   const accent = criterionColor(criterion);
+  const meta = [context, criterion.evidenceRefs.join(' · ') || null].filter(Boolean).join('  ·  ');
   return (
     <View style={styles.criterionRow}>
       <View style={[styles.criterionMarker, { backgroundColor: accent }]} />
       <View style={styles.criterionCopy}>
-        <Body>{criterion.label}</Body>
+        <Text style={[styles.criterionLabel, quiet && styles.criterionLabelQuiet]}>
+          {criterion.label}
+        </Text>
         <Text style={[styles.criterionStatus, { color: accent }]}>
           {criterionStatus(criterion)}
         </Text>
-        {criterion.evidenceRefs.length > 0 ? (
-          <Text style={styles.evidenceLabel}>Evidence · {criterion.evidenceRefs.join(' · ')}</Text>
-        ) : null}
+        {meta ? <Text style={styles.evidenceLabel}>{meta}</Text> : null}
       </View>
     </View>
   );
+}
+
+/** Grouped surface for criterion rows. */
+function DebriefGroup({ children }: { children: ReactNode }) {
+  return <View style={styles.debriefGroup}>{children}</View>;
 }
 
 export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
@@ -209,125 +223,118 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
         )}
 
         <SectionHeader>Critical decisions</SectionHeader>
-        <View style={styles.debriefGroup}>
+        <DebriefGroup>
           {critical.map((c) => (
             <CriterionRow key={c.id} criterion={c} />
           ))}
-        </View>
+        </DebriefGroup>
 
         {safetyHarm.length > 0 && (
           <>
             <SectionHeader>Harmful actions</SectionHeader>
-            {safetyHarm.map((c) => (
-              <Card key={c.id}>
-                <Body>
-                  {c.label} — at {clock(c.creditedAtSec)} ({c.awardedPoints} pts)
-                </Body>
-                <Body muted>{`Safety-relevant penalty${evidenceSuffix(c)}`}</Body>
-              </Card>
-            ))}
+            <DebriefGroup>
+              {safetyHarm.map((c) => (
+                <CriterionRow key={c.id} criterion={c} context="Safety-relevant penalty" />
+              ))}
+            </DebriefGroup>
           </>
         )}
 
         {unnecessary.length > 0 && (
           <>
             <SectionHeader>Unnecessary (efficiency)</SectionHeader>
-            {unnecessary.map((c) => (
-              <Card key={c.id}>
-                <Body>
-                  {c.label} ({c.awardedPoints} pts)
-                </Body>
-                <Body muted>{`Efficiency penalty — not patient harm${evidenceSuffix(c)}`}</Body>
-              </Card>
-            ))}
+            <DebriefGroup>
+              {unnecessary.map((c) => (
+                <CriterionRow
+                  key={c.id}
+                  criterion={c}
+                  context="Efficiency penalty — not patient harm"
+                />
+              ))}
+            </DebriefGroup>
           </>
         )}
 
         {delayed.length > 0 && (
           <>
             <SectionHeader>Correct but delayed</SectionHeader>
-            {delayed.map((c) => (
-              <Card key={c.id}>
-                <Body>
-                  {c.label} — done at {clock(c.creditedAtSec)}, {c.awardedPoints}/{c.maxPoints} pts
-                </Body>
-                <Body muted>
-                  {`Performed after the full-credit window — timing credit reduced by ${
+            <DebriefGroup>
+              {delayed.map((c) => (
+                <CriterionRow
+                  key={c.id}
+                  criterion={c}
+                  context={`Timing credit −${
                     Math.round((c.maxPoints - c.awardedPoints) * 10) / 10
-                  } pts${evidenceSuffix(c)}`}
-                </Body>
-              </Card>
-            ))}
+                  } pts`}
+                />
+              ))}
+            </DebriefGroup>
           </>
         )}
 
         {missedOther.length > 0 && (
           <>
             <SectionHeader>Missed</SectionHeader>
-            {missedOther.map((c) => (
-              <Card key={c.id}>
-                <Body>
-                  {c.label} — missed (0/{c.maxPoints} pts)
-                </Body>
-                <Body muted>{`${c.criticality} criterion${evidenceSuffix(c)}`}</Body>
-              </Card>
-            ))}
+            <DebriefGroup>
+              {missedOther.map((c) => (
+                <CriterionRow key={c.id} criterion={c} context={`${c.criticality} criterion`} />
+              ))}
+            </DebriefGroup>
           </>
         )}
 
         {alternatives.length > 0 && (
           <>
             <SectionHeader>Accepted alternatives</SectionHeader>
-            {alternatives.map((c) => (
-              <Card key={`alt-${c.id}`}>
-                <Body muted>
-                  {c.label}: {c.acceptedActionLabels.join('  —or—  ')} (either earns the same
-                  credit)
-                </Body>
-              </Card>
-            ))}
+            <View style={styles.quietRail}>
+              {alternatives.map((c) => (
+                <View key={`alt-${c.id}`} style={styles.quietItem}>
+                  <Body muted>{c.label}</Body>
+                  <Caption>
+                    {c.acceptedActionLabels.join('  or  ')} — either earns the same credit
+                  </Caption>
+                </View>
+              ))}
+            </View>
           </>
         )}
 
         {doneWell.filter((c) => c.criticality !== 'critical').length > 0 && (
           <>
             <SectionHeader>Done well</SectionHeader>
-            {doneWell
-              .filter((c) => c.criticality !== 'critical')
-              .map((c) => (
-                <Card key={c.id}>
-                  <Body muted>
-                    {c.label} — on time ({clock(c.creditedAtSec)}), {c.awardedPoints}/{c.maxPoints}{' '}
-                    pts{evidenceSuffix(c)}
-                  </Body>
-                </Card>
-              ))}
+            <DebriefGroup>
+              {doneWell
+                .filter((c) => c.criticality !== 'critical')
+                .map((c) => (
+                  <CriterionRow key={c.id} criterion={c} quiet />
+                ))}
+            </DebriefGroup>
           </>
         )}
 
         {(summary.debrief?.keyTeachingPoints?.length ?? 0) > 0 && (
           <>
             <SectionHeader>Key teaching points</SectionHeader>
-            <Card>
+            <View style={styles.quietRail}>
               {summary.debrief.keyTeachingPoints.map((p, i) => (
-                <Body key={i} muted>
-                  • {p}
-                </Body>
+                <View key={i} style={styles.quietItem}>
+                  <Body muted>{p}</Body>
+                </View>
               ))}
-            </Card>
+            </View>
           </>
         )}
 
         {(summary.debrief?.commonErrors?.length ?? 0) > 0 && (
           <>
             <SectionHeader>Common errors in this case</SectionHeader>
-            <Card>
+            <View style={styles.quietRail}>
               {summary.debrief.commonErrors.map((p, i) => (
-                <Body key={i} muted>
-                  • {p}
-                </Body>
+                <View key={i} style={styles.quietItem}>
+                  <Body muted>{p}</Body>
+                </View>
               ))}
-            </Card>
+            </View>
           </>
         )}
 
@@ -367,7 +374,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
       </ScrollView>
 
       <PrimaryButton label="Replay this case" onPress={replay} />
-      <SecondaryButton label="Back to home" onPress={() => navigation.popToTop()} />
+      <TextButton label="Back to home" onPress={() => navigation.popToTop()} />
     </Screen>
   );
 }
@@ -377,8 +384,6 @@ const styles = StyleSheet.create({
   hero: {
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
     padding: spacing.md,
     gap: spacing.md,
   },
@@ -417,8 +422,6 @@ const styles = StyleSheet.create({
   debriefGroup: {
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
     overflow: 'hidden',
   },
   criterionRow: {
@@ -427,9 +430,23 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   criterionMarker: { width: 3 },
-  criterionCopy: { flex: 1, gap: spacing.xs, padding: spacing.md },
+  criterionCopy: {
+    flex: 1,
+    gap: 3,
+    paddingVertical: spacing.sm + 4,
+    paddingHorizontal: spacing.md,
+  },
+  criterionLabel: { ...typography.bodySecondary, fontSize: 15, color: colors.text },
+  criterionLabelQuiet: { color: colors.textMuted },
   criterionStatus: { ...typography.caption },
   evidenceLabel: { ...typography.caption, color: colors.textFaint },
+  quietRail: {
+    gap: spacing.md,
+    paddingLeft: spacing.md,
+    borderLeftWidth: 1,
+    borderLeftColor: colors.border,
+  },
+  quietItem: { gap: spacing.xs },
   timelineGroup: { borderTopWidth: 1, borderTopColor: colors.border },
   timelineRow: {
     flexDirection: 'row',

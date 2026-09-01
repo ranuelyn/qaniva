@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Caption, Divider, Screen, SectionHeader, SettingsRow } from '@/components/ui';
+import { Caption, Divider, Group, Screen, SectionHeader, SettingsRow } from '@/components/ui';
 import { attemptStore } from '@/storage/asyncStorageKv';
 import { analytics } from '@/analytics';
-import { colors, radius, spacing } from '@/theme/tokens';
+import { spacing } from '@/theme/tokens';
 import type { TabScreenProps } from '@/navigation/types';
 
 /**
@@ -46,29 +46,31 @@ export function SettingsScreen({ navigation }: TabScreenProps<'Settings'>) {
     <Screen>
       <ScrollView contentContainerStyle={styles.content}>
         <SectionHeader>Learning</SectionHeader>
-        <View style={styles.group}>
+        <Group>
           <SettingsRow grouped label="Difficulty" detail="Standard (MVP)" />
-          <Divider />
+          <Divider inset />
           <SettingsRow grouped label="Language" detail="English" />
-        </View>
+        </Group>
 
         <SectionHeader>Data</SectionHeader>
-        <View style={styles.group}>
+        <Group>
           <SettingsRow grouped label="Reset local progress" onPress={confirmReset} destructive />
-        </View>
+        </Group>
         {resetNote ? <Caption>{resetNote}</Caption> : null}
 
         <SectionHeader>About</SectionHeader>
-        <View style={styles.group}>
+        <Group>
           <SettingsRow grouped label="About Qaniva" onPress={() => navigation.navigate('About')} />
-          <Divider />
+          <Divider inset />
           <SettingsRow
             grouped
             label="Educational use & clinical status"
             onPress={() => navigation.navigate('Disclaimer')}
           />
-          <Divider />
-          <SettingsRow grouped label="Version" detail={`${version} (MVP)`} />
+        </Group>
+
+        <View style={styles.footer}>
+          <Caption>Qaniva {version} (MVP)</Caption>
         </View>
       </ScrollView>
     </Screen>
@@ -77,10 +79,5 @@ export function SettingsScreen({ navigation }: TabScreenProps<'Settings'>) {
 
 const styles = StyleSheet.create({
   content: { gap: spacing.sm, paddingBottom: spacing.xl },
-  group: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.md,
-    overflow: 'hidden',
-  },
+  footer: { alignItems: 'center', paddingTop: spacing.lg },
 });

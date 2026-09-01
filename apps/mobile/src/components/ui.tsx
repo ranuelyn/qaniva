@@ -75,8 +75,8 @@ export function Eyebrow({ children }: { children: ReactNode }) {
   return <Text style={styles.eyebrow}>{children}</Text>;
 }
 
-export function Divider() {
-  return <View style={styles.divider} />;
+export function Divider({ inset }: { inset?: boolean }) {
+  return <View style={[styles.divider, inset && styles.dividerInset]} />;
 }
 
 /** Big deterministic number (scores, vitals-style emphasis). */
@@ -121,25 +121,48 @@ export function SettingsRow({
   destructive?: boolean;
   grouped?: boolean;
 }) {
-  const Wrapper = onPress ? Pressable : View;
-  return (
-    <Wrapper
-      accessibilityRole={onPress ? 'button' : undefined}
-      accessibilityLabel={label}
-      style={({ pressed }: { pressed?: boolean }) => [
-        styles.settingsRow,
-        grouped && styles.settingsRowGrouped,
-        pressed && styles.cardPressed,
-      ]}
-      onPress={onPress}
-    >
+  const rowStyles = [styles.settingsRow, grouped && styles.settingsRowGrouped];
+  const content = (
+    <>
       <Text style={[styles.settingsLabel, destructive && styles.destructive]}>{label}</Text>
       <View style={styles.settingsRight}>
         {detail ? <Text style={styles.settingsDetail}>{detail}</Text> : null}
         {onPress ? <Text style={styles.chevron}>›</Text> : null}
       </View>
-    </Wrapper>
+    </>
   );
+  if (!onPress) {
+    return <View style={rowStyles}>{content}</View>;
+  }
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      style={({ pressed }) => [...rowStyles, pressed && styles.cardPressed]}
+      onPress={onPress}
+    >
+      {content}
+    </Pressable>
+  );
+}
+
+/** Quiet inline CTA — for tertiary navigation that must not compete with a PrimaryButton. */
+export function TextButton({ label, onPress }: { label: string; onPress: () => void }) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      style={({ pressed }) => [styles.textButton, pressed && { opacity: 0.6 }]}
+      onPress={onPress}
+    >
+      <Text style={styles.textButtonLabel}>{label}</Text>
+    </Pressable>
+  );
+}
+
+/** Grouped-list container: one soft surface, rows separated by inset dividers. */
+export function Group({ children }: { children: ReactNode }) {
+  return <View style={styles.group}>{children}</View>;
 }
 
 /** Compact Qaniva wordmark (provisional brand — text treatment, no logo asset yet). */
@@ -172,10 +195,8 @@ const styles = StyleSheet.create({
   },
   buttonSecondary: {
     backgroundColor: colors.surfaceAlt,
-    borderWidth: 1,
-    borderColor: colors.border,
     borderRadius: radius.md,
-    minHeight: sizes.buttonHeight,
+    minHeight: sizes.buttonHeight - 4,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: spacing.md,
@@ -196,6 +217,18 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border },
+  dividerInset: { marginLeft: spacing.md },
+  group: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.md,
+    overflow: 'hidden',
+  },
+  textButton: {
+    minHeight: sizes.touchTarget,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textButtonLabel: { ...typography.button, fontSize: 15, color: colors.textMuted },
   numeric: { ...typography.numeric, color: colors.text },
   badge: {
     flexDirection: 'row',
@@ -224,19 +257,25 @@ const styles = StyleSheet.create({
   settingsRow: {
     backgroundColor: colors.surface,
     borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
     paddingHorizontal: spacing.md,
-    minHeight: sizes.touchTarget + 8,
+    paddingVertical: spacing.sm,
+    minHeight: sizes.touchTarget + 12,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    gap: spacing.md,
   },
-  settingsLabel: { ...typography.body, color: colors.text },
-  settingsRowGrouped: { borderWidth: 0, borderRadius: 0 },
-  settingsRight: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  settingsDetail: { ...typography.bodySecondary, color: colors.textMuted },
-  chevron: { fontSize: 22, color: colors.textFaint, marginTop: -2 },
+  settingsLabel: { ...typography.body, fontSize: 16, color: colors.text, flexShrink: 1 },
+  settingsRowGrouped: { backgroundColor: 'transparent', borderRadius: 0 },
+  settingsRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    flexShrink: 0,
+    maxWidth: '55%',
+  },
+  settingsDetail: { ...typography.bodySecondary, color: colors.textMuted, textAlign: 'right' },
+  chevron: { fontSize: 20, color: colors.textFaint, marginTop: -2 },
   destructive: { color: colors.danger },
   wordmark: { ...typography.display, color: colors.text },
   wordmarkCompact: { fontSize: 22, fontWeight: '800' },
