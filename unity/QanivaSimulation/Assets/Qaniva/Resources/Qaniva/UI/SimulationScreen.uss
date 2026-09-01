@@ -1,4 +1,4 @@
-/* Qaniva simulation UI — plain, functional, phone-portrait, big tap targets. */
+/* Qaniva simulation UI — calm clinical ink/teal, phone portrait, big tap targets. */
 
 .root {
   flex-grow: 1;
@@ -11,65 +11,67 @@
 .vitals-bar {
   flex-direction: row;
   justify-content: space-between;
-  background-color: rgba(10, 14, 20, 0.92);
+  background-color: rgba(14, 17, 22, 0.94);
   padding: 10px 14px;
 }
 
 .vital {
-  color: rgb(120, 220, 160);
-  font-size: 30px;
+  color: rgb(70, 201, 139);
+  font-size: 28px;
   -unity-font-style: bold;
 }
 
-.clock { color: rgb(240, 240, 240); }
+.clock { color: rgb(237, 241, 245); }
 
 .status-bar {
-  background-color: rgba(10, 14, 20, 0.75);
+  background-color: rgba(14, 17, 22, 0.82);
   padding: 4px 14px;
 }
 
 .patient-status {
-  color: rgb(170, 185, 200);
-  font-size: 24px;
+  color: rgb(152, 164, 177);
+  font-size: 22px;
 }
 
 .scene-spacer { flex-grow: 1; }
 
 .result-banner {
-  background-color: rgba(24, 32, 44, 0.95);
-  border-left-width: 6px;
-  border-left-color: rgb(59, 167, 255);
+  background-color: rgba(23, 28, 35, 0.97);
+  border-left-width: 4px;
+  border-left-color: rgb(62, 198, 180);
   margin: 8px 12px;
   padding: 10px 14px;
+  max-height: 300px;
+  border-radius: 12px;
 }
 
 .result-text {
-  color: rgb(235, 240, 245);
-  font-size: 26px;
+  color: rgb(237, 241, 245);
+  font-size: 24px;
   white-space: normal;
 }
 
 .completion-panel {
-  background-color: rgba(20, 60, 40, 0.95);
+  background-color: rgba(23, 45, 39, 0.97);
   margin: 8px 12px;
   padding: 14px;
   border-radius: 10px;
 }
 
 .completion-title {
-  color: rgb(120, 230, 170);
-  font-size: 34px;
+  color: rgb(70, 201, 139);
+  font-size: 32px;
   -unity-font-style: bold;
 }
 
 .completion-detail {
-  color: rgb(220, 235, 225);
-  font-size: 26px;
+  color: rgb(237, 241, 245);
+  font-size: 24px;
   white-space: normal;
 }
 
 .timeline-panel {
-  background-color: rgba(12, 16, 24, 0.96);
+  background-color: rgba(23, 28, 35, 0.97);
   margin: 8px 12px;
   padding: 8px;
   max-height: 420px;
@@ -77,14 +79,14 @@
 }
 
 .timeline-entry {
-  color: rgb(200, 210, 220);
-  font-size: 24px;
+  color: rgb(205, 214, 223);
+  font-size: 22px;
   padding: 6px 8px;
   white-space: normal;
 }
 
 .action-area {
-  background-color: rgba(10, 14, 20, 0.96);
+  background-color: rgba(14, 17, 22, 0.97);
   padding: 8px 10px 4px 10px;
 }
 
@@ -98,15 +100,15 @@
   height: 64px;
   margin: 0 3px;
   font-size: 26px;
-  color: rgb(170, 185, 200);
-  background-color: rgb(26, 33, 44);
+  color: rgb(152, 164, 177);
+  background-color: rgb(31, 38, 48);
   border-width: 0;
   border-radius: 8px;
 }
 
 .category-tab-active {
-  background-color: rgb(45, 90, 150);
-  color: rgb(255, 255, 255);
+  background-color: rgb(62, 198, 180);
+  color: rgb(6, 35, 30);
   -unity-font-style: bold;
 }
 
@@ -116,8 +118,8 @@
   height: 84px;
   margin: 5px 2px;
   font-size: 28px;
-  color: rgb(240, 244, 248);
-  background-color: rgb(37, 52, 71);
+  color: rgb(237, 241, 245);
+  background-color: rgb(31, 38, 48);
   border-width: 0;
   border-radius: 10px;
   -unity-text-align: middle-left;
@@ -125,12 +127,12 @@
 }
 
 .action-button-disabled {
-  background-color: rgb(26, 30, 38);
-  color: rgb(110, 120, 132);
+  background-color: rgb(23, 28, 35);
+  color: rgb(85, 96, 107);
 }
 
 .action-disabled-reason {
-  color: rgb(140, 130, 90);
+  color: rgb(232, 163, 61);
   font-size: 21px;
   margin: -4px 2px 4px 20px;
   white-space: normal;
@@ -146,13 +148,13 @@
   height: 60px;
   min-width: 200px;
   font-size: 25px;
-  color: rgb(200, 210, 220);
-  background-color: rgb(30, 38, 50);
+  color: rgb(205, 214, 223);
+  background-color: rgb(31, 38, 48);
   border-width: 0;
   border-radius: 8px;
 }
 
-.exit { color: rgb(255, 130, 140); }
+.exit { color: rgb(229, 72, 77); }
 
 .hidden { display: none; }
 
@@ -162,8 +164,8 @@
   height: 54px;
   margin-top: 8px;
   font-size: 24px;
-  color: rgb(16, 22, 30);
-  background-color: rgb(120, 200, 255);
+  color: rgb(6, 35, 30);
+  background-color: rgb(62, 198, 180);
   border-width: 0;
   border-radius: 8px;
 }
@@ -174,30 +176,34 @@
   right: 0;
   top: 0;
   bottom: 0;
-  background-color: rgba(10, 14, 20, 0.97);
-  padding: 90px 16px 40px 16px;
+  background-color: rgba(14, 17, 22, 0.99);
+  padding: 132px 16px 34px 16px;
 }
 
 .result-viewer-title {
   font-size: 30px;
-  color: rgb(240, 244, 248);
+  color: rgb(237, 241, 245);
   -unity-font-style: bold;
   margin-bottom: 10px;
 }
 
 .result-viewer-scroll {
   flex-grow: 1;
-  background-color: rgb(255, 255, 255);
-  border-radius: 8px;
+  background-color: rgb(23, 28, 35);
+  border-radius: 12px;
+  border-width: 1px;
+  border-color: rgb(42, 50, 61);
 }
 
 .result-viewer-image {
   flex-shrink: 0;
+  align-self: center;
+  background-color: rgb(255, 255, 255);
 }
 
 .result-viewer-note {
   font-size: 20px;
-  color: rgb(255, 190, 120);
+  color: rgb(232, 163, 61);
   margin-top: 8px;
   white-space: normal;
 }
@@ -212,10 +218,10 @@
   height: 64px;
   min-width: 140px;
   font-size: 30px;
-  color: rgb(240, 244, 248);
-  background-color: rgb(37, 52, 71);
+  color: rgb(237, 241, 245);
+  background-color: rgb(31, 38, 48);
   border-width: 0;
   border-radius: 8px;
 }
 
-.viewer-button.close { min-width: 240px; color: rgb(255, 130, 140); }
+.viewer-button.close { min-width: 220px; color: rgb(62, 198, 180); }

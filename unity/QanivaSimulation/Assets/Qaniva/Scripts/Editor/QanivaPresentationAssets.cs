@@ -399,7 +399,7 @@ namespace Qaniva.EditorTools
             key.transform.localEulerAngles = new Vector3(52f, -28f, 0f);
             var keyLight = key.AddComponent<Light>();
             keyLight.type = LightType.Directional;
-            keyLight.intensity = 0.76f;
+            keyLight.intensity = 0.82f;
             keyLight.color = new Color(1f, 0.985f, 0.95f);
             keyLight.shadows = LightShadows.Soft;
 
@@ -408,7 +408,7 @@ namespace Qaniva.EditorTools
             fill.transform.localPosition = new Vector3(-0.6f, 2.2f, -1.8f);
             var fillLight = fill.AddComponent<Light>();
             fillLight.type = LightType.Point;
-            fillLight.intensity = 0.40f;
+            fillLight.intensity = 0.34f;
             fillLight.range = 7f;
             fillLight.color = new Color(0.92f, 0.95f, 1f);
             fillLight.shadows = LightShadows.None;
@@ -417,10 +417,10 @@ namespace Qaniva.EditorTools
             // lower third left for the action UI, top band for the vitals bar.
             var camGo = new GameObject("PresentationCamera");
             camGo.transform.SetParent(root.transform, false);
-            camGo.transform.localPosition = new Vector3(0.02f, 2.05f, -2.35f);
+            camGo.transform.localPosition = new Vector3(0.02f, 1.92f, -2.18f);
             var cam = camGo.AddComponent<Camera>();
-            camGo.transform.LookAt(root.transform.TransformPoint(new Vector3(0.05f, 0.35f, 0.75f)));
-            cam.fieldOfView = 60f;
+            camGo.transform.LookAt(root.transform.TransformPoint(new Vector3(0.05f, 0.43f, 0.72f)));
+            cam.fieldOfView = 56f;
             cam.nearClipPlane = 0.1f;
             cam.farClipPlane = 40f;
             cam.clearFlags = CameraClearFlags.SolidColor;

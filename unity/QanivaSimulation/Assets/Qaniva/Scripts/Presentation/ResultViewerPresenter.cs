@@ -24,7 +24,7 @@ namespace Qaniva.Presentation
         private const float ZoomStep = 1.25f;
 
         /// <summary>Base on-panel width for a freshly opened asset (panel ref width 1206).</summary>
-        private const float FitWidth = 1150f;
+        private const float FitWidth = 1080f;
 
         private readonly VisualElement _panel;
         private readonly Label _title;
