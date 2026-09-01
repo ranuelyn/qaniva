@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Caption, Screen, SectionHeader, SettingsRow } from '@/components/ui';
+import { Caption, Divider, Screen, SectionHeader, SettingsRow } from '@/components/ui';
 import { attemptStore } from '@/storage/asyncStorageKv';
 import { analytics } from '@/analytics';
-import { spacing } from '@/theme/tokens';
+import { colors, radius, spacing } from '@/theme/tokens';
 import type { TabScreenProps } from '@/navigation/types';
 
 /**
@@ -46,20 +46,30 @@ export function SettingsScreen({ navigation }: TabScreenProps<'Settings'>) {
     <Screen>
       <ScrollView contentContainerStyle={styles.content}>
         <SectionHeader>Learning</SectionHeader>
-        <SettingsRow label="Difficulty" detail="Standard (MVP)" />
-        <SettingsRow label="Language" detail="English" />
+        <View style={styles.group}>
+          <SettingsRow grouped label="Difficulty" detail="Standard (MVP)" />
+          <Divider />
+          <SettingsRow grouped label="Language" detail="English" />
+        </View>
 
         <SectionHeader>Data</SectionHeader>
-        <SettingsRow label="Reset local progress" onPress={confirmReset} destructive />
+        <View style={styles.group}>
+          <SettingsRow grouped label="Reset local progress" onPress={confirmReset} destructive />
+        </View>
         {resetNote ? <Caption>{resetNote}</Caption> : null}
 
         <SectionHeader>About</SectionHeader>
-        <SettingsRow label="About Qaniva" onPress={() => navigation.navigate('About')} />
-        <SettingsRow
-          label="Educational use & clinical status"
-          onPress={() => navigation.navigate('Disclaimer')}
-        />
-        <SettingsRow label="Version" detail={`${version} (MVP)`} />
+        <View style={styles.group}>
+          <SettingsRow grouped label="About Qaniva" onPress={() => navigation.navigate('About')} />
+          <Divider />
+          <SettingsRow
+            grouped
+            label="Educational use & clinical status"
+            onPress={() => navigation.navigate('Disclaimer')}
+          />
+          <Divider />
+          <SettingsRow grouped label="Version" detail={`${version} (MVP)`} />
+        </View>
       </ScrollView>
     </Screen>
   );
@@ -67,4 +77,10 @@ export function SettingsScreen({ navigation }: TabScreenProps<'Settings'>) {
 
 const styles = StyleSheet.create({
   content: { gap: spacing.sm, paddingBottom: spacing.xl },
+  group: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    overflow: 'hidden',
+  },
 });

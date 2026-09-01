@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { BadgeRow, Card, CardTitle, StatusBadge } from '@/components/ui';
-import { colors, typography } from '@/theme/tokens';
+import { colors, spacing, typography } from '@/theme/tokens';
 import type { CaseProgress } from '@/storage/attemptStore';
 
 /**
@@ -15,6 +15,8 @@ export function CaseCard({
   minutes,
   progress,
   onPress,
+  index,
+  compact,
 }: {
   title: string;
   teaser: string;
@@ -22,35 +24,53 @@ export function CaseCard({
   minutes: number;
   progress?: CaseProgress;
   onPress: () => void;
+  index?: number;
+  compact?: boolean;
 }) {
   return (
     <Card onPress={onPress}>
-      <CardTitle>{title}</CardTitle>
-      <Text style={styles.teaser}>“{teaser}”</Text>
-      <Text style={styles.meta}>
-        {specialty} · ~{minutes} min
-      </Text>
-      <BadgeRow>
-        {progress?.completed ? (
-          <StatusBadge label={`Completed · best ${progress.bestScore} pts`} tone="success" />
-        ) : progress && progress.attempts > 0 ? (
-          <StatusBadge label={`Attempted · ${progress.attempts}×`} tone="warning" />
-        ) : (
-          <StatusBadge label="Not attempted" tone="neutral" />
-        )}
-      </BadgeRow>
-      <View style={styles.ctaRow}>
-        <Text style={styles.cta}>
-          {progress && progress.attempts > 0 ? 'Play again ›' : 'Start ›'}
-        </Text>
+      <View style={styles.titleRow}>
+        {typeof index === 'number' ? (
+          <Text style={styles.index}>{String(index + 1).padStart(2, '0')}</Text>
+        ) : null}
+        <View style={styles.titleCopy}>
+          <CardTitle>{title}</CardTitle>
+          <Text style={styles.meta}>
+            {specialty} · ~{minutes} min
+          </Text>
+        </View>
+      </View>
+      {!compact ? <Text style={styles.teaser}>“{teaser}”</Text> : null}
+      <View style={styles.footerRow}>
+        <BadgeRow>
+          {progress?.completed ? (
+            <StatusBadge label={`Best ${progress.bestScore} pts`} tone="success" />
+          ) : progress && progress.attempts > 0 ? (
+            <StatusBadge
+              label={`${progress.attempts} attempt${progress.attempts === 1 ? '' : 's'}`}
+              tone="warning"
+            />
+          ) : (
+            <StatusBadge label="New case" tone="neutral" />
+          )}
+        </BadgeRow>
+        <Text style={styles.cta}>{progress && progress.attempts > 0 ? 'Replay ›' : 'Start ›'}</Text>
       </View>
     </Card>
   );
 }
 
 const styles = StyleSheet.create({
+  titleRow: { flexDirection: 'row', gap: spacing.sm, alignItems: 'flex-start' },
+  titleCopy: { flex: 1, gap: spacing.xs },
+  index: { ...typography.caption, color: colors.brand, letterSpacing: 1 },
   teaser: { ...typography.bodySecondary, color: colors.textMuted, fontStyle: 'italic' },
   meta: { ...typography.caption, color: colors.textFaint },
-  ctaRow: { alignItems: 'flex-end' },
+  footerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: spacing.xs,
+  },
   cta: { ...typography.button, fontSize: 14, color: colors.brand },
 });

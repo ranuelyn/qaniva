@@ -1,14 +1,24 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Body, Caption, Card, PrimaryButton, Screen, SectionHeader, Title } from '@/components/ui';
+import {
+  Body,
+  Caption,
+  Card,
+  Divider,
+  Eyebrow,
+  PrimaryButton,
+  Screen,
+  SectionHeader,
+  Title,
+} from '@/components/ui';
 import { apiClient } from '@/api/client';
 import { catalogCase, DEFAULT_BRIEFING, specialtyLabel } from '@/cases/catalog';
 import { attemptStore } from '@/storage/asyncStorageKv';
 import type { StoredAttempt } from '@/storage/attemptStore';
 import { analytics } from '@/analytics';
 import { cryptoRandomId, randomSeed } from '@/lib/ids';
-import { colors, spacing, typography } from '@/theme/tokens';
+import { colors, spacing } from '@/theme/tokens';
 import type { ScreenProps } from '@/navigation/types';
 
 /**
@@ -17,10 +27,18 @@ import type { ScreenProps } from '@/navigation/types';
  * in app code.
  */
 export function CaseDetailScreen({ navigation, route }: ScreenProps<'CaseDetail'>) {
-  const { caseId, caseVersion, title } = route.params;
+  const { caseId, caseVersion, title: routeTitle } = route.params;
   const entry = catalogCase(caseId);
+  // Deep links (qaniva://case/<id>) carry no title param — fall back to the catalog.
+  const title = routeTitle || (entry?.manifest.title ?? caseId);
   const briefing = entry?.briefing ?? DEFAULT_BRIEFING;
   const [history, setHistory] = useState<StoredAttempt[]>([]);
+  const authoredTaskLines = briefing.filter(
+    (line) => line.startsWith('Your task:') || line.startsWith('This is an educational'),
+  );
+  const taskLines = authoredTaskLines.length > 0 ? authoredTaskLines : briefing;
+  const contextLines =
+    authoredTaskLines.length > 0 ? briefing.filter((line) => !taskLines.includes(line)) : [];
 
   useEffect(() => {
     analytics.track({ event: 'case_viewed', caseId });
@@ -62,26 +80,45 @@ export function CaseDetailScreen({ navigation, route }: ScreenProps<'CaseDetail'
           </Caption>
         ) : null}
 
-        <SectionHeader>Briefing</SectionHeader>
-        <Card>
-          {briefing.map((line, i) => (
-            <View key={i} style={styles.briefingLine}>
-              <Text style={styles.briefingBullet}>—</Text>
-              <Body muted>{line}</Body>
-            </View>
-          ))}
-        </Card>
+        {contextLines.length > 0 ? <SectionHeader>Case information</SectionHeader> : null}
+        {contextLines.length > 0 ? (
+          <Card>
+            {contextLines.map((line, i) => {
+              const separator = line.indexOf(':');
+              const label = separator > 0 ? line.slice(0, separator) : 'Context';
+              const detail = separator > 0 ? line.slice(separator + 1).trim() : line;
+              return (
+                <View key={line}>
+                  {i > 0 ? <Divider /> : null}
+                  <View style={styles.briefingLine}>
+                    <Eyebrow>{label}</Eyebrow>
+                    <Body muted>{detail}</Body>
+                  </View>
+                </View>
+              );
+            })}
+          </Card>
+        ) : null}
+
+        <SectionHeader>Your task</SectionHeader>
+        <View style={styles.taskBlock}>
+          {taskLines.map((line) => {
+            const separator = line.indexOf(':');
+            const detail = separator > 0 ? line.slice(separator + 1).trim() : line;
+            return <Body key={line}>{detail}</Body>;
+          })}
+        </View>
 
         {history.length > 0 && (
           <>
             <SectionHeader>Your recent attempts</SectionHeader>
             {history.map((a) => (
-              <Card key={a.summary.attemptId}>
+              <View key={a.summary.attemptId} style={styles.attemptRow}>
                 <Body muted>
                   {a.summary.totalScore} pts · {a.summary.terminalState} ·{' '}
                   {new Date(a.summary.completedAt).toLocaleString()}
                 </Body>
-              </Card>
+              </View>
             ))}
           </>
         )}
@@ -96,6 +133,16 @@ export function CaseDetailScreen({ navigation, route }: ScreenProps<'CaseDetail'
 
 const styles = StyleSheet.create({
   content: { gap: spacing.sm, paddingBottom: spacing.md },
-  briefingLine: { flexDirection: 'row', gap: spacing.sm, paddingRight: spacing.md },
-  briefingBullet: { ...typography.body, color: colors.brand },
+  briefingLine: { gap: spacing.xs, paddingVertical: spacing.sm },
+  taskBlock: {
+    borderLeftWidth: 3,
+    borderLeftColor: colors.brand,
+    paddingLeft: spacing.md,
+    gap: spacing.sm,
+  },
+  attemptRow: {
+    paddingVertical: spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
 });

@@ -40,8 +40,9 @@ export function CasesScreen({ navigation }: TabScreenProps<'Cases'>) {
         data={CASE_CATALOG}
         keyExtractor={(c) => `${c.manifest.id}@${c.manifest.version}`}
         contentContainerStyle={{ gap: 12 }}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <CaseCard
+            index={index}
             title={item.manifest.title}
             teaser={item.teaser}
             specialty={specialtyLabel(item.manifest.specialty)}

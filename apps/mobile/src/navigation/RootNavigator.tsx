@@ -105,6 +105,7 @@ export function RootNavigator({ initialRouteName }: { initialRouteName: 'Onboard
           headerShadowVisible: false,
           headerTintColor: colors.text,
           headerTitleStyle: { ...typography.sectionTitle, color: colors.text },
+          headerBackButtonDisplayMode: 'minimal',
         }}
       >
         <Stack.Screen

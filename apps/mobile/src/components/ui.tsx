@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import { colors, radius, sizes, spacing, tones, typography, type Tone } from '@/theme/tokens';
 
 /**
@@ -8,8 +8,8 @@ import { colors, radius, sizes, spacing, tones, typography, type Tone } from '@/
  * and status rows always carry text.
  */
 
-export function Screen({ children }: { children: ReactNode }) {
-  return <View style={styles.screen}>{children}</View>;
+export function Screen({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
+  return <View style={[styles.screen, style]}>{children}</View>;
 }
 
 export function Card({ children, onPress }: { children: ReactNode; onPress?: () => void }) {
@@ -71,6 +71,14 @@ export function Caption({ children }: { children: ReactNode }) {
   return <Text style={styles.caption}>{children}</Text>;
 }
 
+export function Eyebrow({ children }: { children: ReactNode }) {
+  return <Text style={styles.eyebrow}>{children}</Text>;
+}
+
+export function Divider() {
+  return <View style={styles.divider} />;
+}
+
 /** Big deterministic number (scores, vitals-style emphasis). */
 export function Numeric({ children }: { children: ReactNode }) {
   return <Text style={styles.numeric}>{children}</Text>;
@@ -105,11 +113,13 @@ export function SettingsRow({
   detail,
   onPress,
   destructive,
+  grouped,
 }: {
   label: string;
   detail?: string;
   onPress?: () => void;
   destructive?: boolean;
+  grouped?: boolean;
 }) {
   const Wrapper = onPress ? Pressable : View;
   return (
@@ -118,6 +128,7 @@ export function SettingsRow({
       accessibilityLabel={label}
       style={({ pressed }: { pressed?: boolean }) => [
         styles.settingsRow,
+        grouped && styles.settingsRowGrouped,
         pressed && styles.cardPressed,
       ]}
       onPress={onPress}
@@ -178,6 +189,13 @@ const styles = StyleSheet.create({
   body: { ...typography.body, color: colors.text },
   muted: { color: colors.textMuted },
   caption: { ...typography.caption, color: colors.textFaint },
+  eyebrow: {
+    ...typography.caption,
+    color: colors.brand,
+    letterSpacing: 1.4,
+    textTransform: 'uppercase',
+  },
+  divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border },
   numeric: { ...typography.numeric, color: colors.text },
   badge: {
     flexDirection: 'row',
@@ -215,6 +233,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   settingsLabel: { ...typography.body, color: colors.text },
+  settingsRowGrouped: { borderWidth: 0, borderRadius: 0 },
   settingsRight: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   settingsDetail: { ...typography.bodySecondary, color: colors.textMuted },
   chevron: { fontSize: 22, color: colors.textFaint, marginTop: -2 },

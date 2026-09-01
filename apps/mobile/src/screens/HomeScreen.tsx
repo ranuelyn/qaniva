@@ -7,7 +7,6 @@ import {
   Caption,
   Card,
   CardTitle,
-  EmptyState,
   SecondaryButton,
   SectionHeader,
   Wordmark,
@@ -95,6 +94,7 @@ export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
   const completedCount = progress.filter((p) => p.completed).length;
   const totalAttempts = progress.reduce((sum, p) => sum + p.attempts, 0);
   const latestCase = latest ? catalogCase(latest.summary.caseId) : undefined;
+  const firstCase = CASE_CATALOG[0]!;
 
   return (
     <ScrollView
@@ -126,18 +126,40 @@ export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
           </View>
         </Card>
       ) : (
-        <EmptyState
-          title="Choose your first case"
-          hint="Pick a case below to start your first simulation."
-        />
+        <Card
+          onPress={() => {
+            navigation.navigate('CaseDetail', {
+              caseId: firstCase.manifest.id,
+              caseVersion: firstCase.manifest.version,
+              title: firstCase.manifest.title,
+            });
+          }}
+        >
+          <Caption>YOUR FIRST SIMULATION</Caption>
+          <CardTitle>{firstCase.manifest.title}</CardTitle>
+          <Body muted>
+            Start with a focused emergency case and review every decision afterward.
+          </Body>
+          <Text style={styles.continueCta}>Start first case ›</Text>
+        </Card>
       )}
 
-      <SectionHeader>Cases</SectionHeader>
-      {CASE_CATALOG.map((c) => {
+      <View style={styles.sectionRow}>
+        <SectionHeader>Cases</SectionHeader>
+        <Text
+          style={styles.sectionLink}
+          onPress={() => navigation.navigate('Tabs', { screen: 'Cases' })}
+        >
+          View all ›
+        </Text>
+      </View>
+      {CASE_CATALOG.slice(0, 2).map((c, index) => {
         const p = progress.find((x) => x.caseId === c.manifest.id);
         return (
           <CaseCard
             key={c.manifest.id}
+            index={index}
+            compact
             title={c.manifest.title}
             teaser={c.teaser}
             specialty={specialtyLabel(c.manifest.specialty)}
@@ -164,10 +186,7 @@ export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
           <Body muted>See your attempt history and best scores ›</Body>
         </Card>
       ) : (
-        <EmptyState
-          title="You haven't completed a case yet."
-          hint="Your progress will appear here."
-        />
+        <Body muted>Your scores and clinical timelines will appear after your first case.</Body>
       )}
       <SecondaryButton
         label="Educational use & clinical status"
@@ -181,6 +200,8 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.lg, gap: spacing.md, paddingBottom: spacing.xl },
   header: { gap: 2, marginBottom: spacing.xs },
+  sectionRow: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between' },
+  sectionLink: { ...typography.caption, color: colors.brand },
   continueRow: { marginTop: spacing.xs },
   continueCta: { ...typography.button, color: colors.brand },
 });

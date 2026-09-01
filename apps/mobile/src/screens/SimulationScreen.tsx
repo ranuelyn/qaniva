@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { ActivityIndicator } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { SimulationMode } from '@qaniva/contracts';
-import { Body, PrimaryButton, Screen, Wordmark } from '@/components/ui';
+import { Body, Eyebrow, PrimaryButton, Screen, Wordmark } from '@/components/ui';
 import { useUnitySimulation } from '@/unity/useUnitySimulation';
 import { analytics } from '@/analytics';
+import { colors, spacing } from '@/theme/tokens';
 import type { ScreenProps } from '@/navigation/types';
 
 /** E2E capture mode: an aborted run returns to Home so the run loop continues. */
@@ -25,6 +27,7 @@ const FAILURE_MESSAGES: Record<string, string> = {
 export function SimulationScreen({ navigation, route }: ScreenProps<'Simulation'>) {
   const { caseId, caseVersion, attemptId, seed, title, mode } = route.params;
   const sim = useUnitySimulation();
+  const insets = useSafeAreaInsets();
 
   const { start } = sim;
   useEffect(() => {
@@ -64,8 +67,11 @@ export function SimulationScreen({ navigation, route }: ScreenProps<'Simulation'
   }, [sim.phase, sim.summary, navigation, caseId, caseVersion, attemptId, title]);
 
   return (
-    <Screen>
+    <Screen
+      style={{ paddingTop: insets.top + spacing.lg, paddingBottom: insets.bottom + spacing.lg }}
+    >
       <Wordmark compact />
+      <Eyebrow>{sim.phase === 'failed' ? 'Simulation unavailable' : 'Simulation mode'}</Eyebrow>
       <Body muted>{title}</Body>
       {sim.phase === 'failed' ? (
         <>
@@ -77,7 +83,7 @@ export function SimulationScreen({ navigation, route }: ScreenProps<'Simulation'
         </>
       ) : (
         <>
-          <ActivityIndicator color={undefined} />
+          <ActivityIndicator color={colors.brand} />
           <Body muted>
             {sim.phase === 'starting' && 'Preparing the simulation…'}
             {sim.phase === 'ready' && 'Entering the simulation…'}

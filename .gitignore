@@ -86,3 +86,7 @@ apps/mobile/unity-frameworks/ios/
 apps/mobile/ios/.xcode.env.local
 unity-editmode-results.xml
 unity-playmode-results.xml
+
+# User-supplied review packaging (byte-identical to docs/audits/product-shell-screenshots/)
+docs/audits/product-shell-screenshots.zip
+qaniva-final-polish-screenshots.zip

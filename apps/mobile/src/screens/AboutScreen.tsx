@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
-import { Body, Caption, Card, Screen, SectionHeader, Wordmark } from '@/components/ui';
+import { Body, Caption, Eyebrow, Screen, SectionHeader, Wordmark } from '@/components/ui';
 import { analytics } from '@/analytics';
-import { spacing } from '@/theme/tokens';
+import { colors, spacing } from '@/theme/tokens';
 import type { ScreenProps } from '@/navigation/types';
 
 export function AboutScreen(_props: ScreenProps<'About'>) {
@@ -25,16 +25,17 @@ export function AboutScreen(_props: ScreenProps<'About'>) {
         </Body>
 
         <SectionHeader>How it works</SectionHeader>
-        <Card>
+        <View style={styles.callout}>
+          <Eyebrow>Engine-owned truth</Eyebrow>
           <Body muted>
             Every case is a versioned, evidence-referenced definition executed by a deterministic
             clinical engine: the same decisions always produce the same outcome, timeline and score.
             Nothing in the simulation is improvised by AI.
           </Body>
-        </Card>
+        </View>
 
         <SectionHeader>Status</SectionHeader>
-        <Card>
+        <View style={styles.copyBlock}>
           <Body muted>
             This is an MVP build for internal and demonstration use. The clinical content is
             evidence-based and fictional, and is awaiting formal physician validation — see
@@ -44,7 +45,7 @@ export function AboutScreen(_props: ScreenProps<'About'>) {
             Privacy policy and terms of use are in preparation for the test-distribution release and
             are not yet published.
           </Body>
-        </Card>
+        </View>
 
         <Caption>Version {version} (MVP) · Brand assets provisional</Caption>
         <Caption>© 2026 Qaniva project</Caption>
@@ -55,4 +56,11 @@ export function AboutScreen(_props: ScreenProps<'About'>) {
 
 const styles = StyleSheet.create({
   content: { gap: spacing.md, paddingBottom: spacing.xl },
+  callout: {
+    borderLeftWidth: 3,
+    borderLeftColor: colors.brand,
+    paddingLeft: spacing.md,
+    gap: spacing.sm,
+  },
+  copyBlock: { gap: spacing.md },
 });
