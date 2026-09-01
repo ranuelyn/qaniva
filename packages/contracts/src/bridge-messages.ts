@@ -88,7 +88,10 @@ export const simulationFailedMessageSchema = z.object({
   ...envelopeBase,
   type: z.literal('SIMULATION_FAILED'),
   payload: z.object({
-    attemptId: z.string().uuid().optional(),
+    // A failure BEFORE an attempt exists (e.g. CASE_LOAD_FAILED on an unknown
+    // case) legitimately carries no attempt id; the C# serializer emits null
+    // rather than omitting the field, so null must decode.
+    attemptId: z.string().uuid().nullish(),
     code: z.enum(SIMULATION_FAILURE_CODES),
     message: z.string().min(1),
   }),
