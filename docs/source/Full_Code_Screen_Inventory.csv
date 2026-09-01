@@ -1,0 +1,106 @@
+﻿ID,Alan,Ekran/State,Kanıt Durumu,Not
+A01,Açılış / Launch,Uygulama açılış/splash,Yakalanacak,"İlk yüklenme, marka ve olası izin akışı."
+A02,Ana Ekran,Yeni Home,Belgeli,2025 güncellemesi ile next-patient odağında yeniden tasarlandı.
+A03,Ana Ekran,Daily Patient kartı,Belgeli,Abone kullanıcılar için günlük vaka giriş noktası.
+A04,Ana Ekran,Challenges kartı/liste girişi,Belgeli,v3.7 ile küratörlü vaka setleri.
+A05,Ana Ekran,EMS giriş alanı,Belgeli,Ambulans tabanlı EMS vakaları.
+A06,Ana Ekran,Continue / son vaka,Yakalanacak,Home üzerinden hızlı devam davranışı.
+A07,Ana Ekran,Subscribe CTA,Belgeli,Home/Profile üzerinden abonelik.
+A08,Profil,Profile ana ekran,Belgeli,"Hesap, abonelik, zorluk ve CME erişimleri."
+A09,Profil,Login,Belgeli,Hesap zorunlu değil; login skor/abonelik senkronu sağlar.
+A10,Profil,Create Account,Belgeli,E-posta doğrulamalı hesap.
+A11,Profil,Google / Apple social login,Belgeli,v3.6.3 ile eklendi.
+A12,Profil,Difficulty Settings,Doğrulandı,Easy/Medium/Hard preset + 8 ayrı ayar.
+A13,Profil,Subscription management,Belgeli,Restore/Change/Manage Subscription.
+A14,Profil,CME geçmişi,Belgeli,CME kayıtlarını inceleme ve sertifika.
+B01,Vaka Kütüphanesi,Case List / Library,Belgeli,"Tanı, kategori, vaka adı/numarası ile arama/filtre."
+B02,Vaka Kütüphanesi,Rotation view,Belgeli,Klinik rotasyona göre vaka tarama.
+B03,Vaka Kütüphanesi,Unit / EMS view,Belgeli,Birim bazlı tarama.
+B04,Vaka Kütüphanesi,Favorites,Belgeli,v3.6.1 ile favorileme.
+B05,Vaka Kütüphanesi,Offline Download,Belgeli,Mobilde offline-first vaka indirme.
+B06,Vaka Kütüphanesi,Search results,Yakalanacak,Arama davranışının gerçek UI state’i.
+B07,Vaka Kütüphanesi,Filters,Yakalanacak,Specialty/difficulty/unit filtrelerinin gerçek UI state’i.
+B08,Vaka Detayı,Case Summary / Intro,Belgeli,Brief/triage/EMS bağlamı.
+B09,Vaka Detayı,Locked / Pro state,Yakalanacak,Ücretsiz kullanıcı paywall davranışı.
+B10,Vaka Detayı,Past Score,Belgeli,Önceki skor ve CME erişimi.
+C01,Simülasyon,Ana vaka ekranı,Doğrulandı,"3D hasta, monitor, attending/nurse ve 8 aksiyon sekmesi."
+C02,Simülasyon,Vitals / monitor,Doğrulandı,"HR, BP, RR, T, O2; EMS EtCO2/waveform."
+C03,Simülasyon,Attending Physician,Doğrulandı,Easy/Medium yardım; Hard’da gizlenebilir.
+C04,Simülasyon,Nurse / EMT / Medical Control NPC,Doğrulandı,Ortama göre ekip karakterleri.
+C05,Simülasyon,Case log,Belgeli,Eylem günlüğü ve ayara bağlı canlı skor.
+C06,Simülasyon,Simulated Time,Belgeli,EMS’te eylem yaptıkça ilerleyen saat.
+C07,Simülasyon,Decompensation / arrest,Belgeli,"Gecikmede kötüleşme, arrest veya ölüm."
+C08,Simülasyon,Action result toast,Doğrulandı,Eylem sonucu kısa bildirim state’i.
+D01,Patient,Background / Demographics,Belgeli,"Ad, yaş, boy/kilo, code status, CC, HPI, PMH, ilaç, alerji."
+D02,Patient,History / ROS menüsü,Yakalanacak,Scripted anamnez seçenekleri.
+D03,Patient,Patient AI chat,Doğrulandı,Klavyeyle doğal dil sohbeti.
+D04,Patient,Patient AI microphone,Belgeli,Mikrofon ile history-taking.
+D05,Patient,AI conversation limits / paywall,Yakalanacak,Free/Basic/Pro limit davranışı.
+E01,Exam,Exam category list,Doğrulandı,"Airway, Breathing, Circulation, Disability, Exposure, HEENT vb."
+E02,Exam,Airway result,Yakalanacak,Muayene sonucu state’i.
+E03,Exam,Breathing / Pulmonary result,Yakalanacak,Muayene sonucu state’i.
+E04,Exam,Circulation / Cardio result,Yakalanacak,Muayene sonucu state’i.
+E05,Exam,Neuro / Disability result,Yakalanacak,Muayene sonucu state’i.
+E06,Exam,Skin / Exposure result,Yakalanacak,Muayene sonucu state’i.
+F01,Stabilize,Stabilization Actions,Belgeli,"IV, monitor, CPR, oxygen, fluids, defib/pacer, airway."
+F02,Stabilize,Oxygen action detail,Yakalanacak,Modal/seçim/sonuç akışı.
+F03,Stabilize,IV / vascular access,Yakalanacak,Tek veya çoklu kabul edilen eylemler.
+F04,Stabilize,Fluids / blood resuscitation,Yakalanacak,Sıvı ve kan ürünü akışları.
+F05,Stabilize,Defib / Pacer,Yakalanacak,Cihaz/enerji/ritim seçenekleri.
+G01,Differential,Differential list,Belgeli,Tanıları ekleme/çıkarma; tanım yardımı.
+G02,Differential,Diagnosis definition,Belgeli,Tanı açıklama state’i.
+G03,Differential,Attending reveal differential,Belgeli,Difficulty ayarına bağlı yardım.
+G04,Differential,Final diagnosis selection,Yakalanacak,Handoff öncesi seçim.
+H01,Investigate,Investigate categories,Doğrulandı,"Bedside Tests, Lab Work, Other Labs, Imaging."
+H02,Investigate,Lab browser,Doğrulandı,CBC vb. sonuçların panelde görünümü.
+H03,Investigate,Search-only mode,Belgeli,"Hard’da browser kapalı, isimle arama."
+H04,Investigate,Abnormal result highlight,Belgeli,Turuncu highlight ayarı.
+H05,Investigate,Normal range info,Belgeli,Info butonunda normal aralık.
+H06,Investigate,X-ray result,Doğrulandı,Medikal görüntüleme sonucu.
+H07,Investigate,CT / MRI / US result,Belgeli,Görüntü sonucu ve yorum ayarı.
+H08,Investigate,ECG result,Belgeli,ECG/görüntü yorum state’i.
+I01,Intervene,Interventions browser,Doğrulandı,Prosedür/ilaç ve diğer tedaviler.
+I02,Intervene,Medication categories,Belgeli,"Resus, vasoactive, sedation, cardiac, respiratory, antibiotic vb."
+I03,Intervene,Medication search,Yakalanacak,İlaç adı ve olası doz seçimi.
+I04,Intervene,Procedure action,Yakalanacak,Prosedür seçimi ve sonucu.
+I05,Intervene,Blood bank,Yakalanacak,pRBC/FFP/platelet vb.
+J01,Communicate,Consult list,Belgeli,Uzman konsültasyonları.
+J02,Communicate,Consult response,Yakalanacak,Konsültasyon sonucu / öneri state’i.
+J03,Communicate,Team / medical control,Doğrulandı,EMS arayüzünde Medical Control.
+K01,Hand-off,Handoff ana ekranı,Yakalanacak,Vaka bitirme akışı.
+K02,Hand-off,Disposition selection,Belgeli,Discharge/admit/ICU/OR/transfer vb.
+K03,Hand-off,Final diagnosis,Belgeli,Skorun %35 bileşeni.
+K04,Hand-off,Confirm / Finish case,Yakalanacak,Bitiriş confirm state’i.
+L01,Sonuç,Overall Score,Doğrulandı,Diagnosis + disposition + actions final skor.
+L02,Sonuç,Section Scores,Doğrulandı,Exam/Stabilization/Investigations/Interventions/Communications.
+L03,Sonuç,Critical actions detail,Doğrulandı,Yapılan eylem + alternatif + açıklama.
+L04,Sonuç,Recommended actions,Belgeli,Pozitif/bonus mantığı.
+L05,Sonuç,Unnecessary actions,Belgeli,Negatif puan.
+L06,Sonuç,Harmful actions,Belgeli,Negatif puan ve safety sinyali.
+L07,Sonuç,Full Debrief / Discussion,Belgeli,Case discussion ve eğitim açıklaması.
+L08,Sonuç,Rate Case,Doğrulandı,Debrief ekranında puanlama.
+L09,Sonuç,Feedback,Belgeli,Klinik hata/geri bildirim gönderme.
+L10,Sonuç,Replay / Next Case,Yakalanacak,Retention loop.
+M01,Challenges,Challenge list,Belgeli,Chief complaint/clinical topic vaka setleri.
+M02,Challenges,Challenge detail / progress,Yakalanacak,Learn-Practice-Improve ilerlemesi.
+M03,Daily Patient,Daily case screen,Belgeli,Attending yardımı olmadan first-attempt odağı.
+M04,Daily Patient,Share score,Belgeli,İlk deneme skorunu paylaşma.
+N01,Educator Dashboard,Organization overview,Doğrulandı,"Kümülatif kullanım, skor trendi, top learners."
+N02,Educator Dashboard,Commonly missed actions,Doğrulandı,Toplu bilgi açığı analizi.
+N03,Educator Dashboard,Failed cases,Belgeli,Zorlanılan vakalar.
+N04,Educator Dashboard,Learner list,Belgeli,Kullanıcı/grup filtreleri.
+N05,Educator Dashboard,Learner detail,Belgeli,Skor zaman serisi ve tamamlanan vakalar.
+N06,Educator Dashboard,Completed case detail,Belgeli,"Özet, performans, etkileşim timeline’ı."
+N07,Educator Dashboard,Second-by-second case log,Belgeli,"Eylem, sonuç ve scoring sınıfı."
+N08,Educator Dashboard,CSV / Excel export,Belgeli,Toplu ve granular export.
+N09,Educator Dashboard,Groups,Belgeli,Sınıf/yıl/klinik role göre gruplama.
+N10,Educator Dashboard,Assignments,Belgeli,"Vaka atama, due date, minimum score."
+O01,Case Creator,Creator main,Belgeli,Web tabanlı case authoring.
+O02,Case Creator,Patient / environment selection,Belgeli,40+ model ve 5 environment (org sayfası).
+O03,Case Creator,Action customization,Belgeli,ROS/exam/investigation/intervention/communication.
+O04,Case Creator,Diagnosis / disposition setup,Belgeli,Tanı ve disposition özelleştirme.
+O05,Case Creator,Scoring rubric,Belgeli,Critical/recommended/neutral/unnecessary/harmful.
+O06,Case Creator,Clone existing case,Belgeli,Mevcut case’ten türetme.
+P01,System,Offline sync,Belgeli,Offline tamamlanan sonuçların sonraki online açılışta upload’u.
+P02,System,Units of measurement,Belgeli,Ölçü birimi ayarı.
+P03,System,Privacy / data-sharing consent,Belgeli,Kurumsal enrollment sırasında sonuç paylaşımı onayı.
