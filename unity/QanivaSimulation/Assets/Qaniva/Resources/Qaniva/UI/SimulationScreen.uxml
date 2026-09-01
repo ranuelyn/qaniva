@@ -34,14 +34,18 @@
          Pan = native ScrollView touch drag; zoom = simple +/- controls. -->
     <ui:VisualElement name="result-viewer" class="result-viewer hidden">
       <ui:Label name="result-viewer-title" class="result-viewer-title" text="" />
-      <ui:ScrollView name="result-viewer-scroll" class="result-viewer-scroll"
-                     mode="VerticalAndHorizontal">
-        <ui:VisualElement name="result-viewer-image" class="result-viewer-image" />
-      </ui:ScrollView>
       <ui:Label name="result-viewer-note" class="result-viewer-note" text="" />
+      <ui:VisualElement name="result-viewer-stage" class="result-viewer-stage">
+        <ui:ScrollView name="result-viewer-scroll" class="result-viewer-scroll"
+                       mode="VerticalAndHorizontal">
+          <ui:VisualElement name="result-viewer-image" class="result-viewer-image" />
+        </ui:ScrollView>
+      </ui:VisualElement>
       <ui:VisualElement name="result-viewer-controls" class="result-viewer-controls">
-        <ui:Button name="result-zoom-out" class="viewer-button" text="−" />
-        <ui:Button name="result-zoom-in" class="viewer-button" text="+" />
+        <ui:VisualElement name="result-viewer-zoom" class="result-viewer-zoom">
+          <ui:Button name="result-zoom-out" class="viewer-button" text="−" />
+          <ui:Button name="result-zoom-in" class="viewer-button" text="+" />
+        </ui:VisualElement>
         <ui:Button name="result-viewer-close" class="viewer-button close" text="Close" />
       </ui:VisualElement>
     </ui:VisualElement>

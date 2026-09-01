@@ -364,8 +364,11 @@ namespace Qaniva.EditorTools
             var monitor = (GameObject)PrefabUtility.InstantiatePrefab(
                 AssetDatabase.LoadAssetAtPath<GameObject>($"{PropsDir}/BedsideMonitor.prefab"));
             monitor.transform.SetParent(root.transform, false);
-            monitor.transform.localPosition = new Vector3(0.80f, 0f, 1.28f);
-            monitor.transform.localEulerAngles = new Vector3(0f, -35f, 0f);
+            monitor.transform.localPosition = new Vector3(0.78f, 0f, 1.26f);
+            // Face the presentation camera: the screen normal is -Z, the camera sits
+            // front-left and above ((0.02, 1.92, -2.18)), so yaw slightly left and
+            // tilt the face up toward it — the vitals must be readable in-frame.
+            monitor.transform.localEulerAngles = new Vector3(8f, 14f, 0f);
 
             // IV pole, left of the bed head.
             var iv = new GameObject("IvPole");

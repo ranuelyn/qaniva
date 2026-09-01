@@ -133,10 +133,12 @@ namespace Qaniva.Presentation
         {
             _inputLocked = false;
             _lastSubmitTime = -999f;
+            // Close the viewer FIRST: it restores the action area / result banner
+            // visibility it borrowed, and the reset below then hides the banner.
+            _resultViewer.Close();
             _resultBanner.AddToClassList("hidden");
             _resultText.text = "";
             _resultViewButton.AddToClassList("hidden");
-            _resultViewer.Close();
             _openableAssetId = null;
             _openableAssetLabel = null;
             _openableAssetStatus = null;

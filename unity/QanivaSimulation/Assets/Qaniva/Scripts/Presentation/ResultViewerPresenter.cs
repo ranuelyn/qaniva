@@ -23,17 +23,21 @@ namespace Qaniva.Presentation
         private const float MaxZoom = 4f;
         private const float ZoomStep = 1.25f;
 
-        /// <summary>Base on-panel width for a freshly opened asset (panel ref width 1206).</summary>
-        private const float FitWidth = 1080f;
+        /// <summary>Base on-panel width for a freshly opened asset (panel ref width 1206,
+        /// minus the viewer's horizontal padding and the scroll surface inset).</summary>
+        private const float FitWidth = 1150f;
 
         private readonly VisualElement _panel;
         private readonly Label _title;
         private readonly ScrollView _scroll;
         private readonly VisualElement _image;
         private readonly Label _note;
+        private readonly VisualElement _actionArea;
+        private readonly VisualElement _resultBanner;
 
         private Texture2D _texture;
         private float _zoom = 1f;
+        private bool _bannerWasVisible;
 
         public ResultViewerPresenter(VisualElement root)
         {
@@ -42,6 +46,11 @@ namespace Qaniva.Presentation
             _scroll = root.Q<ScrollView>("result-viewer-scroll");
             _image = root.Q<VisualElement>("result-viewer-image");
             _note = root.Q<Label>("result-viewer-note");
+            // The action drawer/result banner are later siblings (drawn above the
+            // viewer) — the viewer hides them while open so the diagnostic asset
+            // owns the whole screen.
+            _actionArea = root.Q<VisualElement>("action-area");
+            _resultBanner = root.Q<VisualElement>("result-banner");
 
             root.Q<Button>("result-viewer-close").clicked += Close;
             root.Q<Button>("result-zoom-in").clicked += () => SetZoom(_zoom * ZoomStep);
@@ -84,12 +93,25 @@ namespace Qaniva.Presentation
                 SetZoom(1f);
             }
 
+            _bannerWasVisible = _resultBanner != null && !_resultBanner.ClassListContains("hidden");
+            _actionArea?.AddToClassList("hidden");
+            _resultBanner?.AddToClassList("hidden");
             _panel.RemoveFromClassList("hidden");
         }
 
         public void Close()
         {
-            _panel?.AddToClassList("hidden");
+            if (!IsOpen)
+            {
+                return;
+            }
+            _panel.AddToClassList("hidden");
+            _actionArea?.RemoveFromClassList("hidden");
+            if (_bannerWasVisible)
+            {
+                _resultBanner?.RemoveFromClassList("hidden");
+            }
+            _bannerWasVisible = false;
         }
 
         private void SetZoom(float zoom)
