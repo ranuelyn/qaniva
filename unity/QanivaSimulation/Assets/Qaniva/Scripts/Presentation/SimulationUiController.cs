@@ -60,7 +60,7 @@ namespace Qaniva.Presentation
         private float _lastSubmitTime = -999f;
         private bool _inputLocked;
 
-        public bool SheetCollapsed => _actionArea != null && _actionArea.ClassListContains("sheet-collapsed");
+        public bool SheetCollapsed => _actionArea != null && _actionArea.ClassListContains("panel-closed");
 
         private void ToggleSheet()
         {
@@ -70,11 +70,11 @@ namespace Qaniva.Presentation
             }
             if (SheetCollapsed)
             {
-                _actionArea.RemoveFromClassList("sheet-collapsed");
+                _actionArea.RemoveFromClassList("panel-closed");
             }
             else
             {
-                _actionArea.AddToClassList("sheet-collapsed");
+                _actionArea.AddToClassList("panel-closed");
             }
         }
 
@@ -140,15 +140,29 @@ namespace Qaniva.Presentation
             }
             // Re-tapping the active category only ever EXPANDS (a collapsed sheet
             // must reopen from the dock); collapsing is the grabber's explicit job.
-            void ExpandSheet()
+            void OpenPanel()
             {
                 if (SheetCollapsed)
                 {
                     ToggleSheet();
                 }
             }
-            _actions.ActiveCategoryReselected += ExpandSheet;
-            _actions.CategoryChanged += ExpandSheet;
+            void ClosePanel()
+            {
+                if (!SheetCollapsed)
+                {
+                    ToggleSheet();
+                }
+            }
+            // Choosing a category opens its panel; re-tapping the active category or
+            // the panel's close button closes it so the patient owns the scene again.
+            _actions.CategoryChanged += OpenPanel;
+            _actions.ActiveCategoryReselected += ToggleSheet; // re-tap: open if closed, close if open
+            var panelClose = root.Q<Button>("panel-close");
+            if (panelClose != null)
+            {
+                panelClose.clicked += ClosePanel;
+            }
 
             ApplySafeArea(root);
 
@@ -191,7 +205,7 @@ namespace Qaniva.Presentation
             _timeline.Render(_controller.GetTimeline());
             _vitals.Render(_controller.CurrentSnapshot);
             _actions.ResetCategory();
-            _actionArea?.RemoveFromClassList("sheet-collapsed");
+            _actionArea?.AddToClassList("panel-closed");
             _actions.Render(_controller.GetActionAvailability());
         }
 

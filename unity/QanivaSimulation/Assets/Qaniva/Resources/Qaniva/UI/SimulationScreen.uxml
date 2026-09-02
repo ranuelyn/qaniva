@@ -80,15 +80,25 @@
       <ui:ScrollView name="timeline-scroll" class="timeline-scroll" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" />
     </ui:VisualElement>
 
-    <!-- C+D. action sheet: grabber + utilities, category dock, decision rows -->
-    <ui:VisualElement name="action-area" class="action-area">
-      <ui:VisualElement name="sheet-header" class="sheet-header">
+    <!-- C+D. clinical action layer: category rails on both screen edges (thumb
+         reach, patient stays central), a side panel with the chosen category's
+         decision rows, and a floating utility bar at the bottom. -->
+    <ui:VisualElement name="action-area" class="action-area panel-closed" picking-mode="Ignore">
+      <ui:VisualElement name="rail-left" class="rail rail-left" picking-mode="Ignore" />
+      <ui:VisualElement name="rail-right" class="rail rail-right" picking-mode="Ignore" />
+      <ui:VisualElement name="category-tabs" class="hidden" />
+      <ui:VisualElement name="action-panel" class="action-panel">
+        <ui:VisualElement name="panel-header" class="panel-header">
+          <ui:Label name="panel-title" class="panel-title" text="" />
+          <ui:Button name="panel-close" class="panel-close" text="Kapat" />
+        </ui:VisualElement>
+        <ui:ScrollView name="action-list" class="action-list" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" />
+      </ui:VisualElement>
+      <ui:VisualElement name="utility-bar" class="utility-bar">
         <ui:Button name="toggle-timeline" class="utility-button" text="Vaka günlüğü" />
-        <ui:Button name="sheet-handle" class="sheet-handle" text="" />
+        <ui:Button name="sheet-handle" class="hidden" text="" />
         <ui:Button name="exit-button" class="utility-button exit" text="Çık" />
       </ui:VisualElement>
-      <ui:VisualElement name="category-tabs" class="category-tabs" />
-      <ui:ScrollView name="action-list" class="action-list" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" />
     </ui:VisualElement>
 
     <ui:VisualElement name="safe-bottom" class="safe-bottom" />

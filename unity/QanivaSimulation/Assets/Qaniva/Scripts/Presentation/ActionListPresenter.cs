@@ -49,7 +49,15 @@ namespace Qaniva.Presentation
         private static readonly string[] CategoryOrder = { "Patient", "Examine", "Orders", "Treat", "More" };
 
         private readonly VisualElement _tabs;
+        private readonly VisualElement _railLeft;
+        private readonly VisualElement _railRight;
+        private readonly VisualElement _panel;
+        private readonly Label _panelTitle;
         private readonly ScrollView _list;
+
+        /// <summary>Which screen edge hosts each category (thumb reach, Full-Code-
+        /// informed principle; layout only).</summary>
+        private static readonly HashSet<string> LeftRail = new() { "Patient", "Examine" };
         private readonly Action<string> _onSubmit;
 
         private IReadOnlyList<ActionAvailabilityView> _current = Array.Empty<ActionAvailabilityView>();
@@ -66,6 +74,10 @@ namespace Qaniva.Presentation
         public ActionListPresenter(VisualElement root, Action<string> onSubmit)
         {
             _tabs = root.Q<VisualElement>("category-tabs");
+            _railLeft = root.Q<VisualElement>("rail-left");
+            _railRight = root.Q<VisualElement>("rail-right");
+            _panel = root.Q<VisualElement>("action-panel");
+            _panelTitle = root.Q<Label>("panel-title");
             _list = root.Q<ScrollView>("action-list");
             _onSubmit = onSubmit;
         }
@@ -155,17 +167,42 @@ namespace Qaniva.Presentation
         private void RenderTabs(List<string> categories)
         {
             _tabs.Clear();
+            _railLeft?.Clear();
+            _railRight?.Clear();
+            int leftIndex = 0, rightIndex = 0;
             foreach (var category in categories)
             {
                 var tab = new Button { name = $"tab-{category}", text = CategoryDisplay.TryGetValue(category, out var shown) ? shown : category };
                 tab.AddToClassList("category-tab");
+                tab.AddToClassList("rail-tab");
                 if (category == _activeCategory)
                 {
                     tab.AddToClassList("category-tab-active");
                 }
                 string captured = category;
                 tab.clicked += () => SelectCategory(captured);
-                _tabs.Add(tab);
+
+                bool left = LeftRail.Contains(category);
+                var rail = left ? _railLeft : _railRight;
+                int index = left ? leftIndex++ : rightIndex++;
+                if (rail == null)
+                {
+                    _tabs.Add(tab);
+                    continue;
+                }
+                // 236×72 box rotated 90° → visual 72×236; place the visual box in the rail.
+                tab.style.top = index * 252 + 82;
+                rail.Add(tab);
+            }
+            if (_panelTitle != null)
+            {
+                _panelTitle.text = CategoryDisplay.TryGetValue(_activeCategory, out var title) ? title : _activeCategory;
+            }
+            if (_panel != null)
+            {
+                bool fromLeft = LeftRail.Contains(_activeCategory);
+                _panel.EnableInClassList("panel-from-left", fromLeft);
+                _panel.EnableInClassList("panel-from-right", !fromLeft);
             }
         }
 

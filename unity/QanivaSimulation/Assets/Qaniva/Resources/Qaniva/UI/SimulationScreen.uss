@@ -10,7 +10,7 @@
 }
 
 .safe-top { height: 54px; }
-.safe-bottom { height: 24px; background-color: rgba(14, 17, 22, 0.97); }
+.safe-bottom { height: 24px; }
 
 /* --- top strip: vitals tiles + humanized status --------------------------- */
 
@@ -127,107 +127,121 @@
   white-space: normal;
 }
 
-/* --- action sheet ----------------------------------------------------------- */
+/* --- clinical action layer: edge rails + side panel + utility bar ----------- */
 
 .action-area {
-  background-color: rgba(14, 17, 22, 0.97);
-  border-top-left-radius: 32px;
-  border-top-right-radius: 32px;
-  border-top-width: 1px;
-  border-top-color: rgb(42, 50, 61);
-  padding: 6px 20px 0 20px;
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
 }
 
-.sheet-header {
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  height: 78px;
+.rail {
+  position: absolute;
+  top: 640px;
+  width: 76px;
+  height: 1200px;
 }
+.rail-left { left: 0; }
+.rail-right { right: 0; }
 
-.sheet-handle {
-  width: 120px;
-  height: 78px;
-  background-color: rgba(0, 0, 0, 0);
-  border-width: 0;
+/* Each tab is laid out as a 236×72 box and rotated 90° into the rail; the
+   presenter positions them absolutely (top = index*252 + 82, left = -80). */
+.rail-tab {
+  position: absolute;
+  width: 236px;
+  height: 72px;
+  left: -80px;
   margin: 0;
   padding: 0;
-  /* the visible grabber is the pseudo bar drawn via border-top on a child? UI
-     Toolkit has no pseudo elements — the button itself is a hit target and the
-     grabber is drawn by .sheet-handle-bar (added at runtime). */
-}
-
-.sheet-handle-bar {
-  width: 108px;
-  height: 8px;
-  border-radius: 4px;
-  background-color: rgb(58, 68, 82);
-  align-self: center;
-}
-
-.utility-button {
-  height: 64px;
-  min-width: 180px;
-  padding: 0 14px;
   font-size: 33px;
-  color: rgb(152, 164, 177);
-  background-color: rgba(0, 0, 0, 0);
-  border-width: 0;
-  border-radius: 12px;
-  margin: 0;
-}
-
-.utility-button:active { background-color: rgb(23, 28, 35); }
-
-.utility-button.exit { color: rgb(229, 72, 77); -unity-text-align: middle-right; }
-
-/* category dock: quiet labels, active = teal text + underline indicator */
-
-.category-tabs {
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 2px 0 6px 0;
-  border-bottom-width: 1px;
-  border-bottom-color: rgb(42, 50, 61);
-}
-
-.category-tab {
-  flex-grow: 1;
-  flex-basis: 0;
-  height: 96px;
-  margin: 0;
-  padding: 0 0 6px 0;
-  font-size: 36px;
-  color: rgb(152, 164, 177);
-  background-color: rgba(0, 0, 0, 0);
-  border-width: 0;
-  border-bottom-width: 4px;
-  border-bottom-color: rgba(0, 0, 0, 0);
-  border-radius: 0;
+  letter-spacing: 1px;
+  color: rgb(205, 214, 223);
+  background-color: rgba(14, 17, 22, 0.90);
+  border-width: 1px;
+  border-color: rgb(42, 50, 61);
+  border-radius: 14px;
   -unity-text-align: middle-center;
 }
-
-.category-tab:active { color: rgb(237, 241, 245); }
-
-.category-tab-active {
-  color: rgb(62, 198, 180);
-  border-bottom-color: rgb(62, 198, 180);
+.rail-left .rail-tab { rotate: 90deg; }
+.rail-right .rail-tab { rotate: -90deg; }
+.rail-tab:active { background-color: rgb(31, 38, 48); }
+.rail-tab.category-tab-active {
+  color: rgb(6, 35, 30);
+  background-color: rgb(62, 198, 180);
+  border-color: rgb(62, 198, 180);
   -unity-font-style: bold;
 }
 
-/* decision rows */
+.action-panel {
+  position: absolute;
+  top: 560px;
+  max-height: 1500px;
+  width: 860px;
+  background-color: rgba(14, 17, 22, 0.97);
+  border-width: 1px;
+  border-color: rgb(42, 50, 61);
+  border-radius: 26px;
+  padding: 10px 14px 12px 14px;
+}
+.panel-from-left  { left: 90px; }
+.panel-from-right { right: 90px; }
+.panel-closed .action-panel { display: none; }
 
-/* Fixed height: the dock never shifts when a category has fewer rows. */
-.action-list { height: 620px; margin-top: 6px; }
+.panel-header {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px 10px 14px;
+  border-bottom-width: 1px;
+  border-bottom-color: rgb(42, 50, 61);
+}
+.panel-title {
+  font-size: 36px;
+  color: rgb(237, 241, 245);
+  -unity-font-style: bold;
+}
+.panel-close {
+  height: 64px;
+  min-width: 120px;
+  padding: 0 22px;
+  margin: 0;
+  font-size: 30px;
+  color: rgb(152, 164, 177);
+  background-color: rgb(23, 28, 35);
+  border-width: 0;
+  border-radius: 32px;
+}
 
-.sheet-collapsed .action-list { display: none; }
+.utility-bar {
+  position: absolute;
+  left: 0; right: 0; bottom: 118px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.utility-button {
+  height: 76px;
+  min-width: 240px;
+  margin: 0 10px;
+  padding: 0 28px;
+  font-size: 32px;
+  color: rgb(205, 214, 223);
+  background-color: rgba(14, 17, 22, 0.92);
+  border-width: 1px;
+  border-color: rgb(42, 50, 61);
+  border-radius: 38px;
+}
+.utility-button:active { background-color: rgb(31, 38, 48); }
+.utility-button.exit { color: rgb(229, 72, 77); min-width: 160px; }
+
+/* decision rows (inside the panel) */
+.action-list { flex-grow: 0; flex-shrink: 1; max-height: 1250px; margin-top: 4px; }
 
 .action-row {
   flex-direction: row;
   align-items: center;
-  min-height: 132px;
+  min-height: 124px;
   margin: 0;
-  padding: 18px 8px 18px 12px;
+  padding: 16px 6px 16px 10px;
   background-color: rgba(0, 0, 0, 0);
   border-width: 0;
   border-bottom-width: 1px;
@@ -235,42 +249,21 @@
   border-radius: 0;
   -unity-text-align: middle-left;
 }
-
 .action-row:active { background-color: rgb(23, 28, 35); }
-
 .action-row-copy { flex-grow: 1; flex-shrink: 1; }
-
-.action-row-title {
-  color: rgb(237, 241, 245);
-  font-size: 42px;
-  white-space: normal;
-}
-
-.action-row-secondary {
-  color: rgb(152, 164, 177);
-  font-size: 33px;
-  margin-top: 4px;
-  white-space: normal;
-}
-
-.action-row-status {
-  color: rgb(62, 198, 180);
-  font-size: 33px;
-  margin-left: 20px;
-  flex-shrink: 0;
-}
-
-.action-row-chevron {
-  color: rgb(107, 118, 132);
-  font-size: 44px;
-  margin-left: 20px;
-  flex-shrink: 0;
-}
-
+.action-row-title { color: rgb(237, 241, 245); font-size: 40px; white-space: normal; }
+.action-row-secondary { color: rgb(152, 164, 177); font-size: 32px; margin-top: 4px; white-space: normal; }
+.action-row-status { color: rgb(62, 198, 180); font-size: 31px; margin-left: 18px; flex-shrink: 0; }
+.action-row-chevron { color: rgb(107, 118, 132); font-size: 42px; margin-left: 18px; flex-shrink: 0; }
 .action-row-disabled .action-row-title { color: rgb(107, 118, 132); }
 .action-row-disabled .action-row-secondary { color: rgb(85, 96, 107); }
 .action-row-disabled .action-row-status { color: rgb(107, 118, 132); }
 .action-row-done .action-row-status { color: rgb(70, 201, 139); }
+
+/* the result card floats above the utility bar */
+.result-banner { position: absolute; left: 20px; right: 20px; bottom: 222px; margin: 0; }
+.completion-panel { position: absolute; left: 20px; right: 20px; bottom: 222px; margin: 0; }
+.timeline-panel { position: absolute; left: 20px; right: 20px; bottom: 222px; margin: 0; }
 
 .hidden { display: none; }
 
