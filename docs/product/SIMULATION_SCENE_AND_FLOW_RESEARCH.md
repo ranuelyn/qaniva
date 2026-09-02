@@ -108,3 +108,18 @@ bottom. Element names (`tab-*`, `action-*`) are unchanged for the driver/tests.
   so it clears the vitals strip), an emissive ECG waveform strip across the
   top, and monitor-convention colours (HR green, SpO2 cyan, NIBP red, RR
   yellow); labels NABIZ / SpO2 / TA / SS.
+
+## Addendum (2026-09-02, fourth pass) — owner-supplied "Hospital Patient" model
+
+The owner supplied a purpose-made hospital-patient model (`Hospital Patient.zip`:
+12 OBJ parts, PNG textures, T-pose, cm units, **unrigged**, no MTL). Pipeline
+(`scripts/build-patient-from-hp.py`, Blender headless): textures assigned per
+part by geometry, skin parts joined into one Body, a 20-bone armature built
+from proportions with automatic weights, weights **transferred** to the gown,
+eyes, lashes, mouth and bracelet so they follow the limbs, gown decimated
+(~76k tris total), slippers dropped for a bed patient, lying pose baked
+(arms at the sides on the mattress, torso/head on the raised backrest), FBX
+export. Unity lays it down with the 180° roll (this model faces −Y). It
+replaces the Quaternius-based patient as `adult_rigged_v1`; the Quaternius
+pipeline stays available as a CC0 fallback. **Licence of the supplied model is
+the owner's to confirm** (see `Art/Patients/LICENSE-hospital-patient.txt`).
