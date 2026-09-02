@@ -77,7 +77,7 @@ namespace Qaniva.Presentation
             if (_texture == null)
             {
                 Debug.LogError($"[ResultViewer] asset \"{assetId}\" not found under Resources/{AssetResourceFolder}");
-                _note.text = $"Result asset \"{assetId}\" is missing from this build.";
+                _note.text = $"Sonuç görseli \"{assetId}\" bu sürümde bulunamadı.";
                 _image.style.backgroundImage = new StyleBackground((Texture2D)null);
                 _image.style.width = 0;
                 _image.style.height = 0;
@@ -85,10 +85,10 @@ namespace Qaniva.Presentation
             else
             {
                 _note.text = clinicalStatus == "placeholder_replacement_required"
-                    ? "Schematic training placeholder — NOT a verified diagnostic tracing (clinical verification pending)."
+                    ? "Şematik eğitim yer tutucusu — doğrulanmış bir tanısal trase DEĞİLDİR (klinik doğrulama bekleniyor)."
                     : clinicalStatus == "clinician_verified"
                         ? ""
-                        : "Provenance not verified.";
+                        : "Kaynağı doğrulanmamış.";
                 _image.style.backgroundImage = new StyleBackground(_texture);
                 SetZoom(1f);
             }

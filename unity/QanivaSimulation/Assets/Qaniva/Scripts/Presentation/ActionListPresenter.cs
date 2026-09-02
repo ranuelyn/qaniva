@@ -35,6 +35,17 @@ namespace Qaniva.Presentation
             ["disposition"] = "More",
         };
 
+        /// <summary>Display names (Turkish product language). Element NAMES keep the
+        /// English category keys (tab-Examine …) — that is the driver/test contract.</summary>
+        private static readonly Dictionary<string, string> CategoryDisplay = new()
+        {
+            ["Patient"] = "Hasta",
+            ["Examine"] = "Muayene",
+            ["Orders"] = "İstemler",
+            ["Treat"] = "Tedavi",
+            ["More"] = "Diğer",
+        };
+
         private static readonly string[] CategoryOrder = { "Patient", "Examine", "Orders", "Treat", "More" };
 
         private readonly VisualElement _tabs;
@@ -76,15 +87,15 @@ namespace Qaniva.Presentation
         {
             if (string.IsNullOrEmpty(disabledReason))
             {
-                return "Unavailable";
+                return "Kullanılamaz";
             }
             if (disabledReason == "already performed")
             {
-                return "Done";
+                return "Yapıldı";
             }
             if (disabledReason.StartsWith("requires:", StringComparison.Ordinal))
             {
-                return "Not yet available";
+                return "Henüz uygun değil";
             }
             return disabledReason;
         }
@@ -146,7 +157,7 @@ namespace Qaniva.Presentation
             _tabs.Clear();
             foreach (var category in categories)
             {
-                var tab = new Button { name = $"tab-{category}", text = category };
+                var tab = new Button { name = $"tab-{category}", text = CategoryDisplay.TryGetValue(category, out var shown) ? shown : category };
                 tab.AddToClassList("category-tab");
                 if (category == _activeCategory)
                 {

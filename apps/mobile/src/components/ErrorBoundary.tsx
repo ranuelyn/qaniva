@@ -26,7 +26,7 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.error) {
       return (
         <View style={styles.container}>
-          <Text style={styles.title}>Something went wrong</Text>
+          <Text style={styles.title}>Bir şeyler ters gitti</Text>
           <Text style={styles.body}>{this.state.error.message}</Text>
         </View>
       );

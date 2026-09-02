@@ -87,10 +87,14 @@ function Tabs() {
         ),
       })}
     >
-      <Tab.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-      <Tab.Screen name="Cases" component={CasesScreen} options={{ title: 'Cases' }} />
-      <Tab.Screen name="Progress" component={ProgressScreen} options={{ title: 'Progress' }} />
-      <Tab.Screen name="Settings" component={SettingsScreen} options={{ title: 'Settings' }} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ headerShown: false, title: 'Ana Sayfa' }}
+      />
+      <Tab.Screen name="Cases" component={CasesScreen} options={{ title: 'Vakalar' }} />
+      <Tab.Screen name="Progress" component={ProgressScreen} options={{ title: 'İlerleme' }} />
+      <Tab.Screen name="Settings" component={SettingsScreen} options={{ title: 'Ayarlar' }} />
     </Tab.Navigator>
   );
 }
@@ -117,19 +121,19 @@ export function RootNavigator({ initialRouteName }: { initialRouteName: 'Onboard
         <Stack.Screen
           name="CaseDetail"
           component={CaseDetailScreen}
-          options={{ title: 'Briefing' }}
+          options={{ title: 'Vaka Özeti' }}
         />
         <Stack.Screen
           name="Simulation"
           component={SimulationScreen}
           options={{ headerShown: false, gestureEnabled: false }}
         />
-        <Stack.Screen name="Results" component={ResultsScreen} options={{ title: 'Results' }} />
-        <Stack.Screen name="About" component={AboutScreen} options={{ title: 'About Qaniva' }} />
+        <Stack.Screen name="Results" component={ResultsScreen} options={{ title: 'Sonuçlar' }} />
+        <Stack.Screen name="About" component={AboutScreen} options={{ title: 'Qaniva Hakkında' }} />
         <Stack.Screen
           name="Disclaimer"
           component={DisclaimerScreen}
-          options={{ title: 'Educational use' }}
+          options={{ title: 'Eğitim Amaçlı Kullanım' }}
         />
       </Stack.Navigator>
     </NavigationContainer>

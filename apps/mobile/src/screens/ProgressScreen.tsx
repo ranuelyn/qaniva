@@ -22,6 +22,16 @@ import type { TabScreenProps } from '@/navigation/types';
  * Progress: persisted-attempt mastery per case + recent attempts. Deterministic
  * facts only — no streaks, XP or badges.
  */
+const OUTCOME_TR: Record<string, string> = {
+  complete: 'tamamlandı',
+  partial: 'kötüleşme sonrası tamamlandı',
+  deteriorated: 'kötüleşti',
+  discharge: 'taburcu',
+  admit: 'yatış',
+  death: 'kaybedildi',
+  aborted: 'iptal',
+};
+
 export function ProgressScreen({ navigation }: TabScreenProps<'Progress'>) {
   const [progress, setProgress] = useState<CaseProgress[]>([]);
   const [recent, setRecent] = useState<StoredAttempt[]>([]);
@@ -51,8 +61,8 @@ export function ProgressScreen({ navigation }: TabScreenProps<'Progress'>) {
     return (
       <Screen>
         <EmptyState
-          title="You haven't completed a case yet."
-          hint="Play a case from the library — your attempts, scores and clinical timelines will be tracked here."
+          title="Henüz bir vaka tamamlamadın."
+          hint="Kütüphaneden bir vaka oyna — denemelerin, skorların ve klinik zaman çizelgelerin burada izlenir."
         />
       </Screen>
     );
@@ -66,16 +76,16 @@ export function ProgressScreen({ navigation }: TabScreenProps<'Progress'>) {
             <Numeric>
               {completed}/{CASE_CATALOG.length}
             </Numeric>
-            <Caption>cases completed</Caption>
+            <Caption>tamamlanan vaka</Caption>
           </View>
           <View style={styles.metricDivider} />
           <View style={styles.metric}>
             <Numeric>{totalAttempts}</Numeric>
-            <Caption>total attempts</Caption>
+            <Caption>toplam deneme</Caption>
           </View>
         </View>
 
-        <SectionHeader>By case</SectionHeader>
+        <SectionHeader>Vakaya göre</SectionHeader>
         <View style={styles.group}>
           {attempted.map((p, index) => {
             const c = catalogCase(p.caseId);
@@ -97,12 +107,12 @@ export function ProgressScreen({ navigation }: TabScreenProps<'Progress'>) {
                   <View style={styles.rowCopy}>
                     <Text style={styles.rowTitle}>{c.manifest.title}</Text>
                     <Body muted>
-                      {p.completed ? 'Completed' : 'Attempted'} · best {p.bestScore} pts ·{' '}
-                      {p.attempts} {p.attempts === 1 ? 'attempt' : 'attempts'}
+                      {p.completed ? 'Tamamlandı' : 'Denendi'} · en iyi {p.bestScore} puan ·{' '}
+                      {p.attempts} deneme
                     </Body>
                     {p.lastAttemptedAt ? (
                       <Caption>
-                        Last played {new Date(p.lastAttemptedAt).toLocaleDateString()}
+                        Son oynama {new Date(p.lastAttemptedAt).toLocaleDateString('tr-TR')}
                       </Caption>
                     ) : null}
                   </View>
@@ -113,7 +123,7 @@ export function ProgressScreen({ navigation }: TabScreenProps<'Progress'>) {
           })}
         </View>
 
-        <SectionHeader>Recent attempts</SectionHeader>
+        <SectionHeader>Son denemeler</SectionHeader>
         <View style={styles.recentList}>
           {recent.map((a, index) => {
             const c = catalogCase(a.summary.caseId);
@@ -122,13 +132,14 @@ export function ProgressScreen({ navigation }: TabScreenProps<'Progress'>) {
                 {index > 0 ? <Divider /> : null}
                 <View style={styles.recentRow}>
                   <View style={styles.recentScore}>
-                    <Eyebrow>Score</Eyebrow>
+                    <Eyebrow>Puan</Eyebrow>
                     <Text style={styles.rowTitle}>{a.summary.totalScore}</Text>
                   </View>
                   <View style={styles.rowCopy}>
                     <Body>{c?.manifest.title ?? a.summary.caseId}</Body>
                     <Body muted>
-                      {a.summary.terminalState} · {new Date(a.summary.completedAt).toLocaleString()}
+                      {OUTCOME_TR[a.summary.terminalState] ?? a.summary.terminalState} ·{' '}
+                      {new Date(a.summary.completedAt).toLocaleString('tr-TR')}
                     </Body>
                   </View>
                 </View>

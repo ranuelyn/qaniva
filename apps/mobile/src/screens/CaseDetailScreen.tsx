@@ -26,6 +26,16 @@ import type { ScreenProps } from '@/navigation/types';
  * data (`metadata.briefing` in case.json via the catalog) — no case text lives
  * in app code.
  */
+const OUTCOME_TR: Record<string, string> = {
+  complete: 'tamamlandı',
+  partial: 'kötüleşme sonrası tamamlandı',
+  deteriorated: 'kötüleşti',
+  discharge: 'taburcu',
+  admit: 'yatış',
+  death: 'kaybedildi',
+  aborted: 'iptal',
+};
+
 export function CaseDetailScreen({ navigation, route }: ScreenProps<'CaseDetail'>) {
   const { caseId, caseVersion, title: routeTitle } = route.params;
   const entry = catalogCase(caseId);
@@ -34,7 +44,7 @@ export function CaseDetailScreen({ navigation, route }: ScreenProps<'CaseDetail'
   const briefing = entry?.briefing ?? DEFAULT_BRIEFING;
   const [history, setHistory] = useState<StoredAttempt[]>([]);
   const authoredTaskLines = briefing.filter(
-    (line) => line.startsWith('Your task:') || line.startsWith('This is an educational'),
+    (line) => line.startsWith('Göreviniz:') || line.startsWith('Bu, kurgusal'),
   );
   const taskLines = authoredTaskLines.length > 0 ? authoredTaskLines : briefing;
   const contextLines =
@@ -75,17 +85,17 @@ export function CaseDetailScreen({ navigation, route }: ScreenProps<'CaseDetail'
         <Title>{title}</Title>
         {entry ? (
           <Caption>
-            {specialtyLabel(entry.manifest.specialty)} · estimated ~
-            {entry.manifest.estimatedMinutes} min session
+            {specialtyLabel(entry.manifest.specialty)} · tahmini ~{entry.manifest.estimatedMinutes}{' '}
+            dk
           </Caption>
         ) : null}
 
-        {contextLines.length > 0 ? <SectionHeader>Case information</SectionHeader> : null}
+        {contextLines.length > 0 ? <SectionHeader>Vaka bilgileri</SectionHeader> : null}
         {contextLines.length > 0 ? (
           <Card>
             {contextLines.map((line, i) => {
               const separator = line.indexOf(':');
-              const label = separator > 0 ? line.slice(0, separator) : 'Context';
+              const label = separator > 0 ? line.slice(0, separator) : 'Bağlam';
               const detail = separator > 0 ? line.slice(separator + 1).trim() : line;
               return (
                 <View key={line}>
@@ -100,7 +110,7 @@ export function CaseDetailScreen({ navigation, route }: ScreenProps<'CaseDetail'
           </Card>
         ) : null}
 
-        <SectionHeader>Your task</SectionHeader>
+        <SectionHeader>Göreviniz</SectionHeader>
         <View style={styles.taskBlock}>
           {taskLines.map((line) => {
             const separator = line.indexOf(':');
@@ -111,12 +121,13 @@ export function CaseDetailScreen({ navigation, route }: ScreenProps<'CaseDetail'
 
         {history.length > 0 && (
           <>
-            <SectionHeader>Your recent attempts</SectionHeader>
+            <SectionHeader>Son denemelerin</SectionHeader>
             {history.map((a) => (
               <View key={a.summary.attemptId} style={styles.attemptRow}>
                 <Body muted>
-                  {a.summary.totalScore} pts · {a.summary.terminalState} ·{' '}
-                  {new Date(a.summary.completedAt).toLocaleString()}
+                  {a.summary.totalScore} puan ·{' '}
+                  {OUTCOME_TR[a.summary.terminalState] ?? a.summary.terminalState} ·{' '}
+                  {new Date(a.summary.completedAt).toLocaleString('tr-TR')}
                 </Body>
               </View>
             ))}
@@ -124,7 +135,7 @@ export function CaseDetailScreen({ navigation, route }: ScreenProps<'CaseDetail'
         )}
       </ScrollView>
       <PrimaryButton
-        label={history.length > 0 ? 'Play again' : 'Enter simulation'}
+        label={history.length > 0 ? 'Tekrar oyna' : 'Simülasyona gir'}
         onPress={begin}
       />
     </Screen>

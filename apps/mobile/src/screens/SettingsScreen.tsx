@@ -20,19 +20,17 @@ export function SettingsScreen({ navigation }: TabScreenProps<'Settings'>) {
 
   function confirmReset() {
     Alert.alert(
-      'Reset local progress?',
-      'This deletes all locally stored attempts and scores on this device. It cannot be undone.',
+      'Yerel ilerleme sıfırlansın mı?',
+      'Bu cihazda saklanan tüm denemeler ve skorlar silinir. Geri alınamaz.',
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: 'Vazgeç', style: 'cancel' },
         {
-          text: 'Reset',
+          text: 'Sıfırla',
           style: 'destructive',
           onPress: async () => {
             const result = await attemptStore.clearAll();
             setResetNote(
-              result.ok
-                ? 'Local progress was reset.'
-                : 'Progress could not be reset on this device.',
+              result.ok ? 'Yerel ilerleme sıfırlandı.' : 'İlerleme bu cihazda sıfırlanamadı.',
             );
           },
         },
@@ -45,26 +43,35 @@ export function SettingsScreen({ navigation }: TabScreenProps<'Settings'>) {
   return (
     <Screen>
       <ScrollView contentContainerStyle={styles.content}>
-        <SectionHeader>Learning</SectionHeader>
+        <SectionHeader>Öğrenme</SectionHeader>
         <Group>
-          <SettingsRow grouped label="Difficulty" detail="Standard (MVP)" />
+          <SettingsRow grouped label="Zorluk" detail="Standart (MVP)" />
           <Divider inset />
-          <SettingsRow grouped label="Language" detail="English" />
+          <SettingsRow grouped label="Dil" detail="Türkçe" />
         </Group>
 
-        <SectionHeader>Data</SectionHeader>
+        <SectionHeader>Veri</SectionHeader>
         <Group>
-          <SettingsRow grouped label="Reset local progress" onPress={confirmReset} destructive />
+          <SettingsRow
+            grouped
+            label="Yerel ilerlemeyi sıfırla"
+            onPress={confirmReset}
+            destructive
+          />
         </Group>
         {resetNote ? <Caption>{resetNote}</Caption> : null}
 
-        <SectionHeader>About</SectionHeader>
+        <SectionHeader>Hakkında</SectionHeader>
         <Group>
-          <SettingsRow grouped label="About Qaniva" onPress={() => navigation.navigate('About')} />
+          <SettingsRow
+            grouped
+            label="Qaniva Hakkında"
+            onPress={() => navigation.navigate('About')}
+          />
           <Divider inset />
           <SettingsRow
             grouped
-            label="Educational use & clinical status"
+            label="Eğitim amaçlı kullanım ve klinik durum"
             onPress={() => navigation.navigate('Disclaimer')}
           />
         </Group>

@@ -15,35 +15,35 @@ export function DisclaimerScreen(_props: ScreenProps<'Disclaimer'>) {
     <Screen>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.primaryNotice}>
-          <Eyebrow>Educational simulation only</Eyebrow>
+          <Eyebrow>Yalnızca eğitim amaçlı simülasyon</Eyebrow>
           <Body>
-            Qaniva is an educational simulation. It is not intended for the diagnosis or treatment
-            of real patients, and it must not be used to guide real patient care.
+            Qaniva bir eğitim simülasyonudur. Gerçek hastaların tanı veya tedavisi için
+            tasarlanmamıştır ve gerçek hasta bakımına yön vermek için kullanılmamalıdır.
           </Body>
         </View>
 
         <View style={styles.copyBlock}>
           <Body>
-            Nothing in Qaniva replaces clinical judgment, supervision, or your institution's
-            protocols and guidelines. Where Qaniva and your local protocol differ, follow your
-            protocol.
+            Qaniva&apos;daki hiçbir şey klinik muhakemenin, süpervizyonun ya da kurumunuzun protokol
+            ve kılavuzlarının yerini almaz. Qaniva ile yerel protokolünüz farklıysa protokolünüzü
+            izleyin.
           </Body>
         </View>
 
-        <SectionHeader>Clinical content status</SectionHeader>
+        <SectionHeader>Klinik içeriğin durumu</SectionHeader>
         <View style={styles.copyBlock}>
           <Body>
-            Cases in this MVP build are fictional, evidence-referenced teaching scenarios. Their
-            clinical content is currently awaiting formal physician review — it should be treated as
-            draft educational material, not validated clinical guidance.
+            Bu MVP sürümündeki vakalar kurgusal, kanıta referanslı öğretim senaryolarıdır. Klinik
+            içerikleri şu anda resmî hekim incelemesini beklemektedir — doğrulanmış klinik rehber
+            değil, taslak eğitim materyali olarak ele alınmalıdır.
           </Body>
         </View>
 
-        <SectionHeader>Your data</SectionHeader>
+        <SectionHeader>Verileriniz</SectionHeader>
         <View style={styles.copyBlock}>
           <Body>
-            All patients in Qaniva are fictional. Do not enter real patient data anywhere in the
-            app. Your attempts and scores are stored only on this device in the MVP.
+            Qaniva&apos;daki tüm hastalar kurgusaldır. Uygulamanın hiçbir yerine gerçek hasta verisi
+            girmeyin. MVP&apos;de denemeleriniz ve skorlarınız yalnızca bu cihazda saklanır.
           </Body>
         </View>
       </ScrollView>

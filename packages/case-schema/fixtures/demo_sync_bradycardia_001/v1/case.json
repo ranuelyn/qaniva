@@ -3,11 +3,11 @@
   "id": "demo_sync_bradycardia_001",
   "version": 1,
   "metadata": {
-    "title": "FICTIONAL DEMO — Adult with a slow pulse and dizziness",
-    "chiefComplaint": "Feeling dizzy and weak for the last hour",
+    "title": "KURGUSAL DEMO — Yavaş nabız ve baş dönmesi olan erişkin",
+    "chiefComplaint": "Son bir saattir baş dönmesi ve halsizlik",
     "briefing": [
-      "You will be taken to the full-screen 3D simulation. Assess the patient, order and treat, then choose a disposition.",
-      "This fictional demo case exercises the engine end to end. No diagnosis is shown up front."
+      "Tam ekran 3B simülasyona alınacaksınız. Hastayı değerlendirin, tetkik isteyin ve tedavi edin, sonra bir yatış/sevk kararı verin.",
+      "Bu kurgusal demo vakası motoru uçtan uca çalıştırır. Tanı önceden gösterilmez."
     ],
     "specialty": "emergency_medicine",
     "estimatedMinutes": 8,
@@ -20,9 +20,9 @@
     "fictional": true
   },
   "learningObjectives": [
-    "Practise the engine's examine / order / treat / disposition loop",
-    "Experience a timed deterioration rule and its debrief explanation",
-    "See how a contraindicated action is scored as harmful"
+    "Motorun muayene / istem / tedavi / karar döngüsünü çalıştırma",
+    "Zamanlı bir kötüleşme kuralını ve açıklamasını deneyimleme",
+    "Kontrendike bir eylemin zararlı olarak nasıl puanlandığını görme"
   ],
   "presentationProfile": {
     "roomKey": "ed_resus_v1",
@@ -38,8 +38,11 @@
     "ageYears": 58,
     "sex": "male",
     "weightKg": 82,
-    "persona": "anxious but cooperative, answers briefly",
-    "backgroundFacts": ["Walked into triage, then felt too weak to stand", "No chest pain reported"]
+    "persona": "endişeli ama uyumlu, kısa yanıt veriyor",
+    "backgroundFacts": [
+      "Triyaja yürüyerek geldi, sonra ayakta duramayacak kadar halsizleşti",
+      "Göğüs ağrısı bildirmiyor"
+    ]
   },
   "initialState": {
     "vitals": {
@@ -62,24 +65,24 @@
     {
       "id": "onset_1h",
       "disclosure": "on_ask",
-      "text": "The patient says the symptoms started about an hour ago."
+      "text": "Hasta belirtilerin yaklaşık bir saat önce başladığını söylüyor."
     },
     {
       "id": "no_med_allergies",
       "disclosure": "on_ask",
-      "text": "The patient reports no known medication allergies."
+      "text": "Hasta bilinen ilaç alerjisi olmadığını bildiriyor."
     },
     {
       "id": "ecg_shows_brady",
       "disclosure": "on_order_result",
-      "text": "The ECG shows a slow rate with no acute ischemic changes (fictional demo content)."
+      "text": "EKG akut iskemik değişiklik olmadan yavaş bir hız gösteriyor (kurgusal demo içeriği)."
     }
   ],
   "availableActions": [
     {
       "id": "attach_monitor",
       "type": "examine",
-      "label": "Attach cardiac monitor",
+      "label": "Kardiyak monitör bağla",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -97,7 +100,7 @@
     {
       "id": "patient_history",
       "type": "communication",
-      "label": "Take a focused history",
+      "label": "Odaklanmış öykü al",
       "timeCostSec": 30,
       "visibility": "always",
       "visibleWhen": null,
@@ -119,7 +122,7 @@
     {
       "id": "ecg_12lead",
       "type": "order",
-      "label": "Order a 12-lead ECG",
+      "label": "12 derivasyonlu EKG iste",
       "timeCostSec": 60,
       "visibility": "always",
       "visibleWhen": null,
@@ -141,7 +144,7 @@
     {
       "id": "iv_access",
       "type": "procedure",
-      "label": "Obtain IV access",
+      "label": "Damar yolu aç",
       "timeCostSec": 60,
       "visibility": "always",
       "visibleWhen": null,
@@ -159,7 +162,7 @@
     {
       "id": "give_atropine",
       "type": "medication",
-      "label": "Give first-line demo drug",
+      "label": "Birinci basamak demo ilacını ver",
       "timeCostSec": 30,
       "visibility": "always",
       "visibleWhen": null,
@@ -200,7 +203,7 @@
     {
       "id": "transcutaneous_pacing",
       "type": "procedure",
-      "label": "Start transcutaneous pacing",
+      "label": "Transkütan pacing başlat",
       "timeCostSec": 90,
       "visibility": "when",
       "visibleWhen": "flag('atropine_given') || simTimeSec >= 180",
@@ -233,7 +236,7 @@
     {
       "id": "give_demo_contraindicated_drug",
       "type": "medication",
-      "label": "Give demo contraindicated drug",
+      "label": "Kontrendike demo ilacını ver",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -261,7 +264,7 @@
     {
       "id": "consult_cardiology",
       "type": "consult",
-      "label": "Consult cardiology",
+      "label": "Kardiyoloji konsültasyonu iste",
       "timeCostSec": 30,
       "visibility": "always",
       "visibleWhen": null,
@@ -279,7 +282,7 @@
     {
       "id": "disposition_ccu",
       "type": "disposition",
-      "label": "Admit to coronary care unit",
+      "label": "Koroner yoğun bakıma yatır",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -365,7 +368,7 @@
   "scoringCriteria": [
     {
       "id": "time_to_monitor",
-      "label": "Attached a cardiac monitor early",
+      "label": "Kardiyak monitör erken bağlandı",
       "criticality": "minor",
       "acceptedActions": ["attach_monitor"],
       "timingWindow": {
@@ -381,7 +384,7 @@
     },
     {
       "id": "time_to_ecg",
-      "label": "Obtained a 12-lead ECG promptly",
+      "label": "12 derivasyonlu EKG hızla çekildi",
       "criticality": "major",
       "acceptedActions": ["ecg_12lead"],
       "timingWindow": {
@@ -397,7 +400,7 @@
     },
     {
       "id": "give_first_line",
-      "label": "Gave the first-line demo drug",
+      "label": "Birinci basamak demo ilacı verildi",
       "criticality": "critical",
       "acceptedActions": ["give_atropine"],
       "stateConstraints": [],
@@ -409,7 +412,7 @@
     },
     {
       "id": "rescue_pacing",
-      "label": "Escalated to pacing when appropriate",
+      "label": "Uygun zamanda pacinge geçildi",
       "criticality": "major",
       "acceptedActions": ["transcutaneous_pacing"],
       "stateConstraints": [],
@@ -421,7 +424,7 @@
     },
     {
       "id": "consult_appropriately",
-      "label": "Involved cardiology",
+      "label": "Kardiyoloji dahil edildi",
       "criticality": "minor",
       "acceptedActions": ["consult_cardiology"],
       "stateConstraints": [],
@@ -433,7 +436,7 @@
     },
     {
       "id": "appropriate_disposition",
-      "label": "Chose an appropriate disposition",
+      "label": "Uygun yatış kararı verildi",
       "criticality": "major",
       "acceptedActions": ["disposition_ccu"],
       "stateConstraints": [],
@@ -445,7 +448,7 @@
     },
     {
       "id": "avoid_contraindicated",
-      "label": "Avoided the contraindicated demo drug",
+      "label": "Kontrendike demo ilacından kaçınıldı",
       "criticality": "critical",
       "acceptedActions": ["give_demo_contraindicated_drug"],
       "stateConstraints": [],
@@ -461,31 +464,31 @@
       "id": "complete",
       "when": "flag('disposition_selected')",
       "outcome": "complete",
-      "label": "Case complete — patient dispositioned"
+      "label": "Vaka tamamlandı — hasta için karar verildi"
     },
     {
       "id": "arrest_death",
       "when": "flag('arrested')",
       "outcome": "death",
-      "label": "The demo patient deteriorated to arrest"
+      "label": "Demo hasta arreste kadar kötüleşti"
     }
   ],
   "debriefMetadata": {
-    "summary": "A fictional teaching scenario used to exercise the deterministic engine end to end.",
+    "summary": "Deterministik motoru uçtan uca çalıştırmak için kullanılan kurgusal bir eğitim senaryosu.",
     "keyTeachingPoints": [
-      "Recognise instability early and monitor",
-      "Treat before the timed deterioration rule fires at 5 minutes",
-      "Escalate to pacing if the first-line drug is not enough"
+      "İnstabiliteyi erken tanıyın ve monitörize edin",
+      "Zamanlı kötüleşme kuralı 5. dakikada tetiklenmeden önce tedavi edin",
+      "Birinci basamak ilaç yetersizse pacinge geçin"
     ],
     "commonErrors": [
-      "Spending too long on history before treating",
-      "Giving the contraindicated demo drug",
-      "Choosing disposition before stabilising the patient"
+      "Tedavi etmeden önce öyküye çok uzun zaman ayırmak",
+      "Kontrendike demo ilacını vermek",
+      "Hastayı stabilize etmeden karar vermek"
     ]
   },
   "references": [
     {
-      "label": "Demo content notice",
+      "label": "Demo içerik bildirimi",
       "citation": "Internal Qaniva foundation demo case. Not derived from any clinical guideline and not clinically reviewed."
     }
   ]

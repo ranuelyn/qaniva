@@ -17,16 +17,16 @@ const E2E_MODE = Boolean(process.env.EXPO_PUBLIC_E2E_AUTOSTART);
 /** Friendly wording per bridge failure code; the raw detail stays behind a disclosure. */
 const FAILURE_MESSAGES: Record<string, { title: string; body: string }> = {
   CASE_LOAD_FAILED: {
-    title: "This case isn't available right now",
-    body: 'The case content could not be loaded on this device. Going back and reopening it usually resolves this.',
+    title: 'Bu vaka şu anda kullanılamıyor',
+    body: 'Vaka içeriği bu cihaza yüklenemedi. Geri dönüp tekrar açmak genellikle sorunu çözer.',
   },
   BRIDGE_PROTOCOL_ERROR: {
-    title: 'The simulation hit a problem',
-    body: 'The simulation runtime reported a communication problem. Please leave the case and try again.',
+    title: 'Simülasyonda bir sorun oluştu',
+    body: 'Simülasyon çalışma ortamı bir iletişim sorunu bildirdi. Lütfen vakadan çıkıp tekrar deneyin.',
   },
   UNKNOWN: {
-    title: 'The simulation could not start',
-    body: 'Something went wrong while preparing this case. Please go back and try again.',
+    title: 'Simülasyon başlatılamadı',
+    body: 'Bu vaka hazırlanırken bir sorun oluştu. Lütfen geri dönüp tekrar deneyin.',
   },
 };
 
@@ -109,7 +109,7 @@ export function SimulationScreen({ navigation, route }: ScreenProps<'Simulation'
               style={styles.detailsToggle}
               onPress={() => setShowDetails((v) => !v)}
             >
-              <Caption>{showDetails ? 'Hide technical details' : 'Technical details'}</Caption>
+              <Caption>{showDetails ? 'Teknik ayrıntıları gizle' : 'Teknik ayrıntılar'}</Caption>
             </Pressable>
             {showDetails ? (
               <View style={styles.detailsBlock}>
@@ -117,22 +117,22 @@ export function SimulationScreen({ navigation, route }: ScreenProps<'Simulation'
               </View>
             ) : null}
           </View>
-          <PrimaryButton label="Back to cases" onPress={() => navigation.popToTop()} />
+          <PrimaryButton label="Vakalara dön" onPress={() => navigation.popToTop()} />
         </>
       ) : (
         <View style={styles.center}>
           <ActivityIndicator color={colors.brand} />
           <Body muted>
-            {sim.phase === 'starting' && 'Preparing the simulation…'}
-            {sim.phase === 'ready' && 'Entering the simulation…'}
-            {sim.phase === 'idle' && 'Preparing the simulation…'}
-            {sim.phase === 'exited' && 'Leaving the simulation…'}
+            {sim.phase === 'starting' && 'Simülasyon hazırlanıyor…'}
+            {sim.phase === 'ready' && 'Simülasyona giriliyor…'}
+            {sim.phase === 'idle' && 'Simülasyon hazırlanıyor…'}
+            {sim.phase === 'exited' && 'Simülasyondan çıkılıyor…'}
           </Body>
           <Caption>{title}</Caption>
           {sim.transportKind === 'fake' && (
             <Body muted>
-              ⚠ Development build without the simulation runtime — results are simulated
-              placeholders.
+              ⚠ Simülasyon çalışma ortamı olmayan geliştirme sürümü — sonuçlar simüle edilmiş yer
+              tutuculardır.
             </Body>
           )}
         </View>

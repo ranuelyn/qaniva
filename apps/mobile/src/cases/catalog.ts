@@ -40,7 +40,7 @@ export interface CatalogCase {
 }
 
 export const DEFAULT_BRIEFING = [
-  'You will be taken to the full-screen 3D simulation. Assess the patient, order and treat, then choose a disposition. No diagnosis is shown up front.',
+  'Tam ekran 3B simülasyona alınacaksınız. Hastayı değerlendirin, tetkik isteyin ve tedavi edin, sonra bir karar verin. Tanı önceden gösterilmez.',
 ];
 
 export const CASE_CATALOG: CatalogCase[] = BUNDLED.map((c) => ({
@@ -62,6 +62,14 @@ export function catalogCase(caseId: string): CatalogCase | undefined {
 }
 
 /** Human wording for the specialty slug (presentation only). */
+const SPECIALTY_TR: Record<string, string> = {
+  emergency_medicine: 'Acil Tıp',
+  cardiology: 'Kardiyoloji',
+  internal_medicine: 'İç Hastalıkları',
+  pediatrics: 'Pediatri',
+  anesthesiology: 'Anesteziyoloji',
+};
+
 export function specialtyLabel(slug: string): string {
-  return slug.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
+  return SPECIALTY_TR[slug] ?? slug.replace(/_/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase());
 }

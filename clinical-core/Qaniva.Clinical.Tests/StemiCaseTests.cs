@@ -194,7 +194,7 @@ public class StemiCaseTests
         var sim = NewSim();
         var result = sim.ApplyAction("ecg_12lead");
         Assert.True(result.Accepted);
-        Assert.Contains("12-lead ECG acquired", result.ResultText);
+        Assert.Contains("12 derivasyonlu EKG çekildi", result.ResultText);
         Assert.Equal("ecg_stemi_anterior_v1", result.ResultAssetId);
         Assert.Contains(result.NewlyDisclosedFacts, f => f.Id == "ecg_tracing");
     }

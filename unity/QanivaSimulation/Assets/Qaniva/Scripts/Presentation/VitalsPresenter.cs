@@ -30,12 +30,50 @@ namespace Qaniva.Presentation
             _status = root.Q<Label>("patient-status");
         }
 
-        /// <summary>"sinus_rhythm" → "Sinus rhythm"; "poor_perfusion" → "Poor perfusion".</summary>
+        /// <summary>Turkish display copy for the engine's state identifiers (schema
+        /// enums + case rhythm ids). Unknown identifiers fall back to a readable
+        /// "snake_case → Sentence case" form so nothing is ever hidden.</summary>
+        private static readonly System.Collections.Generic.Dictionary<string, string> Display = new()
+        {
+            ["sinus_rhythm"] = "Sinüs ritmi",
+            ["sinus_tachycardia"] = "Sinüs taşikardisi",
+            ["sinus_bradycardia"] = "Sinüs bradikardisi",
+            ["demo_bradycardia"] = "Bradikardi (demo)",
+            ["ventricular_fibrillation"] = "Ventriküler fibrilasyon",
+            ["asystole"] = "Asistoli",
+            ["normal"] = "Dolaşım normal",
+            ["poor_perfusion"] = "Zayıf perfüzyon",
+            ["shock"] = "Şok",
+            ["arrest"] = "Arrest",
+            ["alert"] = "Uyanık",
+            ["voice"] = "Sese yanıt veriyor",
+            ["pain"] = "Ağrıya yanıt veriyor",
+            ["unresponsive"] = "Yanıtsız",
+            ["patent"] = "Hava yolu açık",
+            ["at_risk"] = "Hava yolu riskli",
+            ["obstructed"] = "Hava yolu tıkalı",
+            ["spontaneous"] = "Spontan solunum",
+            ["labored"] = "Zorlu solunum",
+            ["assisted"] = "Destekli solunum",
+            ["apneic"] = "Apneik",
+            ["correct"] = "Doğru",
+            ["delayed"] = "Gecikmiş",
+            ["missed"] = "Kaçırıldı",
+            ["harmful"] = "Zararlı",
+            ["neutral"] = "Nötr",
+            ["unnecessary"] = "Gereksiz",
+        };
+
+        /// <summary>"sinus_rhythm" → "Sinüs ritmi" (known) or "Sinus rhythm" (fallback).</summary>
         public static string Humanize(string identifier)
         {
             if (string.IsNullOrEmpty(identifier))
             {
                 return "";
+            }
+            if (Display.TryGetValue(identifier, out var shown))
+            {
+                return shown;
             }
             var sb = new StringBuilder(identifier.Length);
             foreach (char c in identifier)

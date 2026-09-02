@@ -35,6 +35,16 @@ const E2E_MODE =
 const E2E_MAX_RUNS = 2;
 const E2E_BRIEFING_DWELL_MS = 4000;
 
+const OUTCOME_TR: Record<string, string> = {
+  complete: 'tamamlandı',
+  partial: 'kötüleşme sonrası tamamlandı',
+  deteriorated: 'kötüleşti',
+  discharge: 'taburcu',
+  admit: 'yatış',
+  death: 'kaybedildi',
+  aborted: 'iptal',
+};
+
 export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
   const insets = useSafeAreaInsets();
   const [latest, setLatest] = useState<StoredAttempt | null>(null);
@@ -103,10 +113,10 @@ export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
     >
       <View style={styles.header}>
         <Wordmark />
-        <Caption>Clinical decision simulation</Caption>
+        <Caption>Klinik karar simülasyonu</Caption>
       </View>
 
-      <SectionHeader>Continue</SectionHeader>
+      <SectionHeader>Devam et</SectionHeader>
       {latest && latestCase ? (
         <Card
           onPress={() =>
@@ -119,10 +129,11 @@ export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
         >
           <CardTitle>{latestCase.manifest.title}</CardTitle>
           <Body muted>
-            Last attempt: {latest.summary.totalScore} pts · {latest.summary.terminalState}
+            Son deneme: {latest.summary.totalScore} puan ·{' '}
+            {OUTCOME_TR[latest.summary.terminalState] ?? latest.summary.terminalState}
           </Body>
           <View style={styles.continueRow}>
-            <Text style={styles.continueCta}>Replay this case ›</Text>
+            <Text style={styles.continueCta}>Bu vakayı tekrar oyna ›</Text>
           </View>
         </Card>
       ) : (
@@ -135,22 +146,22 @@ export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
             });
           }}
         >
-          <Caption>YOUR FIRST SIMULATION</Caption>
+          <Caption>İLK SİMÜLASYONUN</Caption>
           <CardTitle>{firstCase.manifest.title}</CardTitle>
           <Body muted>
-            Start with a focused emergency case and review every decision afterward.
+            Odaklanmış bir acil vakasıyla başla; ardından her kararını gözden geçir.
           </Body>
-          <Text style={styles.continueCta}>Start first case ›</Text>
+          <Text style={styles.continueCta}>İlk vakayı başlat ›</Text>
         </Card>
       )}
 
       <View style={styles.sectionRow}>
-        <SectionHeader>Cases</SectionHeader>
+        <SectionHeader>Vakalar</SectionHeader>
         <Text
           style={styles.sectionLink}
           onPress={() => navigation.navigate('Tabs', { screen: 'Cases' })}
         >
-          View all ›
+          Tümünü gör ›
         </Text>
       </View>
       {CASE_CATALOG.slice(0, 2).map((c, index) => {
@@ -176,20 +187,22 @@ export function HomeScreen({ navigation }: TabScreenProps<'Home'>) {
         );
       })}
 
-      <SectionHeader>Your progress</SectionHeader>
+      <SectionHeader>İlerlemen</SectionHeader>
       {totalAttempts > 0 ? (
         <Card onPress={() => navigation.navigate('Tabs', { screen: 'Progress' })}>
           <Body>
-            {completedCount} of {CASE_CATALOG.length} cases completed · {totalAttempts}{' '}
-            {totalAttempts === 1 ? 'attempt' : 'attempts'}
+            {CASE_CATALOG.length} vakanın {completedCount} tanesi tamamlandı · {totalAttempts}{' '}
+            {'deneme'}
           </Body>
-          <Body muted>See your attempt history and best scores ›</Body>
+          <Body muted>Deneme geçmişini ve en iyi skorlarını gör ›</Body>
         </Card>
       ) : (
-        <Body muted>Your scores and clinical timelines will appear after your first case.</Body>
+        <Body muted>
+          Skorların ve klinik zaman çizelgelerin ilk vakandan sonra burada görünecek.
+        </Body>
       )}
       <SecondaryButton
-        label="Educational use & clinical status"
+        label="Eğitim amaçlı kullanım ve klinik durum"
         onPress={() => navigation.navigate('Disclaimer')}
       />
     </ScrollView>

@@ -30,13 +30,34 @@ const E2E_MODE = Boolean(process.env.EXPO_PUBLIC_E2E_AUTOSTART);
  * separately from recommended ones.
  */
 const OUTCOME_LABELS: Record<string, string> = {
-  complete: 'Case complete',
-  partial: 'Completed — after avoidable deterioration',
-  deteriorated: 'The patient deteriorated before definitive care',
-  discharge: 'Ended by discharge',
-  admit: 'Completed — patient admitted',
-  death: 'The patient died',
-  aborted: 'Attempt aborted',
+  complete: 'Vaka tamamlandı',
+  partial: 'Tamamlandı — önlenebilir kötüleşmeden sonra',
+  deteriorated: 'Hasta kesin tedaviden önce kötüleşti',
+  discharge: 'Taburculukla sonlandı',
+  admit: 'Tamamlandı — hasta yatırıldı',
+  death: 'Hasta kaybedildi',
+  aborted: 'Deneme iptal edildi',
+};
+
+const SCORE_DOMAIN_TR: Record<string, string> = {
+  critical: 'Kritik',
+  timing: 'Zamanlama',
+  treatment: 'Tedavi',
+  disposition: 'Karar',
+  efficiency: 'Verimlilik',
+};
+const CLASSIFICATION_TR: Record<string, string> = {
+  correct: 'Doğru',
+  delayed: 'Gecikmiş',
+  missed: 'Kaçırıldı',
+  harmful: 'Zararlı',
+  neutral: 'Nötr',
+  unnecessary: 'Gereksiz',
+};
+const CRITICALITY_TR: Record<string, string> = {
+  critical: 'kritik',
+  major: 'önemli',
+  minor: 'ikincil',
 };
 
 function clock(sec: number): string {
@@ -50,7 +71,7 @@ function clock(sec: number): string {
 function durationMin(summary: AttemptSummary): string {
   const ms = Date.parse(summary.completedAt) - Date.parse(summary.startedAt);
   if (!Number.isFinite(ms) || ms <= 0) return '';
-  return `${Math.max(1, Math.round(ms / 60000))} min`;
+  return `${Math.max(1, Math.round(ms / 60000))} dk`;
 }
 
 function criterionColor(c: CriterionResult): string {
@@ -61,12 +82,12 @@ function criterionColor(c: CriterionResult): string {
 }
 
 function criterionStatus(c: CriterionResult): string {
-  if (c.classification === 'missed') return `Missed · 0/${c.maxPoints} pts`;
+  if (c.classification === 'missed') return `Kaçırıldı · 0/${c.maxPoints} puan`;
   if (c.classification === 'delayed') {
-    return `Delayed ${clock(c.creditedAtSec)} · ${c.awardedPoints}/${c.maxPoints} pts`;
+    return `Gecikmiş ${clock(c.creditedAtSec)} · ${c.awardedPoints}/${c.maxPoints} puan`;
   }
-  if (c.classification === 'harmful') return `${c.awardedPoints} pts`;
-  return `On time ${clock(c.creditedAtSec)} · ${c.awardedPoints}/${c.maxPoints} pts`;
+  if (c.classification === 'harmful') return `${c.awardedPoints} puan`;
+  return `Zamanında ${clock(c.creditedAtSec)} · ${c.awardedPoints}/${c.maxPoints} puan`;
 }
 
 /**
@@ -114,7 +135,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
     analytics.track({ event: 'debrief_viewed', caseId, attemptId: summary.attemptId });
     let active = true;
     attemptStore.save(summary).then((r) => {
-      if (active && !r.ok) setSaveNote('Note: this attempt could not be saved on this device.');
+      if (active && !r.ok) setSaveNote('Not: bu deneme bu cihaza kaydedilemedi.');
     });
     return () => {
       active = false;
@@ -171,13 +192,13 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
   return (
     <Screen>
-      <Eyebrow>Deterministic debrief</Eyebrow>
+      <Eyebrow>Deterministik değerlendirme</Eyebrow>
       <Body muted>{title}</Body>
       <ScrollView ref={scrollRef} contentContainerStyle={styles.content}>
         <View style={styles.hero}>
           <View style={styles.heroTop}>
             <View style={styles.heroCopy}>
-              <Eyebrow>Outcome</Eyebrow>
+              <Eyebrow>Sonuç</Eyebrow>
               <Text style={styles.outcome}>
                 {OUTCOME_LABELS[summary.terminalState] ?? summary.terminalState}
               </Text>
@@ -188,24 +209,24 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
             {Object.entries(summary.scoreBreakdown).map(([label, value]) => (
               <View key={label} style={styles.scoreItem}>
                 <Text style={styles.scoreValue}>{value}</Text>
-                <Text style={styles.scoreLabel}>{label}</Text>
+                <Text style={styles.scoreLabel}>{SCORE_DOMAIN_TR[label] ?? label}</Text>
               </View>
             ))}
           </View>
-          {durationMin(summary) ? <Caption>Attempt time · {durationMin(summary)}</Caption> : null}
+          {durationMin(summary) ? <Caption>Deneme süresi · {durationMin(summary)}</Caption> : null}
           {saveNote ? <Body muted>{saveNote}</Body> : null}
         </View>
 
         {summary.debrief?.summary ? (
           <View style={styles.summary}>
-            <Eyebrow>Case focus</Eyebrow>
+            <Eyebrow>Vakanın odağı</Eyebrow>
             <Body muted>{summary.debrief.summary}</Body>
           </View>
         ) : null}
 
         {stateEvents.length > 0 && (
           <>
-            <SectionHeader>What happened to the patient</SectionHeader>
+            <SectionHeader>Hastaya ne oldu</SectionHeader>
             <View style={styles.causalRail}>
               {stateEvents.map((e) =>
                 e.stateChanges.map((text, i) => (
@@ -222,7 +243,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
           </>
         )}
 
-        <SectionHeader>Critical decisions</SectionHeader>
+        <SectionHeader>Kritik kararlar</SectionHeader>
         <DebriefGroup>
           {critical.map((c) => (
             <CriterionRow key={c.id} criterion={c} />
@@ -231,10 +252,10 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {safetyHarm.length > 0 && (
           <>
-            <SectionHeader>Harmful actions</SectionHeader>
+            <SectionHeader>Zararlı eylemler</SectionHeader>
             <DebriefGroup>
               {safetyHarm.map((c) => (
-                <CriterionRow key={c.id} criterion={c} context="Safety-relevant penalty" />
+                <CriterionRow key={c.id} criterion={c} context="Güvenlikle ilgili ceza" />
               ))}
             </DebriefGroup>
           </>
@@ -242,13 +263,13 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {unnecessary.length > 0 && (
           <>
-            <SectionHeader>Unnecessary (efficiency)</SectionHeader>
+            <SectionHeader>Gereksiz (verimlilik)</SectionHeader>
             <DebriefGroup>
               {unnecessary.map((c) => (
                 <CriterionRow
                   key={c.id}
                   criterion={c}
-                  context="Efficiency penalty — not patient harm"
+                  context="Verimlilik cezası — hasta zararı değil"
                 />
               ))}
             </DebriefGroup>
@@ -257,15 +278,15 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {delayed.length > 0 && (
           <>
-            <SectionHeader>Correct but delayed</SectionHeader>
+            <SectionHeader>Doğru ama gecikmiş</SectionHeader>
             <DebriefGroup>
               {delayed.map((c) => (
                 <CriterionRow
                   key={c.id}
                   criterion={c}
-                  context={`Timing credit −${
+                  context={`Zamanlama puanı −${
                     Math.round((c.maxPoints - c.awardedPoints) * 10) / 10
-                  } pts`}
+                  } puan`}
                 />
               ))}
             </DebriefGroup>
@@ -274,10 +295,14 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {missedOther.length > 0 && (
           <>
-            <SectionHeader>Missed</SectionHeader>
+            <SectionHeader>Kaçırılanlar</SectionHeader>
             <DebriefGroup>
               {missedOther.map((c) => (
-                <CriterionRow key={c.id} criterion={c} context={`${c.criticality} criterion`} />
+                <CriterionRow
+                  key={c.id}
+                  criterion={c}
+                  context={`${CRITICALITY_TR[c.criticality] ?? c.criticality} ölçüt`}
+                />
               ))}
             </DebriefGroup>
           </>
@@ -285,13 +310,13 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {alternatives.length > 0 && (
           <>
-            <SectionHeader>Accepted alternatives</SectionHeader>
+            <SectionHeader>Kabul edilen alternatifler</SectionHeader>
             <View style={styles.quietRail}>
               {alternatives.map((c) => (
                 <View key={`alt-${c.id}`} style={styles.quietItem}>
                   <Body muted>{c.label}</Body>
                   <Caption>
-                    {c.acceptedActionLabels.join('  or  ')} — either earns the same credit
+                    {c.acceptedActionLabels.join('  veya  ')} — ikisi de aynı puanı kazandırır
                   </Caption>
                 </View>
               ))}
@@ -301,7 +326,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {doneWell.filter((c) => c.criticality !== 'critical').length > 0 && (
           <>
-            <SectionHeader>Done well</SectionHeader>
+            <SectionHeader>İyi yapılanlar</SectionHeader>
             <DebriefGroup>
               {doneWell
                 .filter((c) => c.criticality !== 'critical')
@@ -314,7 +339,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {(summary.debrief?.keyTeachingPoints?.length ?? 0) > 0 && (
           <>
-            <SectionHeader>Key teaching points</SectionHeader>
+            <SectionHeader>Temel öğretim noktaları</SectionHeader>
             <View style={styles.quietRail}>
               {summary.debrief.keyTeachingPoints.map((p, i) => (
                 <View key={i} style={styles.quietItem}>
@@ -327,7 +352,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {(summary.debrief?.commonErrors?.length ?? 0) > 0 && (
           <>
-            <SectionHeader>Common errors in this case</SectionHeader>
+            <SectionHeader>Bu vakada sık yapılan hatalar</SectionHeader>
             <View style={styles.quietRail}>
               {summary.debrief.commonErrors.map((p, i) => (
                 <View key={i} style={styles.quietItem}>
@@ -338,17 +363,19 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
           </>
         )}
 
-        <SectionHeader>Clinical timeline</SectionHeader>
+        <SectionHeader>Klinik zaman çizelgesi</SectionHeader>
         <View style={styles.timelineGroup}>
           {summary.timeline.map((entry) => (
             <View key={entry.seq} style={styles.timelineRow}>
               <Text style={styles.timelineTime}>{clock(entry.simTimeSec)}</Text>
               <View style={styles.timelineCopy}>
                 <Body>{entry.label}</Body>
-                <Text style={styles.timelineClassification}>{entry.classification}</Text>
+                <Text style={styles.timelineClassification}>
+                  {CLASSIFICATION_TR[entry.classification] ?? entry.classification}
+                </Text>
                 {entry.stateChanges.map((text, i) => (
                   <Body key={i} muted>
-                    Patient response · {text}
+                    Hastanın yanıtı · {text}
                   </Body>
                 ))}
               </View>
@@ -358,7 +385,7 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
 
         {(summary.references?.length ?? 0) > 0 && (
           <>
-            <SectionHeader>References</SectionHeader>
+            <SectionHeader>Kaynaklar</SectionHeader>
             <View style={styles.references}>
               {summary.references.map((r, i) => (
                 <View key={i} style={styles.referenceRow}>
@@ -370,11 +397,11 @@ export function ResultsScreen({ navigation, route }: ScreenProps<'Results'>) {
           </>
         )}
 
-        <Caption>replay hash: {summary.replayHash}</Caption>
+        <Caption>tekrar özeti (hash): {summary.replayHash}</Caption>
       </ScrollView>
 
-      <PrimaryButton label="Replay this case" onPress={replay} />
-      <TextButton label="Back to home" onPress={() => navigation.popToTop()} />
+      <PrimaryButton label="Bu vakayı tekrar oyna" onPress={replay} />
+      <TextButton label="Ana sayfaya dön" onPress={() => navigation.popToTop()} />
     </Screen>
   );
 }

@@ -250,7 +250,7 @@ namespace Qaniva.Presentation
                 }
                 if (string.IsNullOrEmpty(outcome.ResultText) && outcome.NewlyDisclosedFacts.Count == 0)
                 {
-                    text.Append('\n').Append($"{actionId} — done");
+                    text.Append('\n').Append($"{actionId} — yapıldı");
                 }
                 _resultText.text = text.ToString();
 
@@ -271,7 +271,7 @@ namespace Qaniva.Presentation
             }
             else
             {
-                _resultText.text = $"{actionId} — not performed: {outcome.RejectionReason}";
+                _resultText.text = $"Uygulanmadı: {outcome.RejectionReason}";
             }
 
             _actions.Render(_controller.GetActionAvailability());
@@ -284,7 +284,7 @@ namespace Qaniva.Presentation
             {
                 _completionPanel.RemoveFromClassList("hidden");
                 _completionDetail.text =
-                    $"Outcome: {outcome.Snapshot.TerminalOutcome}\nReturning to results…";
+                    $"Sonuç: {VitalsPresenter.Humanize(outcome.Snapshot.TerminalOutcome)}\nSonuçlara dönülüyor…";
             }
         }
 

@@ -21,28 +21,28 @@ type OnboardingPage = {
 
 const PAGES: OnboardingPage[] = [
   {
-    title: 'Clinical decision simulation',
-    body: 'Qaniva puts you in front of a dynamic 3D patient. What happens next is decided by your clinical decisions — not a script.',
+    title: 'Klinik karar simülasyonu',
+    body: 'Qaniva seni dinamik bir 3B hastanın karşısına koyar. Sonra ne olacağına bir senaryo değil, senin klinik kararların karar verir.',
     icon: 'body-outline' as const,
-    steps: ['Patient', 'Decision', 'Response'],
+    steps: ['Hasta', 'Karar', 'Yanıt'],
   },
   {
-    title: 'Assess, investigate, treat',
-    body: 'Take the history, examine, order investigations and give treatments — the same way you would think at the bedside.',
+    title: 'Değerlendir, araştır, tedavi et',
+    body: 'Öykü al, muayene et, tetkik iste ve tedavi ver — hasta başında düşündüğün gibi.',
     icon: 'medkit-outline' as const,
-    steps: ['Assess', 'Investigate', 'Treat'],
+    steps: ['Değerlendir', 'Araştır', 'Tedavi et'],
   },
   {
-    title: 'Timing and order matter',
-    body: 'The patient state evolves with the simulated clock. A correct action done late is not the same as a correct action done on time.',
+    title: 'Zamanlama ve sıra önemlidir',
+    body: 'Hastanın durumu simüle edilen saatle birlikte değişir. Geç yapılan doğru bir eylem, zamanında yapılan doğru eylemle aynı değildir.',
     icon: 'time-outline' as const,
-    steps: ['00:00', 'Action', 'State change'],
+    steps: ['00:00', 'Eylem', 'Durum değişimi'],
   },
   {
-    title: 'Review every decision',
-    body: 'After each case you get a deterministic debrief: your clinical timeline, what was on time, delayed or missed — with the evidence behind the scoring.',
+    title: 'Her kararı gözden geçir',
+    body: 'Her vakadan sonra deterministik bir değerlendirme alırsın: klinik zaman çizelgen, neyin zamanında, neyin gecikmiş ya da kaçırılmış olduğu — puanlamanın arkasındaki kanıtlarla.',
     icon: 'git-compare-outline' as const,
-    steps: ['Timeline', 'Why', 'Evidence'],
+    steps: ['Zaman çizelgesi', 'Neden', 'Kanıt'],
   },
 ];
 
@@ -103,7 +103,7 @@ export function OnboardingScreen({ navigation, route }: ScreenProps<'Onboarding'
             onPress={finish}
             hitSlop={12}
           >
-            <Text style={styles.skip}>Skip</Text>
+            <Text style={styles.skip}>Geç</Text>
           </Pressable>
         )}
       </View>
@@ -155,10 +155,10 @@ export function OnboardingScreen({ navigation, route }: ScreenProps<'Onboarding'
 
       <View style={styles.footer}>
         {isLast ? (
-          <PrimaryButton label="Get started" onPress={finish} />
+          <PrimaryButton label="Başla" onPress={finish} />
         ) : (
           <PrimaryButton
-            label="Next"
+            label="İleri"
             onPress={() => {
               const next = Math.min(page + 1, PAGES.length - 1);
               listRef.current?.scrollToIndex({ index: next, animated: true });

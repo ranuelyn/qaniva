@@ -149,7 +149,7 @@ namespace Qaniva.Simulation.PlayModeTests
 
             var viewer = root.Q<VisualElement>("result-viewer");
             Assert.IsFalse(viewer.ClassListContains("hidden"), "the ECG result must open the viewer");
-            Assert.AreEqual("12-lead ECG", root.Q<Label>("result-viewer-title").text);
+            Assert.AreEqual("12 derivasyonlu EKG", root.Q<Label>("result-viewer-title").text);
             Assert.IsNotNull(Resources.Load<Texture2D>(
                 ResultViewerPresenter.AssetResourceFolder + "ecg_stemi_anterior_v1"),
                 "the bundled tracing asset must resolve");

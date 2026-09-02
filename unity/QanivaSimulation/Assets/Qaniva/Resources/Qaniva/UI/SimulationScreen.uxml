@@ -16,11 +16,11 @@
     <ui:VisualElement name="safe-top" class="safe-top" />
     <ui:VisualElement name="vitals-bar" class="vitals-bar">
       <ui:VisualElement class="vital-tile">
-        <ui:Label class="vital-caption" text="HR" />
+        <ui:Label class="vital-caption" text="NABIZ" />
         <ui:Label name="vital-hr" class="vital" text="--" />
       </ui:VisualElement>
       <ui:VisualElement class="vital-tile">
-        <ui:Label class="vital-caption" text="BP" />
+        <ui:Label class="vital-caption" text="TA" />
         <ui:Label name="vital-bp" class="vital" text="--/--" />
       </ui:VisualElement>
       <ui:VisualElement class="vital-tile">
@@ -28,11 +28,11 @@
         <ui:Label name="vital-spo2" class="vital" text="--" />
       </ui:VisualElement>
       <ui:VisualElement class="vital-tile">
-        <ui:Label class="vital-caption" text="RR" />
+        <ui:Label class="vital-caption" text="SS" />
         <ui:Label name="vital-rr" class="vital" text="--" />
       </ui:VisualElement>
       <ui:VisualElement class="vital-tile vital-tile-clock">
-        <ui:Label class="vital-caption" text="Elapsed" />
+        <ui:Label class="vital-caption" text="SÜRE" />
         <ui:Label name="sim-clock" class="vital clock" text="00:00" />
       </ui:VisualElement>
     </ui:VisualElement>
@@ -46,7 +46,7 @@
     <!-- E. last action result feedback -->
     <ui:VisualElement name="result-banner" class="result-banner hidden">
       <ui:Label name="result-text" class="result-text" text="" />
-      <ui:Button name="result-view-button" class="result-view-button hidden" text="Open result" />
+      <ui:Button name="result-view-button" class="result-view-button hidden" text="Sonucu aç" />
     </ui:VisualElement>
 
     <!-- F. full-screen result viewer (generic: ECG now, imaging later). -->
@@ -64,28 +64,28 @@
           <ui:Button name="result-zoom-out" class="viewer-button" text="−" />
           <ui:Button name="result-zoom-in" class="viewer-button" text="+" />
         </ui:VisualElement>
-        <ui:Button name="result-viewer-close" class="viewer-button close" text="Close" />
+        <ui:Button name="result-viewer-close" class="viewer-button close" text="Kapat" />
       </ui:VisualElement>
     </ui:VisualElement>
 
     <!-- H. completion overlay -->
     <ui:VisualElement name="completion-panel" class="completion-panel hidden">
-      <ui:Label name="completion-title" class="completion-title" text="Case complete" />
+      <ui:Label name="completion-title" class="completion-title" text="Vaka tamamlandı" />
       <ui:Label name="completion-detail" class="completion-detail" text="" />
     </ui:VisualElement>
 
     <!-- N. case log (engine timeline), collapsed by default -->
     <ui:VisualElement name="timeline-panel" class="timeline-panel hidden">
-      <ui:Label class="timeline-title" text="Case log" />
+      <ui:Label class="timeline-title" text="Vaka günlüğü" />
       <ui:ScrollView name="timeline-scroll" class="timeline-scroll" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" />
     </ui:VisualElement>
 
     <!-- C+D. action sheet: grabber + utilities, category dock, decision rows -->
     <ui:VisualElement name="action-area" class="action-area">
       <ui:VisualElement name="sheet-header" class="sheet-header">
-        <ui:Button name="toggle-timeline" class="utility-button" text="Case log" />
+        <ui:Button name="toggle-timeline" class="utility-button" text="Vaka günlüğü" />
         <ui:Button name="sheet-handle" class="sheet-handle" text="" />
-        <ui:Button name="exit-button" class="utility-button exit" text="Exit" />
+        <ui:Button name="exit-button" class="utility-button exit" text="Çık" />
       </ui:VisualElement>
       <ui:VisualElement name="category-tabs" class="category-tabs" />
       <ui:ScrollView name="action-list" class="action-list" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" />

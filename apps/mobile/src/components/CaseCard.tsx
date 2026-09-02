@@ -36,7 +36,7 @@ export function CaseCard({
         <View style={styles.titleCopy}>
           <CardTitle>{title}</CardTitle>
           <Text style={styles.meta}>
-            {specialty} · ~{minutes} min
+            {specialty} · ~{minutes} dk
           </Text>
         </View>
       </View>
@@ -44,17 +44,16 @@ export function CaseCard({
       <View style={styles.footerRow}>
         <BadgeRow>
           {progress?.completed ? (
-            <StatusBadge label={`Best ${progress.bestScore} pts`} tone="success" />
+            <StatusBadge label={`En iyi ${progress.bestScore} puan`} tone="success" />
           ) : progress && progress.attempts > 0 ? (
-            <StatusBadge
-              label={`${progress.attempts} attempt${progress.attempts === 1 ? '' : 's'}`}
-              tone="warning"
-            />
+            <StatusBadge label={`${progress.attempts} deneme`} tone="warning" />
           ) : (
-            <StatusBadge label="New case" tone="neutral" />
+            <StatusBadge label="Yeni vaka" tone="neutral" />
           )}
         </BadgeRow>
-        <Text style={styles.cta}>{progress && progress.attempts > 0 ? 'Replay ›' : 'Start ›'}</Text>
+        <Text style={styles.cta}>
+          {progress && progress.attempts > 0 ? 'Tekrar oyna ›' : 'Başla ›'}
+        </Text>
       </View>
     </Card>
   );

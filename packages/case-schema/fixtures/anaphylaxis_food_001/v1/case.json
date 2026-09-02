@@ -3,16 +3,16 @@
   "id": "anaphylaxis_food_001",
   "version": 1,
   "metadata": {
-    "title": "Sudden rash and wheeze after lunch",
+    "title": "Öğle yemeğinden sonra ani döküntü ve hışıltı",
     "clinicalVersion": "0.1-draft",
-    "chiefComplaint": "Rash, facial swelling and difficulty breathing for 25 minutes",
+    "chiefComplaint": "25 dakikadır döküntü, yüzde şişlik ve nefes darlığı",
     "briefing": [
-      "Role: you are the ED doctor receiving this patient in the resuscitation room.",
-      "Setting: an urban hospital ED, weekday lunchtime. Resus is stocked; ICU and anesthesia are on call.",
-      "Resources: monitor/defibrillator, ED drug stock incl. emergency medications, oxygen, IV fluids, a resus nurse.",
-      "Triage note: \"24F, sudden rash, lip swelling and wheeze ~25 minutes after eating at a restaurant. Triage category 2 — taken to resus.\"",
-      "Your task: assess and manage the patient until a disposition decision. Time advances with your actions — it matters.",
-      "This is an educational simulation of a fictional patient. Act as you would clinically."
+      "Rolünüz: Bu hastayı resüsitasyon odasında karşılayan acil servis hekimisiniz.",
+      "Ortam: Bir şehir hastanesi acil servisi, hafta içi öğle saati. Resüsitasyon odası donanımlı; yoğun bakım ve anestezi icapçı.",
+      "Kaynaklar: monitör/defibrilatör, acil ilaçlar dahil acil servis ilaç stoğu, oksijen, IV sıvılar, bir resüsitasyon hemşiresi.",
+      "Triyaj notu: \"24K, restoranda yemek yedikten ~25 dakika sonra ani döküntü, dudakta şişlik ve hışıltı. Triyaj kategorisi 2 — resüsitasyona alındı.\"",
+      "Göreviniz: Hastayı değerlendirin ve bir yatış/taburculuk kararına kadar yönetin. Zaman, yaptığınız her eylemle ilerler — ve önemlidir.",
+      "Bu, kurgusal bir hastanın eğitim amaçlı simülasyonudur. Klinikte nasıl davranırsanız öyle davranın."
     ],
     "specialty": "emergency_medicine",
     "estimatedMinutes": 8,
@@ -26,11 +26,11 @@
     "fictional": true
   },
   "learningObjectives": [
-    "Recognize anaphylaxis clinically and give intramuscular epinephrine first, without delay (EV-ANA-001, EV-ANA-010, EV-ANA-011)",
-    "Choose the safe epinephrine route — IM anterolateral thigh, never an undiluted IV bolus in a patient with a pulse (EV-ANA-015)",
-    "Support airway, breathing and circulation: positioning, high-flow oxygen, IV fluid bolus for hypotension (EV-ANA-020, EV-ANA-021, EV-ANA-022)",
-    "Reassess after the dose and treat adjuncts as adjuncts — antihistamines and steroids never substitute for epinephrine (EV-ANA-012, EV-ANA-023, EV-ANA-024)",
-    "Choose a biphasic-risk-aware disposition: observation or admission, never immediate discharge (EV-ANA-030)"
+    "Anafilaksiyi klinik olarak tanımak ve gecikmeden önce intramüsküler adrenalin vermek (EV-ANA-001, EV-ANA-010, EV-ANA-011)",
+    "Güvenli adrenalin yolunu seçmek — IM anterolateral uyluk; nabzı olan hastada asla dilüe edilmemiş IV bolus (EV-ANA-015)",
+    "Hava yolu, solunum ve dolaşımı desteklemek: pozisyon, yüksek akımlı oksijen, hipotansiyonda IV sıvı bolusu (EV-ANA-020, EV-ANA-021, EV-ANA-022)",
+    "Dozdan sonra yeniden değerlendirmek ve ek ilaçları ek ilaç olarak kullanmak — antihistaminik ve steroid asla adrenalinin yerini almaz (EV-ANA-012, EV-ANA-023, EV-ANA-024)",
+    "Bifazik risk bilinciyle karar vermek: gözlem veya yatış, asla hemen taburculuk (EV-ANA-030)"
   ],
   "presentationProfile": {
     "roomKey": "ed_resus_v1",
@@ -46,10 +46,10 @@
     "ageYears": 24,
     "sex": "female",
     "weightKg": 61,
-    "persona": "frightened, itchy, speaking in short sentences between wheezes",
+    "persona": "korkmuş, kaşıntılı, hışıltılar arasında kısa cümlelerle konuşuyor",
     "backgroundFacts": [
-      "Developed a rash, lip swelling and wheeze about 25 minutes after eating at a restaurant",
-      "Brought straight to resus from triage"
+      "Restoranda yemek yedikten yaklaşık 25 dakika sonra döküntü, dudak şişliği ve hışıltı gelişti",
+      "Triyajdan doğrudan resüsitasyona getirildi"
     ]
   },
   "initialState": {
@@ -73,39 +73,39 @@
     {
       "id": "hx_exposure",
       "disclosure": "on_ask",
-      "text": "She ate a noodle dish with a sauce at a restaurant ~25 minutes ago; the itching and rash started within minutes of eating."
+      "text": "Yaklaşık 25 dakika önce restoranda soslu bir erişte yemeği yemiş; kaşıntı ve döküntü yemekten dakikalar sonra başlamış."
     },
     {
       "id": "hx_known_allergy",
       "disclosure": "on_ask",
-      "text": "She has a known peanut allergy diagnosed in childhood. She usually carries an epinephrine autoinjector but left it at home today."
+      "text": "Çocuklukta tanı konmuş bilinen fıstık alerjisi var. Genellikle adrenalin otoenjektörü taşıyor ama bugün evde unutmuş."
     },
     {
       "id": "hx_asthma_risk",
       "disclosure": "on_ask",
-      "text": "She has mild asthma (salbutamol as needed) — a risk factor for severe reactions."
+      "text": "Hafif astımı var (gerektiğinde salbutamol) — ağır reaksiyon için bir risk faktörü."
     },
     {
       "id": "hx_med_negatives",
       "disclosure": "on_ask",
-      "text": "No beta-blocker or ACE-inhibitor use. No other regular medication. No previous reaction this severe."
+      "text": "Beta bloker veya ACE inhibitörü kullanmıyor. Başka düzenli ilacı yok. Daha önce bu kadar ağır reaksiyon geçirmemiş."
     },
     {
       "id": "tryptase_result",
       "disclosure": "on_order_result",
-      "text": "Serum tryptase (drawn during the acute phase): elevated — supports mast-cell activation. A convalescent sample is recommended for comparison."
+      "text": "Serum triptaz (akut fazda alınan): yüksek — mast hücre aktivasyonunu destekliyor. Karşılaştırma için konvalesan örnek önerilir."
     },
     {
       "id": "labs_result",
       "disclosure": "on_order_result",
-      "text": "Baseline labs: no critical abnormalities reported."
+      "text": "Bazal laboratuvar: kritik anormallik bildirilmedi."
     }
   ],
   "availableActions": [
     {
       "id": "focused_history",
       "type": "communication",
-      "label": "Take a focused history",
+      "label": "Odaklanmış öykü al",
       "timeCostSec": 45,
       "visibility": "always",
       "visibleWhen": null,
@@ -131,7 +131,7 @@
     {
       "id": "ask_medications",
       "type": "communication",
-      "label": "Ask about medications and prior reactions",
+      "label": "İlaçları ve önceki reaksiyonları sor",
       "timeCostSec": 15,
       "visibility": "always",
       "visibleWhen": null,
@@ -149,7 +149,7 @@
     {
       "id": "reassure_patient",
       "type": "communication",
-      "label": "Explain and reassure",
+      "label": "Bilgilendir ve rahatlat",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -167,7 +167,7 @@
     {
       "id": "attach_monitor",
       "type": "examine",
-      "label": "Attach monitor + BP + SpO2",
+      "label": "Monitör + TA + SpO2 bağla",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -185,7 +185,7 @@
     {
       "id": "exam_airway_skin",
       "type": "examine",
-      "label": "Examine airway and skin",
+      "label": "Hava yolu ve cildi muayene et",
       "timeCostSec": 30,
       "visibility": "always",
       "visibleWhen": null,
@@ -199,7 +199,7 @@
     {
       "id": "exam_lungs",
       "type": "examine",
-      "label": "Lung examination",
+      "label": "Akciğer muayenesi",
       "timeCostSec": 30,
       "visibility": "always",
       "visibleWhen": null,
@@ -213,7 +213,7 @@
     {
       "id": "iv_access",
       "type": "procedure",
-      "label": "Obtain IV access",
+      "label": "Damar yolu aç",
       "timeCostSec": 60,
       "visibility": "always",
       "visibleWhen": null,
@@ -231,7 +231,7 @@
     {
       "id": "order_tryptase",
       "type": "order",
-      "label": "Send serum tryptase",
+      "label": "Serum triptaz gönder",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -249,7 +249,7 @@
     {
       "id": "order_baseline_labs",
       "type": "order",
-      "label": "Send baseline labs",
+      "label": "Bazal tetkikleri gönder",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -267,7 +267,7 @@
     {
       "id": "give_epinephrine_im",
       "type": "medication",
-      "label": "Epinephrine 0.5 mg IM — anterolateral thigh",
+      "label": "Adrenalin 0,5 mg IM — anterolateral uyluk",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -286,7 +286,7 @@
     {
       "id": "give_epinephrine_iv_push",
       "type": "medication",
-      "label": "Epinephrine 1 mg IV push",
+      "label": "Adrenalin 1 mg IV puşe",
       "timeCostSec": 15,
       "visibility": "always",
       "visibleWhen": null,
@@ -304,7 +304,7 @@
     {
       "id": "give_oxygen",
       "type": "medication",
-      "label": "High-flow oxygen",
+      "label": "Yüksek akımlı oksijen",
       "timeCostSec": 15,
       "visibility": "always",
       "visibleWhen": null,
@@ -327,7 +327,7 @@
     {
       "id": "give_fluid_bolus",
       "type": "medication",
-      "label": "IV crystalloid bolus",
+      "label": "IV kristaloid bolus",
       "timeCostSec": 30,
       "visibility": "always",
       "visibleWhen": null,
@@ -345,7 +345,7 @@
     {
       "id": "position_supine_legs_raised",
       "type": "procedure",
-      "label": "Lie flat, raise the legs",
+      "label": "Sırtüstü yatır, bacakları kaldır",
       "timeCostSec": 15,
       "visibility": "always",
       "visibleWhen": null,
@@ -363,7 +363,7 @@
     {
       "id": "give_antihistamine",
       "type": "medication",
-      "label": "Antihistamine IV (adjunct)",
+      "label": "Antihistaminik IV (ek tedavi)",
       "timeCostSec": 15,
       "visibility": "always",
       "visibleWhen": null,
@@ -381,7 +381,7 @@
     {
       "id": "give_steroid",
       "type": "medication",
-      "label": "Corticosteroid IV (adjunct)",
+      "label": "Kortikosteroid IV (ek tedavi)",
       "timeCostSec": 15,
       "visibility": "always",
       "visibleWhen": null,
@@ -399,7 +399,7 @@
     {
       "id": "give_nebulized_salbutamol",
       "type": "medication",
-      "label": "Salbutamol nebulizer (for wheeze)",
+      "label": "Salbutamol nebül (hışıltı için)",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -417,7 +417,7 @@
     {
       "id": "disposition_observation",
       "type": "disposition",
-      "label": "Observe in ED (4–6 h monitoring)",
+      "label": "Acilde gözlem (4–6 saat monitörizasyon)",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -435,7 +435,7 @@
     {
       "id": "disposition_admit",
       "type": "disposition",
-      "label": "Admit for extended monitoring",
+      "label": "Uzatılmış monitörizasyon için yatır",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -453,7 +453,7 @@
     {
       "id": "disposition_discharge_early",
       "type": "disposition",
-      "label": "Discharge home now",
+      "label": "Hemen eve taburcu et",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -489,7 +489,7 @@
         }
       ],
       "presentationCue": null,
-      "debriefText": "Undiluted IV bolus epinephrine caused a heart-rate and blood-pressure surge — IM dosing into the thigh is the safe route in a patient with a pulse.",
+      "debriefText": "Dilüe edilmemiş IV bolus adrenalin nabız ve kan basıncında ani yükselmeye yol açtı — nabzı olan hastada güvenli yol uyluğa IM uygulamadır.",
       "terminalState": null
     },
     {
@@ -540,7 +540,7 @@
         }
       ],
       "presentationCue": "recovery",
-      "debriefText": "Intramuscular epinephrine took effect — the breathing eased and the blood pressure recovered.",
+      "debriefText": "İntramüsküler adrenalin etki etti — solunum rahatladı ve kan basıncı düzeldi.",
       "terminalState": null
     },
     {
@@ -603,7 +603,7 @@
         }
       ],
       "presentationCue": "distress_severe",
-      "debriefText": "Epinephrine was not given in time — the airway swelling and bronchospasm progressed.",
+      "debriefText": "Adrenalin zamanında verilmedi — hava yolu ödemi ve bronkospazm ilerledi.",
       "terminalState": null
     },
     {
@@ -639,7 +639,7 @@
         }
       ],
       "presentationCue": "arrest",
-      "debriefText": "Untreated anaphylaxis progressed to airway obstruction and cardiovascular collapse — the resus team takes over.",
+      "debriefText": "Tedavi edilmeyen anafilaksi hava yolu tıkanıklığı ve dolaşım kollapsına ilerledi — resüsitasyon ekibi devralıyor.",
       "terminalState": "peri_arrest_takeover"
     },
     {
@@ -682,7 +682,7 @@
   "scoringCriteria": [
     {
       "id": "c_epi_im_timely",
-      "label": "Gave IM epinephrine promptly",
+      "label": "IM adrenalin hızla verildi",
       "criticality": "critical",
       "acceptedActions": ["give_epinephrine_im"],
       "timingWindow": {
@@ -698,7 +698,7 @@
     },
     {
       "id": "c_focused_history",
-      "label": "Took a focused history (exposure, allergy, risk factors)",
+      "label": "Odaklanmış öykü alındı (maruziyet, alerji, risk faktörleri)",
       "criticality": "minor",
       "acceptedActions": ["focused_history"],
       "stateConstraints": [],
@@ -710,7 +710,7 @@
     },
     {
       "id": "c_early_monitoring",
-      "label": "Attached monitoring early",
+      "label": "Monitörizasyon erken bağlandı",
       "criticality": "major",
       "acceptedActions": ["attach_monitor"],
       "timingWindow": {
@@ -726,7 +726,7 @@
     },
     {
       "id": "c_iv_access",
-      "label": "Obtained IV access",
+      "label": "Damar yolu açıldı",
       "criticality": "minor",
       "acceptedActions": ["iv_access"],
       "timingWindow": {
@@ -742,7 +742,7 @@
     },
     {
       "id": "c_oxygen_support",
-      "label": "Gave high-flow oxygen (hypoxic patient)",
+      "label": "Yüksek akımlı oksijen verildi (hipoksik hasta)",
       "criticality": "major",
       "acceptedActions": ["give_oxygen"],
       "stateConstraints": [],
@@ -754,7 +754,7 @@
     },
     {
       "id": "c_fluid_bolus",
-      "label": "Gave an IV crystalloid bolus for hypotension",
+      "label": "Hipotansiyon için IV kristaloid bolus verildi",
       "criticality": "major",
       "acceptedActions": ["give_fluid_bolus"],
       "stateConstraints": [],
@@ -766,7 +766,7 @@
     },
     {
       "id": "c_positioning",
-      "label": "Positioned supine with legs raised",
+      "label": "Sırtüstü, bacaklar kaldırılmış pozisyon verildi",
       "criticality": "minor",
       "acceptedActions": ["position_supine_legs_raised"],
       "stateConstraints": [],
@@ -778,7 +778,7 @@
     },
     {
       "id": "c_reassess_after_epi",
-      "label": "Reassessed the patient after epinephrine",
+      "label": "Adrenalinden sonra hasta yeniden değerlendirildi",
       "criticality": "major",
       "acceptedActions": ["exam_lungs", "exam_airway_skin"],
       "stateConstraints": ["flag('epi_im_given')"],
@@ -790,7 +790,7 @@
     },
     {
       "id": "c_disposition",
-      "label": "Chose a biphasic-aware disposition (observe or admit)",
+      "label": "Bifazik risk bilinciyle karar verildi (gözlem veya yatış)",
       "criticality": "major",
       "acceptedActions": ["disposition_observation", "disposition_admit"],
       "stateConstraints": [],
@@ -802,7 +802,7 @@
     },
     {
       "id": "c_iv_bolus_epi",
-      "label": "Gave undiluted IV bolus epinephrine (patient with a pulse)",
+      "label": "Dilüe edilmemiş IV bolus adrenalin verildi (nabzı olan hasta)",
       "criticality": "critical",
       "acceptedActions": ["give_epinephrine_iv_push"],
       "stateConstraints": [],
@@ -818,111 +818,111 @@
       "id": "peri_arrest_takeover",
       "when": "flag('peri_arrest')",
       "outcome": "deteriorated",
-      "label": "The reaction progressed to peri-arrest — the resus team takes over"
+      "label": "Reaksiyon peri-arreste ilerledi — resüsitasyon ekibi devralıyor"
     },
     {
       "id": "discharged_early",
       "when": "flag('discharged')",
       "outcome": "discharge",
-      "label": "Discharged during an incompletely treated reaction (biphasic risk)"
+      "label": "Tam tedavi edilmemiş reaksiyon sırasında taburcu edildi (bifazik risk)"
     },
     {
       "id": "observed_after_deterioration",
       "when": "(flag('dispo_obs') || flag('dispo_admit')) && flag('deteriorated')",
       "outcome": "partial",
-      "label": "Stabilized and observed — after avoidable deterioration"
+      "label": "Stabilize edildi ve gözlendi — önlenebilir kötüleşmeden sonra"
     },
     {
       "id": "observed_in_ed",
       "when": "flag('dispo_obs')",
       "outcome": "complete",
-      "label": "Stabilized — observed in the ED with monitoring"
+      "label": "Stabilize edildi — acilde monitörize gözlem"
     },
     {
       "id": "admitted_for_monitoring",
       "when": "flag('dispo_admit')",
       "outcome": "admit",
-      "label": "Stabilized — admitted for extended monitoring"
+      "label": "Stabilize edildi — uzatılmış monitörizasyon için yatırıldı"
     }
   ],
   "debriefMetadata": {
-    "summary": "A 24-year-old with a known peanut allergy develops anaphylaxis after a restaurant meal. The case trains rapid clinical recognition, immediate IM epinephrine, safe route choice, supportive care, reassessment, and a biphasic-risk-aware disposition.",
+    "summary": "Bilinen fıstık alerjisi olan 24 yaşında bir hastada restoran yemeğinden sonra anafilaksi gelişiyor. Vaka hızlı klinik tanımayı, hemen IM adrenalini, güvenli yol seçimini, destek tedaviyi, yeniden değerlendirmeyi ve bifazik risk bilinciyle karar vermeyi çalıştırır.",
     "keyTeachingPoints": [
-      "Anaphylaxis is a clinical diagnosis — treat on recognition, no test is needed first (EV-ANA-001, EV-ANA-002)",
-      "IM epinephrine into the anterolateral thigh comes first; delay worsens outcomes (EV-ANA-010, EV-ANA-011)",
-      "Never give undiluted IV bolus epinephrine to a patient with a pulse (EV-ANA-015)",
-      "Position supine, give high-flow oxygen when hypoxic, and bolus IV fluids for hypotension (EV-ANA-020, EV-ANA-021, EV-ANA-022)",
-      "Antihistamines and steroids are adjuncts — they never substitute for epinephrine; reassess after each dose and observe for biphasic reactions (EV-ANA-012, EV-ANA-023, EV-ANA-024, EV-ANA-030)"
+      "Anafilaksi klinik bir tanıdır — tanır tanımaz tedavi edin, önce hiçbir test gerekmez (EV-ANA-001, EV-ANA-002)",
+      "Anterolateral uyluğa IM adrenalin ilk sıradadır; gecikme sonuçları kötüleştirir (EV-ANA-010, EV-ANA-011)",
+      "Nabzı olan hastaya asla dilüe edilmemiş IV bolus adrenalin vermeyin (EV-ANA-015)",
+      "Sırtüstü yatırın, hipoksikse yüksek akımlı oksijen verin ve hipotansiyonda IV sıvı bolusu yapın (EV-ANA-020, EV-ANA-021, EV-ANA-022)",
+      "Antihistaminikler ve steroidler ek tedavidir — asla adrenalinin yerini almaz; her dozdan sonra yeniden değerlendirin ve bifazik reaksiyon için gözleyin (EV-ANA-012, EV-ANA-023, EV-ANA-024, EV-ANA-030)"
     ],
     "commonErrors": [
-      "Treating the rash (antihistamine/steroid) instead of the reaction (epinephrine)",
-      "Delaying epinephrine to finish the history or investigations",
-      "Choosing the IV bolus route for epinephrine",
-      "Discharging immediately after apparent recovery",
-      "Never re-examining the patient after treatment"
+      "Reaksiyonu (adrenalin) değil döküntüyü (antihistaminik/steroid) tedavi etmek",
+      "Öyküyü veya tetkikleri bitirmek için adrenalini geciktirmek",
+      "Adrenalin için IV bolus yolunu seçmek",
+      "Görünür iyileşmeden hemen sonra taburcu etmek",
+      "Tedaviden sonra hastayı hiç yeniden muayene etmemek"
     ]
   },
   "resultTemplates": [
     {
       "id": "reassured_note",
-      "text": "You explain what is happening. She nods, still itchy and frightened but listening."
+      "text": "Ne olduğunu açıklıyorsunuz. Başını sallıyor; hâlâ kaşıntılı ve korkmuş ama dinliyor."
     },
     {
       "id": "monitor_attached",
-      "text": "Monitor attached — continuous ECG, NIBP and SpO2 running."
+      "text": "Monitör bağlandı — sürekli EKG, NIBP ve SpO2 izleniyor."
     },
     {
       "id": "exam_airway_findings",
-      "text": "Widespread urticaria; lip and periorbital swelling. The tongue is not swollen and there is no stridor at this time."
+      "text": "Yaygın ürtiker; dudak ve periorbital şişlik. Dil şiş değil ve şu an stridor yok."
     },
     {
       "id": "exam_lungs_findings",
-      "text": "Diffuse expiratory wheeze in both lungs; she speaks in short sentences."
+      "text": "Her iki akciğerde yaygın ekspiratuvar hışıltı; kısa cümlelerle konuşuyor."
     },
     {
       "id": "tryptase_pending",
-      "text": "Serum tryptase sent (drawn now). The result returns after the acute phase."
+      "text": "Serum triptaz gönderildi (şimdi alındı). Sonuç akut fazdan sonra çıkar."
     },
     {
       "id": "labs_sent_note",
-      "text": "CBC, electrolytes and creatinine sent."
+      "text": "Tam kan sayımı, elektrolitler ve kreatinin gönderildi."
     },
     {
       "id": "epi_im_given_note",
-      "text": "Epinephrine 0.5 mg given IM into the anterolateral thigh."
+      "text": "Adrenalin 0,5 mg anterolateral uyluğa IM verildi."
     },
     {
       "id": "epi_iv_given_note",
-      "text": "Epinephrine 1 mg pushed IV, undiluted."
+      "text": "Adrenalin 1 mg dilüe edilmeden IV puşe verildi."
     },
     {
       "id": "oxygen_given_note",
-      "text": "High-flow oxygen applied via non-rebreather mask."
+      "text": "Rezervuarlı maskeyle yüksek akımlı oksijen uygulandı."
     },
     {
       "id": "fluids_given_note",
-      "text": "Rapid IV crystalloid bolus running."
+      "text": "Hızlı IV kristaloid bolus gidiyor."
     },
     {
       "id": "positioned_note",
-      "text": "She is laid flat with her legs raised."
+      "text": "Sırtüstü yatırıldı, bacakları kaldırıldı."
     },
     {
       "id": "antihistamine_note",
-      "text": "IV antihistamine given."
+      "text": "IV antihistaminik verildi."
     },
     {
       "id": "steroid_note",
-      "text": "IV corticosteroid given."
+      "text": "IV kortikosteroid verildi."
     },
     {
       "id": "neb_note",
-      "text": "Salbutamol nebulizer running for the wheeze."
+      "text": "Hışıltı için salbutamol nebül veriliyor."
     }
   ],
   "references": [
     {
-      "label": "WAO Anaphylaxis Guidance 2020",
+      "label": "WAO Anafilaksi Rehberi 2020",
       "citation": "World Allergy Organization Anaphylaxis Guidance 2020. World Allergy Organ J. 2020;13(10):100472.",
       "url": "https://www.worldallergyorganizationjournal.org/article/S1939-4551(20)30375-6/fulltext"
     },
@@ -932,7 +932,7 @@
       "url": "https://www.resus.org.uk/library/additional-guidance/guidance-anaphylaxis"
     },
     {
-      "label": "AAAAI/ACAAI 2023 practice parameter",
+      "label": "AAAAI/ACAAI 2023 uygulama parametresi",
       "citation": "Anaphylaxis: a 2023 practice parameter update. Ann Allergy Asthma Immunol. 2024;132(2):124–176.",
       "url": "https://www.annallergy.org/article/S1081-1206(23)01304-2/fulltext"
     },
@@ -941,7 +941,7 @@
       "citation": "Anafilaksi: Türk Ulusal Rehberi 2018. Türkiye Ulusal Alerji ve Klinik İmmünoloji Derneği (AİD)."
     },
     {
-      "label": "Evidence ledger + clinical status",
+      "label": "Kanıt defteri + klinik durum",
       "citation": "docs/clinical/cases/anaphylaxis/evidence.yaml — per-claim provenance. CLINICAL STATUS: MVP DEMO APPROVED; CLINICAL VALIDATION PENDING (REVIEW.md unsigned). Fictional teaching case; not medical advice."
     }
   ]

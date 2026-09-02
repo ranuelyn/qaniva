@@ -3,16 +3,16 @@
   "id": "stemi_anterior_001",
   "version": 1,
   "metadata": {
-    "title": "Crushing chest pain in a 54-year-old",
+    "title": "54 yaşında erkekte ezici göğüs ağrısı",
     "clinicalVersion": "0.1-draft",
-    "chiefComplaint": "Severe central chest pain for the last 90 minutes",
+    "chiefComplaint": "Son 90 dakikadır şiddetli, orta hatta göğüs ağrısı",
     "briefing": [
-      "Role: you are the ED doctor receiving this patient in the resuscitation room.",
-      "Setting: an urban PCI-capable hospital, weekday daytime. The cath lab is operational; cardiology and interventional cardiology are on call.",
-      "Resources: monitor/defibrillator, ED drug stock, laboratory, portable X-ray, a resus nurse.",
-      "Triage note: \"54M, severe central chest pain for 90 minutes, sweaty. Triage category 2 — taken to resus.\"",
-      "Your task: assess and manage the patient until a disposition decision. Time advances with your actions — it matters.",
-      "This is an educational simulation of a fictional patient. Act as you would clinically."
+      "Rolünüz: Bu hastayı resüsitasyon odasında karşılayan acil servis hekimisiniz.",
+      "Ortam: PKG yapılabilen bir şehir hastanesi, hafta içi gündüz. Kateter laboratuvarı çalışıyor; kardiyoloji ve girişimsel kardiyoloji icapçı.",
+      "Kaynaklar: monitör/defibrilatör, acil servis ilaç stoğu, laboratuvar, portabl röntgen, bir resüsitasyon hemşiresi.",
+      "Triyaj notu: \"54E, 90 dakikadır şiddetli orta hat göğüs ağrısı, terli. Triyaj kategorisi 2 — resüsitasyona alındı.\"",
+      "Göreviniz: Hastayı değerlendirin ve bir yatış/sevk kararına kadar yönetin. Zaman, yaptığınız her eylemle ilerler — ve önemlidir.",
+      "Bu, kurgusal bir hastanın eğitim amaçlı simülasyonudur. Klinikte nasıl davranırsanız öyle davranın."
     ],
     "specialty": "emergency_medicine",
     "estimatedMinutes": 10,
@@ -26,11 +26,11 @@
     "fictional": true
   },
   "learningObjectives": [
-    "Obtain a 12-lead ECG within 10 minutes of arrival for acute chest pain and identify the need for emergent reperfusion (EV-STEMI-010, EV-STEMI-014)",
-    "Initiate guideline-based initial medical therapy — aspirin loading plus appropriate adjuncts — without delaying reperfusion (EV-STEMI-030, EV-STEMI-031)",
-    "Select primary PCI and activate the cath lab within the target window at a PCI-capable center (EV-STEMI-020, EV-STEMI-021)",
-    "Avoid non-indicated and harmful interventions: routine oxygen at normal SpO2, NSAID analgesia, fibrinolysis when primary PCI is immediately available (EV-STEMI-033, EV-STEMI-038, EV-STEMI-023)",
-    "Maintain monitoring and access appropriate for early VF risk (EV-STEMI-013, EV-STEMI-016)"
+    "Akut göğüs ağrısında gelişten sonraki 10 dakika içinde 12 derivasyonlu EKG çekmek ve acil reperfüzyon ihtiyacını tanımak (EV-STEMI-010, EV-STEMI-014)",
+    "Reperfüzyonu geciktirmeden kılavuza uygun başlangıç tedavisini — aspirin yüklemesi ve uygun ek ilaçlar — başlatmak (EV-STEMI-030, EV-STEMI-031)",
+    "PKG yapılabilen merkezde primer PKG'yi seçmek ve kateter laboratuvarını hedef sürede aktive etmek (EV-STEMI-020, EV-STEMI-021)",
+    "Endike olmayan ve zararlı girişimlerden kaçınmak: normal SpO2'de rutin oksijen, NSAİİ analjezi, primer PKG hemen mümkünken fibrinoliz (EV-STEMI-033, EV-STEMI-038, EV-STEMI-023)",
+    "Erken VF riskine uygun monitörizasyon ve damar yolunu sürdürmek (EV-STEMI-013, EV-STEMI-016)"
   ],
   "presentationProfile": {
     "roomKey": "ed_resus_v1",
@@ -46,10 +46,10 @@
     "ageYears": 54,
     "sex": "male",
     "weightKg": 86,
-    "persona": "in severe pain, pale and sweaty, anxious, answers in short sentences",
+    "persona": "şiddetli ağrılı, soluk ve terli, endişeli, kısa cümlelerle yanıt veriyor",
     "backgroundFacts": [
-      "Walked into triage with severe central chest pain",
-      "The pain started about 90 minutes ago, at rest"
+      "Triyaja şiddetli orta hat göğüs ağrısıyla yürüyerek geldi",
+      "Ağrı yaklaşık 90 dakika önce, istirahatte başladı"
     ]
   },
   "initialState": {
@@ -73,54 +73,54 @@
     {
       "id": "hx_pain_character",
       "disclosure": "on_ask",
-      "text": "\"It feels like an elephant is sitting on my chest.\" The pain radiates to the left arm and jaw, with nausea. It started at rest and has been constant."
+      "text": "\"Göğsümün üstünde bir fil oturuyor gibi.\" Ağrı sol kola ve çeneye yayılıyor, bulantı eşlik ediyor. İstirahatte başladı ve sürekli."
     },
     {
       "id": "hx_risk_factors",
       "disclosure": "on_ask",
-      "text": "He smokes about a pack a day (25 years) and takes amlodipine for hypertension. His father had a heart attack at 60."
+      "text": "Günde yaklaşık bir paket sigara içiyor (25 yıl), hipertansiyon için amlodipin kullanıyor. Babası 60 yaşında kalp krizi geçirmiş."
     },
     {
       "id": "hx_safety_negatives",
       "disclosure": "on_ask",
-      "text": "No prior stroke or TIA. No recent surgery, trauma, or bleeding. No erectile-dysfunction medication use."
+      "text": "Geçirilmiş inme veya GİA yok. Yakın zamanda cerrahi, travma veya kanama yok. Erektil disfonksiyon ilacı kullanmıyor."
     },
     {
       "id": "hx_allergies",
       "disclosure": "on_ask",
-      "text": "No known drug allergies."
+      "text": "Bilinen ilaç alerjisi yok."
     },
     {
       "id": "ecg_tracing",
       "disclosure": "on_order_result",
-      "text": "12-lead ECG acquired — the tracing is available to review."
+      "text": "12 derivasyonlu EKG çekildi — trase incelemeniz için hazır."
     },
     {
       "id": "troponin_result",
       "disclosure": "on_order_result",
-      "text": "hs-troponin (drawn at presentation): elevated above the 99th percentile reference limit."
+      "text": "hs-troponin (gelişte alınan): 99. persentil referans sınırının üzerinde yüksek."
     },
     {
       "id": "labs_result",
       "disclosure": "on_order_result",
-      "text": "Baseline labs: no critical abnormalities reported."
+      "text": "Bazal laboratuvar: kritik anormallik bildirilmedi."
     },
     {
       "id": "cxr_result",
       "disclosure": "on_order_result",
-      "text": "Portable chest X-ray: no acute cardiopulmonary process reported."
+      "text": "Portabl akciğer grafisi: akut kardiyopulmoner patoloji bildirilmedi."
     },
     {
       "id": "cath_response",
       "disclosure": "on_order_result",
-      "text": "Interventional cardiology: \"Accepted — cath lab team activating, ready in about 15 minutes.\""
+      "text": "Girişimsel kardiyoloji: \"Kabul — kateter laboratuvarı ekibi aktive ediliyor, yaklaşık 15 dakikada hazır.\""
     }
   ],
   "availableActions": [
     {
       "id": "focused_history",
       "type": "communication",
-      "label": "Take a focused history",
+      "label": "Odaklanmış öykü al",
       "timeCostSec": 45,
       "visibility": "always",
       "visibleWhen": null,
@@ -146,7 +146,7 @@
     {
       "id": "ask_allergies",
       "type": "communication",
-      "label": "Ask about allergies",
+      "label": "Alerjileri sor",
       "timeCostSec": 15,
       "visibility": "always",
       "visibleWhen": null,
@@ -164,7 +164,7 @@
     {
       "id": "reassure_patient",
       "type": "communication",
-      "label": "Explain and reassure",
+      "label": "Bilgilendir ve rahatlat",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -182,7 +182,7 @@
     {
       "id": "record_differential",
       "type": "communication",
-      "label": "Record working differential",
+      "label": "Ön tanıları kaydet",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -200,7 +200,7 @@
     {
       "id": "attach_monitor",
       "type": "examine",
-      "label": "Attach monitor + defib pads",
+      "label": "Monitör + defibrilatör pedleri bağla",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -218,7 +218,7 @@
     {
       "id": "exam_cardiac",
       "type": "examine",
-      "label": "Cardiac examination",
+      "label": "Kardiyak muayene",
       "timeCostSec": 30,
       "visibility": "always",
       "visibleWhen": null,
@@ -232,7 +232,7 @@
     {
       "id": "exam_lungs",
       "type": "examine",
-      "label": "Lung examination",
+      "label": "Akciğer muayenesi",
       "timeCostSec": 30,
       "visibility": "always",
       "visibleWhen": null,
@@ -246,7 +246,7 @@
     {
       "id": "ecg_12lead",
       "type": "order",
-      "label": "Obtain a 12-lead ECG",
+      "label": "12 derivasyonlu EKG çek",
       "timeCostSec": 60,
       "visibility": "always",
       "visibleWhen": null,
@@ -268,7 +268,7 @@
     {
       "id": "iv_access",
       "type": "procedure",
-      "label": "Obtain IV access",
+      "label": "Damar yolu aç",
       "timeCostSec": 60,
       "visibility": "always",
       "visibleWhen": null,
@@ -286,7 +286,7 @@
     {
       "id": "order_troponin",
       "type": "order",
-      "label": "Send hs-troponin",
+      "label": "hs-troponin gönder",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -304,7 +304,7 @@
     {
       "id": "order_baseline_labs",
       "type": "order",
-      "label": "Send baseline labs",
+      "label": "Bazal tetkikleri gönder",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -322,7 +322,7 @@
     {
       "id": "cxr_portable",
       "type": "order",
-      "label": "Order portable chest X-ray",
+      "label": "Portabl akciğer grafisi iste",
       "timeCostSec": 30,
       "visibility": "always",
       "visibleWhen": null,
@@ -340,7 +340,7 @@
     {
       "id": "give_aspirin",
       "type": "medication",
-      "label": "Aspirin 300 mg — chewed",
+      "label": "Aspirin 300 mg — çiğnetilerek",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -358,7 +358,7 @@
     {
       "id": "give_ticagrelor",
       "type": "medication",
-      "label": "Ticagrelor 180 mg — loading dose",
+      "label": "Tikagrelor 180 mg — yükleme dozu",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -376,7 +376,7 @@
     {
       "id": "give_prasugrel",
       "type": "medication",
-      "label": "Prasugrel 60 mg — loading dose",
+      "label": "Prasugrel 60 mg — yükleme dozu",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -394,7 +394,7 @@
     {
       "id": "give_clopidogrel",
       "type": "medication",
-      "label": "Clopidogrel 600 mg — loading dose",
+      "label": "Klopidogrel 600 mg — yükleme dozu",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -412,7 +412,7 @@
     {
       "id": "give_heparin_ufh",
       "type": "medication",
-      "label": "Unfractionated heparin — weight-based IV bolus",
+      "label": "Standart heparin — kiloya göre IV bolus",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -430,7 +430,7 @@
     {
       "id": "give_nitroglycerin_sl",
       "type": "medication",
-      "label": "Nitroglycerin 0.4 mg — sublingual",
+      "label": "Nitrogliserin 0,4 mg — dil altı",
       "timeCostSec": 15,
       "visibility": "always",
       "visibleWhen": null,
@@ -454,7 +454,7 @@
     {
       "id": "give_morphine",
       "type": "medication",
-      "label": "Morphine IV — titrated",
+      "label": "Morfin IV — titre edilerek",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -477,7 +477,7 @@
     {
       "id": "give_oxygen",
       "type": "medication",
-      "label": "Oxygen via face mask",
+      "label": "Yüz maskesiyle oksijen",
       "timeCostSec": 15,
       "visibility": "always",
       "visibleWhen": null,
@@ -500,7 +500,7 @@
     {
       "id": "give_nsaid_analgesia",
       "type": "medication",
-      "label": "IV NSAID for pain",
+      "label": "Ağrı için IV NSAİİ",
       "timeCostSec": 15,
       "visibility": "always",
       "visibleWhen": null,
@@ -523,7 +523,7 @@
     {
       "id": "give_fibrinolytic",
       "type": "medication",
-      "label": "Give fibrinolytic (tenecteplase)",
+      "label": "Fibrinolitik ver (tenekteplaz)",
       "timeCostSec": 30,
       "visibility": "always",
       "visibleWhen": null,
@@ -541,7 +541,7 @@
     {
       "id": "start_statin",
       "type": "medication",
-      "label": "High-intensity statin",
+      "label": "Yüksek yoğunluklu statin",
       "timeCostSec": 15,
       "visibility": "always",
       "visibleWhen": null,
@@ -559,7 +559,7 @@
     {
       "id": "activate_cath_lab",
       "type": "consult",
-      "label": "Activate cath lab (interventional cardiology)",
+      "label": "Kateter laboratuvarını aktive et (girişimsel kardiyoloji)",
       "timeCostSec": 30,
       "visibility": "always",
       "visibleWhen": null,
@@ -577,7 +577,7 @@
     {
       "id": "disposition_cath_lab",
       "type": "disposition",
-      "label": "Transfer to cath lab (handoff)",
+      "label": "Kateter laboratuvarına devret (teslim)",
       "timeCostSec": 30,
       "visibility": "always",
       "visibleWhen": null,
@@ -595,7 +595,7 @@
     {
       "id": "disposition_discharge",
       "type": "disposition",
-      "label": "Discharge home",
+      "label": "Eve taburcu et",
       "timeCostSec": 20,
       "visibility": "always",
       "visibleWhen": null,
@@ -631,7 +631,7 @@
       ],
       "presentationCue": null,
       "terminalState": null,
-      "debriefText": "Nitroglycerin was given while the patient was already hypotensive — the blood pressure dropped further."
+      "debriefText": "Hasta zaten hipotansifken nitrogliserin verildi — kan basıncı daha da düştü."
     },
     {
       "id": "ntg_processed",
@@ -682,7 +682,7 @@
       ],
       "presentationCue": "distress_severe",
       "terminalState": null,
-      "debriefText": "No reperfusion decision was made in time — the untreated ischemia progressed (heart rate up, blood pressure down, pain worse)."
+      "debriefText": "Zamanında reperfüzyon kararı verilmedi — tedavi edilmeyen iskemi ilerledi (nabız yükseldi, tansiyon düştü, ağrı arttı)."
     },
     {
       "id": "t2_vf_arrest",
@@ -712,7 +712,7 @@
       ],
       "presentationCue": "arrest",
       "terminalState": "vf_arrest_takeover",
-      "debriefText": "Prolonged untreated ischemia ended in ventricular fibrillation — the resus team takes over."
+      "debriefText": "Uzun süre tedavi edilmeyen iskemi ventriküler fibrilasyonla sonuçlandı — resüsitasyon ekibi devralıyor."
     },
     {
       "id": "troponin_returns",
@@ -786,7 +786,7 @@
   "scoringCriteria": [
     {
       "id": "c_time_to_ecg",
-      "label": "Obtained the 12-lead ECG promptly",
+      "label": "12 derivasyonlu EKG hızla çekildi",
       "criticality": "critical",
       "acceptedActions": ["ecg_12lead"],
       "timingWindow": {
@@ -802,7 +802,7 @@
     },
     {
       "id": "c_aspirin_loading",
-      "label": "Gave the aspirin loading dose early",
+      "label": "Aspirin yükleme dozu erken verildi",
       "criticality": "critical",
       "acceptedActions": ["give_aspirin"],
       "timingWindow": {
@@ -818,7 +818,7 @@
     },
     {
       "id": "c_cath_lab_activation",
-      "label": "Activated the cath lab within the target window",
+      "label": "Kateter laboratuvarı hedef sürede aktive edildi",
       "criticality": "critical",
       "acceptedActions": ["activate_cath_lab"],
       "timingWindow": {
@@ -834,7 +834,7 @@
     },
     {
       "id": "c_p2y12_loading",
-      "label": "Loaded a preferred P2Y12 inhibitor (ticagrelor or prasugrel)",
+      "label": "Tercih edilen bir P2Y12 inhibitörü yüklendi (tikagrelor veya prasugrel)",
       "criticality": "major",
       "acceptedActions": ["give_ticagrelor", "give_prasugrel"],
       "stateConstraints": [],
@@ -846,7 +846,7 @@
     },
     {
       "id": "c_anticoagulation",
-      "label": "Started anticoagulation for primary PCI",
+      "label": "Primer PKG için antikoagülasyon başlandı",
       "criticality": "major",
       "acceptedActions": ["give_heparin_ufh"],
       "stateConstraints": [],
@@ -858,7 +858,7 @@
     },
     {
       "id": "c_statin_started",
-      "label": "Started a high-intensity statin",
+      "label": "Yüksek yoğunluklu statin başlandı",
       "criticality": "minor",
       "acceptedActions": ["start_statin"],
       "stateConstraints": [],
@@ -870,7 +870,7 @@
     },
     {
       "id": "c_early_monitoring",
-      "label": "Attached monitoring + defib pads early",
+      "label": "Monitörizasyon + defibrilatör pedleri erken bağlandı",
       "criticality": "major",
       "acceptedActions": ["attach_monitor"],
       "timingWindow": {
@@ -886,7 +886,7 @@
     },
     {
       "id": "c_iv_access",
-      "label": "Obtained IV access",
+      "label": "Damar yolu açıldı",
       "criticality": "minor",
       "acceptedActions": ["iv_access"],
       "timingWindow": {
@@ -902,7 +902,7 @@
     },
     {
       "id": "c_focused_history",
-      "label": "Took a focused history (including safety-relevant negatives)",
+      "label": "Odaklanmış öykü alındı (güvenlikle ilgili negatifler dahil)",
       "criticality": "minor",
       "acceptedActions": ["focused_history"],
       "stateConstraints": [],
@@ -914,7 +914,7 @@
     },
     {
       "id": "c_disposition_cath_lab",
-      "label": "Handed the patient off to the cath lab",
+      "label": "Hasta kateter laboratuvarına devredildi",
       "criticality": "major",
       "acceptedActions": ["disposition_cath_lab"],
       "stateConstraints": [],
@@ -926,7 +926,7 @@
     },
     {
       "id": "c_nsaid_in_acs",
-      "label": "Gave an NSAID in ACS (contraindicated)",
+      "label": "AKS'de NSAİİ verildi (kontrendike)",
       "criticality": "critical",
       "acceptedActions": ["give_nsaid_analgesia"],
       "stateConstraints": [],
@@ -938,7 +938,7 @@
     },
     {
       "id": "c_lytic_with_pci_available",
-      "label": "Gave a fibrinolytic while primary PCI was immediately available",
+      "label": "Primer PKG hemen mümkünken fibrinolitik verildi",
       "criticality": "critical",
       "acceptedActions": ["give_fibrinolytic"],
       "stateConstraints": [],
@@ -950,7 +950,7 @@
     },
     {
       "id": "c_nitrate_in_hypotension",
-      "label": "Gave sublingual nitroglycerin while hypotensive",
+      "label": "Hipotansifken dil altı nitrogliserin verildi",
       "criticality": "critical",
       "acceptedActions": ["give_nitroglycerin_sl"],
       "stateConstraints": ["vitals.sbpMmHg < 100"],
@@ -962,7 +962,7 @@
     },
     {
       "id": "c_unnecessary_oxygen",
-      "label": "Applied routine oxygen at SpO2 96%",
+      "label": "SpO2 %96 iken rutin oksijen uygulandı",
       "criticality": "minor",
       "acceptedActions": ["give_oxygen"],
       "stateConstraints": [],
@@ -978,136 +978,136 @@
       "id": "vf_arrest_takeover",
       "when": "flag('vf_arrest')",
       "outcome": "deteriorated",
-      "label": "The patient arrested before reperfusion — the resus team takes over"
+      "label": "Hasta reperfüzyondan önce arrest oldu — resüsitasyon ekibi devralıyor"
     },
     {
       "id": "discharged_stemi",
       "when": "flag('discharged')",
       "outcome": "discharge",
-      "label": "Discharged with an untreated STEMI"
+      "label": "Tedavi edilmemiş STEMI ile taburcu edildi"
     },
     {
       "id": "handoff_after_deterioration",
       "when": "flag('dispo_cath') && flag('deteriorated')",
       "outcome": "partial",
-      "label": "Handed off to the cath lab — after avoidable deterioration"
+      "label": "Kateter laboratuvarına devredildi — önlenebilir kötüleşmeden sonra"
     },
     {
       "id": "handoff_cath_lab",
       "when": "flag('dispo_cath')",
       "outcome": "complete",
-      "label": "Handed off to the cath lab team"
+      "label": "Kateter laboratuvarı ekibine devredildi"
     }
   ],
   "debriefMetadata": {
-    "summary": "A 54-year-old smoker with 90 minutes of typical ischemic chest pain in a PCI-capable ED. The case trains rapid ECG acquisition, guideline initial therapy, and time-critical cath-lab activation — and shows how delay, not just wrong choices, harms the patient.",
+    "summary": "PKG yapılabilen bir acil serviste, 90 dakikadır tipik iskemik göğüs ağrısı olan 54 yaşında sigara içen hasta. Vaka hızlı EKG çekimini, kılavuza uygun başlangıç tedavisini ve zaman kritik kateter laboratuvarı aktivasyonunu çalıştırır — ve yalnızca yanlış seçimlerin değil, gecikmenin de hastaya nasıl zarar verdiğini gösterir.",
     "keyTeachingPoints": [
-      "Obtain and read the 12-lead ECG within 10 minutes of arrival for acute chest pain (EV-STEMI-010)",
-      "Reperfusion decisions are clinical + ECG decisions — do not wait for troponin (EV-STEMI-011)",
-      "At a PCI-capable center, primary PCI is the reperfusion strategy: activate the cath lab immediately once the ECG is diagnostic (EV-STEMI-020, EV-STEMI-021)",
-      "Give the aspirin loading dose early; load a preferred P2Y12 inhibitor without delaying reperfusion (EV-STEMI-030, EV-STEMI-031)",
-      "Avoid what does not help: routine oxygen at normal SpO2, NSAIDs in ACS, and fibrinolysis when the cath lab is available (EV-STEMI-033, EV-STEMI-038, EV-STEMI-023)"
+      "Akut göğüs ağrısında gelişten sonraki 10 dakika içinde 12 derivasyonlu EKG çekin ve yorumlayın (EV-STEMI-010)",
+      "Reperfüzyon kararı klinik + EKG kararıdır — troponini beklemeyin (EV-STEMI-011)",
+      "PKG yapılabilen merkezde reperfüzyon stratejisi primer PKG'dir: EKG tanısal olur olmaz kateter laboratuvarını hemen aktive edin (EV-STEMI-020, EV-STEMI-021)",
+      "Aspirin yükleme dozunu erken verin; reperfüzyonu geciktirmeden tercih edilen bir P2Y12 inhibitörü yükleyin (EV-STEMI-030, EV-STEMI-031)",
+      "Faydası olmayandan kaçının: normal SpO2'de rutin oksijen, AKS'de NSAİİ ve kateter laboratuvarı mümkünken fibrinoliz (EV-STEMI-033, EV-STEMI-038, EV-STEMI-023)"
     ],
     "commonErrors": [
-      "Completing a broad workup (labs, X-ray, long history) before the ECG",
-      "Waiting for the troponin result before activating the cath lab",
-      "Treating pain with an NSAID",
-      "Giving a fibrinolytic despite an available cath lab",
-      "Choosing a disposition before activating reperfusion"
+      "EKG'den önce geniş bir tetkik paketini (laboratuvar, röntgen, uzun öykü) tamamlamak",
+      "Kateter laboratuvarını aktive etmek için troponin sonucunu beklemek",
+      "Ağrıyı NSAİİ ile tedavi etmek",
+      "Kateter laboratuvarı müsaitken fibrinolitik vermek",
+      "Reperfüzyonu başlatmadan yatış/sevk kararı vermek"
     ]
   },
   "resultTemplates": [
     {
       "id": "reassured_note",
-      "text": "You explain what is happening and what comes next. The patient nods, still in pain but calmer."
+      "text": "Ne olduğunu ve sırada ne olduğunu açıklıyorsunuz. Hasta başını sallıyor; hâlâ ağrılı ama daha sakin."
     },
     {
       "id": "ddx_recorded",
-      "text": "Working differential recorded: acute coronary syndrome vs aortic dissection vs pulmonary embolism."
+      "text": "Ön tanılar kaydedildi: akut koroner sendrom / aort diseksiyonu / pulmoner emboli."
     },
     {
       "id": "monitor_attached",
-      "text": "Monitor attached — continuous ECG, NIBP and SpO2 running; defibrillation pads in place."
+      "text": "Monitör bağlandı — sürekli EKG, NIBP ve SpO2 izleniyor; defibrilasyon pedleri yerinde."
     },
     {
       "id": "exam_cardiac_findings",
-      "text": "Heart sounds: regular, mildly tachycardic; an S4 gallop is present; no murmur. Peripheral pulses palpable."
+      "text": "Kalp sesleri: ritmik, hafif taşikardik; S4 galo mevcut; üfürüm yok. Periferik nabızlar alınıyor."
     },
     {
       "id": "exam_lungs_findings",
-      "text": "Chest clear to auscultation bilaterally; no crackles at the bases at this time."
+      "text": "Akciğerler oskültasyonda bilateral temiz; şu an bazallerde krepitasyon yok."
     },
     {
       "id": "ecg_result",
-      "text": "12-lead ECG acquired — rate 96/min. Open the tracing to review it yourself.",
+      "text": "12 derivasyonlu EKG çekildi — hız 96/dk. Traseyi kendiniz değerlendirmek için açın.",
       "assetId": "ecg_stemi_anterior_v1"
     },
     {
       "id": "troponin_pending",
-      "text": "hs-troponin sent (drawn now). Lab turnaround is about 20 minutes."
+      "text": "hs-troponin gönderildi (şimdi alındı). Laboratuvar sonuç süresi yaklaşık 20 dakika."
     },
     {
       "id": "labs_sent_note",
-      "text": "CBC, electrolytes, creatinine and coagulation panel sent."
+      "text": "Tam kan sayımı, elektrolitler, kreatinin ve koagülasyon paneli gönderildi."
     },
     {
       "id": "cxr_ordered_note",
-      "text": "Portable chest X-ray requested."
+      "text": "Portabl akciğer grafisi istendi."
     },
     {
       "id": "aspirin_given",
-      "text": "Aspirin 300 mg given — chewed, non-enteric-coated."
+      "text": "Aspirin 300 mg verildi — çiğnetilerek, enterik kaplı olmayan."
     },
     {
       "id": "ticagrelor_given",
-      "text": "Ticagrelor 180 mg loading dose given."
+      "text": "Tikagrelor 180 mg yükleme dozu verildi."
     },
     {
       "id": "prasugrel_given",
-      "text": "Prasugrel 60 mg loading dose given."
+      "text": "Prasugrel 60 mg yükleme dozu verildi."
     },
     {
       "id": "clopidogrel_given",
-      "text": "Clopidogrel 600 mg loading dose given."
+      "text": "Klopidogrel 600 mg yükleme dozu verildi."
     },
     {
       "id": "ufh_given",
-      "text": "Unfractionated heparin given — weight-based IV bolus."
+      "text": "Standart heparin verildi — kiloya göre IV bolus."
     },
     {
       "id": "ntg_given",
-      "text": "Nitroglycerin 0.4 mg given sublingually."
+      "text": "Nitrogliserin 0,4 mg dil altı verildi."
     },
     {
       "id": "morphine_given",
-      "text": "Morphine given IV, titrated to pain."
+      "text": "Morfin IV verildi, ağrıya göre titre edildi."
     },
     {
       "id": "oxygen_given",
-      "text": "Oxygen applied via face mask."
+      "text": "Yüz maskesiyle oksijen uygulandı."
     },
     {
       "id": "nsaid_given",
-      "text": "IV NSAID analgesia given."
+      "text": "IV NSAİİ analjezi verildi."
     },
     {
       "id": "lytic_given",
-      "text": "Tenecteplase bolus administered."
+      "text": "Tenekteplaz bolus uygulandı."
     },
     {
       "id": "statin_given",
-      "text": "High-intensity statin given."
+      "text": "Yüksek yoğunluklu statin verildi."
     },
     {
       "id": "cath_activation",
-      "text": "Cath lab activation call placed to interventional cardiology."
+      "text": "Girişimsel kardiyolojiye kateter laboratuvarı aktivasyon çağrısı yapıldı."
     }
   ],
   "resultAssets": [
     {
       "id": "ecg_stemi_anterior_v1",
       "kind": "image",
-      "label": "12-lead ECG",
+      "label": "12 derivasyonlu EKG",
       "provenance": {
         "source": "Code-generated schematic placeholder (scripts/generate-ecg-placeholder.py) — first-party, no external content",
         "license": "first-party",
@@ -1119,17 +1119,17 @@
   ],
   "references": [
     {
-      "label": "2025 ACC/AHA/ACEP/NAEMSP/SCAI ACS guideline",
+      "label": "2025 ACC/AHA/ACEP/NAEMSP/SCAI AKS kılavuzu",
       "citation": "2025 ACC/AHA/ACEP/NAEMSP/SCAI Guideline for the Management of Patients With Acute Coronary Syndromes. Circulation. 2025. doi:10.1161/CIR.0000000000001309",
       "url": "https://www.ahajournals.org/doi/10.1161/CIR.0000000000001309"
     },
     {
-      "label": "2023 ESC ACS guideline",
+      "label": "2023 ESC AKS kılavuzu",
       "citation": "Byrne RA et al. 2023 ESC Guidelines for the management of acute coronary syndromes. Eur Heart J. 2023;44(38):3720–3826.",
       "url": "https://academic.oup.com/eurheartj/article/44/38/3720/7243210"
     },
     {
-      "label": "Evidence ledger + clinical status",
+      "label": "Kanıt defteri + klinik durum",
       "citation": "docs/clinical/cases/stemi/evidence.yaml — per-claim provenance. CLINICAL STATUS: MVP DEMO APPROVED; CLINICAL VALIDATION PENDING (docs/clinical/cases/stemi/REVIEW.md unsigned). Fictional teaching case; not medical advice."
     }
   ]

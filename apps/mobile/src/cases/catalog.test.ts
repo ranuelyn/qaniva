@@ -34,6 +34,6 @@ describe('case catalog', () => {
   it('looks up cases by id and prettifies specialties', () => {
     expect(catalogCase('stemi_anterior_001')?.manifest.version).toBe(1);
     expect(catalogCase('missing')).toBeUndefined();
-    expect(specialtyLabel('emergency_medicine')).toBe('Emergency Medicine');
+    expect(specialtyLabel('emergency_medicine')).toBe('Acil Tıp');
   });
 });

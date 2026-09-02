@@ -10,45 +10,44 @@ export function AboutScreen(_props: ScreenProps<'About'>) {
   useEffect(() => {
     analytics.track({ event: 'surface_viewed', surface: 'about' });
   }, []);
-
   const version = Constants.expoConfig?.version ?? '0.0.0';
 
   return (
     <Screen>
       <ScrollView contentContainerStyle={styles.content}>
         <Wordmark />
-        <Body>
-          Qaniva is an interactive clinical decision simulation platform. Learners practice
-          assessment, investigation, treatment and clinical reasoning on dynamic 3D patient cases —
-          where timing, order and patient state shape the outcome, and every decision is reviewed in
-          a deterministic, evidence-referenced debrief.
+        <Body muted>
+          Qaniva, etkileşimli bir klinik karar simülasyonu platformudur. Öğrenenler dinamik 3B hasta
+          vakalarında değerlendirme, tetkik, tedavi ve klinik akıl yürütme pratiği yapar —
+          zamanlama, sıra ve hastanın durumu sonucu, skoru ve zaman çizelgesini belirler. Her karar
+          deterministik, kanıta referanslı bir değerlendirmede gözden geçirilir.
         </Body>
 
-        <SectionHeader>How it works</SectionHeader>
+        <SectionHeader>Nasıl çalışır</SectionHeader>
         <View style={styles.callout}>
-          <Eyebrow>Engine-owned truth</Eyebrow>
+          <Eyebrow>Gerçeğin sahibi motordur</Eyebrow>
           <Body muted>
-            Every case is a versioned, evidence-referenced definition executed by a deterministic
-            clinical engine: the same decisions always produce the same outcome, timeline and score.
-            Nothing in the simulation is improvised by AI.
+            Her vaka, deterministik bir klinik motor tarafından çalıştırılan sürümlü ve kanıta
+            referanslı bir tanımdır: aynı kararlar her zaman aynı sonucu, zaman çizelgesini ve skoru
+            üretir. Simülasyonda hiçbir şey yapay zekâ tarafından uydurulmaz.
           </Body>
         </View>
 
-        <SectionHeader>Status</SectionHeader>
+        <SectionHeader>Durum</SectionHeader>
         <View style={styles.copyBlock}>
           <Body muted>
-            This is an MVP build for internal and demonstration use. The clinical content is
-            evidence-based and fictional, and is awaiting formal physician validation — see
-            “Educational use & clinical status”.
+            Bu, iç kullanım ve tanıtım amaçlı bir MVP sürümüdür. Klinik içerik kanıta dayalı ve
+            kurgusaldır; resmî hekim doğrulaması beklemektedir — bkz. &quot;Eğitim amaçlı kullanım
+            ve klinik durum&quot;.
           </Body>
           <Body muted>
-            Privacy policy and terms of use are in preparation for the test-distribution release and
-            are not yet published.
+            Gizlilik politikası ve kullanım koşulları test dağıtımı için hazırlanmaktadır ve henüz
+            yayımlanmamıştır.
           </Body>
         </View>
 
-        <Caption>Version {version} (MVP) · Brand assets provisional</Caption>
-        <Caption>© 2026 Qaniva project</Caption>
+        <Caption>Sürüm {version} (MVP) · Marka varlıkları geçicidir</Caption>
+        <Caption>© 2026 Qaniva projesi</Caption>
       </ScrollView>
     </Screen>
   );
