@@ -88,6 +88,25 @@ namespace Qaniva.EditorTools
             Make("IvBag", new Color(0.85f, 0.90f, 0.92f, 1f), 0f, 0.6f);
             Make("CeilingPanel", Color.white, 0f, 0.2f, new Color(1.6f, 1.6f, 1.55f));
             Make("Hair", new Color(0.14f, 0.12f, 0.11f), 0f, 0.45f);
+            Make("Eyes", new Color(0.35f, 0.25f, 0.18f), 0f, 0.75f);
+
+            // Textured skin for the Quaternius-based patient. The material name must
+            // contain "Skin" — PatientVisualController tints by that contract.
+            Make("SkinTextured", new Color(0.92f, 0.82f, 0.74f), 0f, 0.30f);
+            var skinTex = Mat("SkinTextured");
+            var baseMap = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Qaniva/Art/Patients/Textures/T_Ubc_Male_BaseColor.png");
+            var normalMap = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Qaniva/Art/Patients/Textures/T_Superhero_Male_Normal.png");
+            if (skinTex != null && baseMap != null)
+            {
+                skinTex.SetTexture("_BaseMap", baseMap);
+                skinTex.mainTexture = baseMap;
+                if (normalMap != null)
+                {
+                    skinTex.SetTexture("_BumpMap", normalMap);
+                    skinTex.EnableKeyword("_NORMALMAP");
+                }
+                EditorUtility.SetDirty(skinTex);
+            }
         }
 
         // --- helpers ------------------------------------------------------
@@ -215,7 +234,10 @@ namespace Qaniva.EditorTools
         /// </summary>
         private static GameObject CreateRiggedPatientPrefab()
         {
-            const string fbxPath = "Assets/Qaniva/Art/Patients/adult_rigged_v1.fbx";
+            // CC0 Quaternius Universal Base Character, processed by scripts (see
+            // Art/Patients/LICENSE-quaternius.txt): Qaniva bone names, gown material,
+            // baked semi-recumbent pose, hair. Replaces the primitive first-party rig.
+            const string fbxPath = "Assets/Qaniva/Art/Patients/adult_ubc_v1.fbx";
             var importer = AssetImporter.GetAtPath(fbxPath) as ModelImporter;
             if (importer == null)
             {
@@ -227,10 +249,12 @@ namespace Qaniva.EditorTools
             importer.animationType = ModelImporterAnimationType.Generic; // procedural bone animation, no clips yet
             foreach (var (src, dst) in new[]
             {
-                ("PatientSkinMat", "Skin"),
-                ("PatientGownMat", "Gown"),
-                ("PatientHairMat", "Hair"),
-                ("PatientBlanketMat", "Blanket"),
+                ("Skin_Body", "SkinTextured"),
+                ("Gown", "Gown"),
+                ("Hair", "Hair"),
+                ("MI_Hair_2", "Hair"),
+                ("MI_Eyes", "Eyes"),
+                ("MI_Hair_1", "Hair"),
             })
             {
                 importer.AddRemap(
@@ -248,10 +272,31 @@ namespace Qaniva.EditorTools
             // (bed-head) but face-down; the extra 180° roll about the body's long
             // axis turns it onto its back. Empirical values verified via PlayMode
             // captures (the Blender FBX import bakes its own axis compensation).
-            model.transform.localRotation =
-                Quaternion.AngleAxis(180f, Vector3.forward) * Quaternion.Euler(90f, 0f, 0f);
+            // Quaternius export: X+90 lays the character on its back with the head
+            // toward +Z (bed head); no extra roll needed (verified via CapturePreview).
+            model.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
             // Feet toward the bed's foot end; body rests on the mattress plane.
             model.transform.localPosition = new Vector3(0f, 0.14f, -0.85f);
+
+            // Semi-recumbent (head of bed ~30°): bend the torso up at Spine/Chest so
+            // the face and chest read to the three-quarter camera. Pure pose — the
+            // breathing/tint controller keys off bone NAMES, which are unchanged.
+            float torsoBend = GetArgFloat("-torsoBend", 0f); // legacy primitive rig: keep supine (pose is baked into the new asset)
+            foreach (var bone in model.GetComponentsInChildren<Transform>())
+            {
+                if (bone.name == "Spine")
+                {
+                    bone.localRotation *= Quaternion.Euler(-torsoBend * 0.55f, 0f, 0f);
+                }
+                else if (bone.name == "Chest")
+                {
+                    bone.localRotation *= Quaternion.Euler(-torsoBend * 0.45f, 0f, 0f);
+                }
+                else if (bone.name == "Head")
+                {
+                    bone.localRotation *= Quaternion.Euler(torsoBend * 0.35f, 0f, 0f);
+                }
+            }
 
             foreach (var renderer in model.GetComponentsInChildren<Renderer>())
             {
@@ -298,13 +343,13 @@ namespace Qaniva.EditorTools
 
             // Labels sit under the (unscaled) monitor root — never under the scaled
             // Screen box, which would distort TextMesh glyphs non-uniformly.
-            Text("HrLabel", root.transform, new Vector3(-0.14f, 1.555f, zFace), "HR", 0.035f, label);
+            Text("HrLabel", root.transform, new Vector3(-0.14f, 1.555f, zFace), "NABIZ", 0.035f, label);
             Text("HrValue", root.transform, new Vector3(-0.14f, 1.475f, zFace), "--", 0.095f, green);
             Text("Spo2Label", root.transform, new Vector3(0.14f, 1.555f, zFace), "SpO2", 0.035f, label);
             Text("Spo2Value", root.transform, new Vector3(0.14f, 1.475f, zFace), "--", 0.095f, cyan);
-            Text("BpLabel", root.transform, new Vector3(-0.14f, 1.385f, zFace), "BP", 0.035f, label);
+            Text("BpLabel", root.transform, new Vector3(-0.14f, 1.385f, zFace), "TA", 0.035f, label);
             Text("BpValue", root.transform, new Vector3(-0.14f, 1.315f, zFace), "--/--", 0.062f, green);
-            Text("RrLabel", root.transform, new Vector3(0.14f, 1.385f, zFace), "RR", 0.035f, label);
+            Text("RrLabel", root.transform, new Vector3(0.14f, 1.385f, zFace), "SS", 0.035f, label);
             Text("RrValue", root.transform, new Vector3(0.14f, 1.315f, zFace), "--", 0.075f, cyan);
             Text("ClockValue", root.transform, new Vector3(0f, 1.255f, zFace), "00:00", 0.032f, label);
 
@@ -350,6 +395,9 @@ namespace Qaniva.EditorTools
             Box("BedBase", bed.transform, new Vector3(0f, 0.28f, 0f), new Vector3(0.8f, 0.28f, 2.0f), "PlasticDark");
             Box("BedFrame", bed.transform, new Vector3(0f, 0.47f, 0f), new Vector3(0.95f, 0.10f, 2.15f), "Metal");
             Box("Mattress", bed.transform, new Vector3(0f, 0.58f, 0f), new Vector3(0.9f, 0.12f, 2.1f), "Mattress");
+            // Raised backrest section (head of bed ~30°) — reads as a real ED bed and
+            // supports the semi-recumbent patient pose.
+            Box("Backrest", bed.transform, new Vector3(0f, 0.80f, 0.78f), new Vector3(0.9f, 0.10f, 0.62f), "Mattress", new Vector3(-32f, 0f, 0f));
             Box("RailLeft", bed.transform, new Vector3(-0.50f, 0.78f, 0.1f), new Vector3(0.04f, 0.22f, 1.5f), "Metal");
             Box("RailRight", bed.transform, new Vector3(0.50f, 0.78f, 0.1f), new Vector3(0.04f, 0.22f, 1.5f), "Metal");
             Cyl("WheelFL", bed.transform, new Vector3(-0.35f, 0.07f, -0.85f), 0.07f, 0.05f, "PlasticDark", new Vector3(0f, 0f, 90f));
@@ -364,11 +412,11 @@ namespace Qaniva.EditorTools
             var monitor = (GameObject)PrefabUtility.InstantiatePrefab(
                 AssetDatabase.LoadAssetAtPath<GameObject>($"{PropsDir}/BedsideMonitor.prefab"));
             monitor.transform.SetParent(root.transform, false);
-            monitor.transform.localPosition = new Vector3(0.56f, 0f, 1.16f);
+            monitor.transform.localPosition = new Vector3(0.82f, 0f, 1.30f);
             // Face the presentation camera: the screen normal is -Z, the camera sits
             // front-left and above ((0.02, 1.92, -2.18)), so yaw slightly left and
             // tilt the face up toward it — the vitals must be readable in-frame.
-            monitor.transform.localEulerAngles = new Vector3(8f, 18f, 0f);
+            monitor.transform.localEulerAngles = new Vector3(6f, -28f, 0f);
 
             // IV pole, left of the bed head.
             var iv = new GameObject("IvPole");
@@ -405,6 +453,8 @@ namespace Qaniva.EditorTools
             keyLight.intensity = 0.82f;
             keyLight.color = new Color(1f, 0.985f, 0.95f);
             keyLight.shadows = LightShadows.Soft;
+            keyLight.shadowBias = 0.03f;
+            keyLight.shadowNormalBias = 0.8f;
 
             var fill = new GameObject("FillLight");
             fill.transform.SetParent(root.transform, false);
@@ -420,10 +470,14 @@ namespace Qaniva.EditorTools
             // lower third left for the action UI, top band for the vitals bar.
             var camGo = new GameObject("PresentationCamera");
             camGo.transform.SetParent(root.transform, false);
-            camGo.transform.localPosition = new Vector3(0.02f, 1.92f, -2.18f);
+            // Elevated three-quarter view from the foot-left: the patient reads as a
+            // person (face + torso + legs), the bed runs diagonally, the monitor sits
+            // at the head-right turned toward the viewer, the lower third stays clear
+            // for the action sheet. Iterated with CapturePreview.
+            camGo.transform.localPosition = new Vector3(-1.12f, 1.86f, -2.12f);
             var cam = camGo.AddComponent<Camera>();
-            camGo.transform.LookAt(root.transform.TransformPoint(new Vector3(0.05f, 0.43f, 0.72f)));
-            cam.fieldOfView = 56f;
+            camGo.transform.LookAt(root.transform.TransformPoint(new Vector3(0.06f, 0.60f, 0.55f)));
+            cam.fieldOfView = 53f;
             cam.nearClipPlane = 0.1f;
             cam.farClipPlane = 40f;
             cam.clearFlags = CameraClearFlags.SolidColor;
@@ -453,7 +507,7 @@ namespace Qaniva.EditorTools
 
             var env = (GameObject)PrefabUtility.InstantiatePrefab(
                 AssetDatabase.LoadAssetAtPath<GameObject>($"{EnvDir}/ed_resus_v1.prefab"));
-            var patientPrefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{PatientDir}/adult_neutral_v1.prefab");
+            var patientPrefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{PatientDir}/{GetArg("-previewPatient") ?? "adult_rigged_v1"}.prefab");
             var anchor = env.transform.Find("PatientAnchor");
             var patient = (GameObject)PrefabUtility.InstantiatePrefab(patientPrefab);
             patient.transform.SetParent(anchor, false);
@@ -507,6 +561,19 @@ namespace Qaniva.EditorTools
             UnityEngine.Object.DestroyImmediate(env);
             Debug.Log($"[QanivaPresentationAssets] preview written -> {outPath}");
         }
+
+        private static float GetArgFloat(string name, float fallback)
+
+        {
+
+            var raw = GetArg(name);
+
+            return raw != null && float.TryParse(raw, System.Globalization.NumberStyles.Float,
+
+                System.Globalization.CultureInfo.InvariantCulture, out var v) ? v : fallback;
+
+        }
+
 
         private static string GetArg(string name)
         {

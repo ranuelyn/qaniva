@@ -1,0 +1,5 @@
+adult_ubc_v1.fbx and the T_Ubc_*/T_Superhero_*/T_Hair_*/T_Eye_* textures derive from
+"Universal Base Characters (Standard)" by Quaternius — CC0 1.0 Universal (public domain).
+https://quaternius.com  ·  https://creativecommons.org/publicdomain/zero/1.0/
+Modifications (Qaniva): bone renames to the Qaniva rig contract, gown material assignment,
+baked semi-recumbent pose, buzzed hair attached. No attribution required; kept for provenance.

@@ -24,6 +24,13 @@ namespace Qaniva.Presentation
     /// </summary>
     public sealed class PatientVisualController : MonoBehaviour
     {
+        // Textured skin (Quaternius-based rig): the albedo lives in the texture, so
+        // the tint is a near-white multiplier — pallor/cyanosis shift it, never darken it.
+        private static readonly Color TexSkinNormal = new Color(1.00f, 0.97f, 0.94f);
+        private static readonly Color TexSkinDistressed = new Color(0.96f, 0.92f, 0.92f);
+        private static readonly Color TexSkinUnconscious = new Color(0.90f, 0.91f, 0.94f);
+        private static readonly Color TexSkinUnresponsive = new Color(0.80f, 0.85f, 0.92f);
+
         private static readonly Color SkinNormal = new Color(0.70f, 0.50f, 0.38f);
         private static readonly Color SkinDistressed = new Color(0.65f, 0.52f, 0.45f); // paler
         private static readonly Color SkinUnconscious = new Color(0.60f, 0.54f, 0.50f);
@@ -105,18 +112,27 @@ namespace Qaniva.Presentation
             _state = state;
             _breathsPerMinute = Mathf.Clamp((float)canonicalRrPerMin, 0f, MaxVisualBreathsPerMinute);
 
-            var tint = state switch
+            var flatTint = state switch
             {
                 PatientVisualState.Distressed => SkinDistressed,
                 PatientVisualState.Unconscious => SkinUnconscious,
                 PatientVisualState.Unresponsive => SkinUnresponsive,
                 _ => SkinNormal,
             };
+            var texturedTint = state switch
+            {
+                PatientVisualState.Distressed => TexSkinDistressed,
+                PatientVisualState.Unconscious => TexSkinUnconscious,
+                PatientVisualState.Unresponsive => TexSkinUnresponsive,
+                _ => TexSkinNormal,
+            };
             foreach (var material in _skinMaterials)
             {
                 // URP Lit: set _BaseColor explicitly (Material.color mapping is
-                // not reliable for headless-created materials).
-                material.SetColor("_BaseColor", tint);
+                // not reliable for headless-created materials). A textured skin
+                // gets the near-white multiplier; flat skin gets the absolute tint.
+                bool textured = material.HasProperty("_BaseMap") && material.GetTexture("_BaseMap") != null;
+                material.SetColor("_BaseColor", textured ? texturedTint : flatTint);
             }
         }
 
