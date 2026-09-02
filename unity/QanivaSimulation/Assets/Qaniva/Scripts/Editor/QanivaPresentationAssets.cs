@@ -90,6 +90,33 @@ namespace Qaniva.EditorTools
             Make("Hair", new Color(0.14f, 0.12f, 0.11f), 0f, 0.45f);
             Make("Eyes", new Color(0.35f, 0.25f, 0.18f), 0f, 0.75f);
 
+            // Owner-supplied "Hospital Patient" textures (Art/Patients/Textures/hp): one URP Lit
+            // material per part. Skin parts carry "Skin" in the name for the tint contract.
+            void MakeTextured(string name, string texFile, float smooth)
+            {
+                Make(name, Color.white, 0f, smooth);
+                var m = Mat(name);
+                var texPath = $"Assets/Qaniva/Art/Patients/Textures/hp/{texFile}";
+                AssetDatabase.ImportAsset(texPath, ImportAssetOptions.ForceSynchronousImport);
+                var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(texPath);
+                if (m != null && tex != null)
+                {
+                    m.SetTexture("_BaseMap", tex);
+                    m.mainTexture = tex;
+                    EditorUtility.SetDirty(m);
+                }
+            }
+            MakeTextured("Skin_Arms", "Arms.png", 0.28f);
+            MakeTextured("Skin_Legs", "Legs.png", 0.28f);
+            MakeTextured("Skin_Face", "Face.png", 0.30f);
+            MakeTextured("Skin_Torso", "Torso.png", 0.28f);
+            MakeTextured("GownTex", "gown.png", 0.12f);
+            MakeTextured("Slippers", "slippers.png", 0.25f);
+            MakeTextured("EyesTex", "Eyes.png", 0.70f);
+            MakeTextured("Mouth", "Mouth.png", 0.40f);
+            MakeTextured("Eyelashes", "Eyelashes.png", 0.20f);
+            MakeTextured("Bracelet", "bracelet.png", 0.30f);
+
             // Textured skin for the Quaternius-based patient. The material name must
             // contain "Skin" — PatientVisualController tints by that contract.
             Make("SkinTextured", new Color(0.92f, 0.82f, 0.74f), 0f, 0.30f);
@@ -237,7 +264,7 @@ namespace Qaniva.EditorTools
             // CC0 Quaternius Universal Base Character, processed by scripts (see
             // Art/Patients/LICENSE-quaternius.txt): Qaniva bone names, gown material,
             // baked semi-recumbent pose, hair. Replaces the primitive first-party rig.
-            const string fbxPath = "Assets/Qaniva/Art/Patients/adult_ubc_v1.fbx";
+            const string fbxPath = "Assets/Qaniva/Art/Patients/adult_hp_v1.fbx";
             var importer = AssetImporter.GetAtPath(fbxPath) as ModelImporter;
             if (importer == null)
             {
@@ -249,12 +276,17 @@ namespace Qaniva.EditorTools
             importer.animationType = ModelImporterAnimationType.Generic; // procedural bone animation, no clips yet
             foreach (var (src, dst) in new[]
             {
-                ("Skin_Body", "SkinTextured"),
-                ("Gown", "Gown"),
-                ("Hair", "Hair"),
-                ("MI_Hair_2", "Hair"),
-                ("MI_Eyes", "Eyes"),
-                ("MI_Hair_1", "Hair"),
+                ("Skin_Arms", "Skin_Arms"),
+                ("Skin_Legs", "Skin_Legs"),
+                ("Skin_Face", "Skin_Face"),
+                ("Skin_Torso", "Skin_Torso"),
+                ("Gown", "GownTex"),
+                ("Slippers", "Slippers"),
+                ("Eyes", "EyesTex"),
+                ("Mouth", "Mouth"),
+                ("Eyelashes", "Eyelashes"),
+                ("Eyebrows", "Eyelashes"),
+                ("Bracelet", "Bracelet"),
             })
             {
                 importer.AddRemap(
@@ -272,9 +304,10 @@ namespace Qaniva.EditorTools
             // (bed-head) but face-down; the extra 180° roll about the body's long
             // axis turns it onto its back. Empirical values verified via PlayMode
             // captures (the Blender FBX import bakes its own axis compensation).
-            // Quaternius export: X+90 lays the character on its back with the head
-            // toward +Z (bed head); no extra roll needed (verified via CapturePreview).
-            model.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+            // The supplied patient faces -Y in Blender: X+90 lays it face-down, the extra
+            // 180° roll about the body axis turns it onto its back (verified on device).
+            model.transform.localRotation =
+                Quaternion.AngleAxis(180f, Vector3.forward) * Quaternion.Euler(90f, 0f, 0f);
             // Feet toward the bed's foot end; body rests on the mattress plane.
             model.transform.localPosition = new Vector3(0f, 0.14f, -0.85f);
 

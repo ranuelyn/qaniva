@@ -1,0 +1,6 @@
+adult_hp_v1.fbx and Textures/hp/* derive from an owner-supplied third-party asset
+("Hospital Patient", delivered as an OBJ set + PNG textures; origin: Sketchfab per the owner).
+LICENCE: to be confirmed by the project owner against the source listing before any
+public/store release (Sketchfab "Standard" licences permit use inside a product but not
+redistribution of the source files). Processing by Qaniva (scripts/build-patient-from-hp.py):
+procedural armature + automatic/transferred weights, lying pose, gown decimation, material naming.
