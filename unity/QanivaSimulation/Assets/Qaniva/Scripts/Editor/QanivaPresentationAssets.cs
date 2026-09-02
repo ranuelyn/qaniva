@@ -264,7 +264,7 @@ namespace Qaniva.EditorTools
             // CC0 Quaternius Universal Base Character, processed by scripts (see
             // Art/Patients/LICENSE-quaternius.txt): Qaniva bone names, gown material,
             // baked semi-recumbent pose, hair. Replaces the primitive first-party rig.
-            const string fbxPath = "Assets/Qaniva/Art/Patients/adult_hp_v1.fbx";
+            const string fbxPath = "Assets/Qaniva/Art/Patients/mixamo/adult_mx_v1_posed.fbx";
             var importer = AssetImporter.GetAtPath(fbxPath) as ModelImporter;
             if (importer == null)
             {
@@ -274,6 +274,7 @@ namespace Qaniva.EditorTools
 
             importer.materialImportMode = ModelImporterMaterialImportMode.ImportViaMaterialDescription;
             importer.animationType = ModelImporterAnimationType.Generic; // procedural bone animation, no clips yet
+            importer.isReadable = true; // Cloth needs readable gown geometry
             foreach (var (src, dst) in new[]
             {
                 ("Skin_Arms", "Skin_Arms"),
@@ -283,6 +284,7 @@ namespace Qaniva.EditorTools
                 ("Gown", "GownTex"),
                 ("Slippers", "Slippers"),
                 ("Eyes", "EyesTex"),
+                ("model_8_mat", "GownTex"),
                 ("Mouth", "Mouth"),
                 ("Eyelashes", "Eyelashes"),
                 ("Eyebrows", "Eyelashes"),
@@ -338,6 +340,10 @@ namespace Qaniva.EditorTools
                     Debug.Log($"[QanivaPresentationAssets] rigged patient material: {renderer.name} -> {(m == null ? "NULL" : m.name)}");
                 }
             }
+
+            // Gown → Unity Cloth: shoulders/chest pinned, hem free, capsule colliders on the
+            // torso and thighs so the hem drapes over the body instead of following bones.
+            SetupGownCloth(model);
 
             // Pillow stays a primitive; the draped blanket is part of the FBX now
             // (BlanketMesh, modeled in Blender and weighted to the Hips bone).
@@ -436,6 +442,83 @@ namespace Qaniva.EditorTools
             Debug.Log($"[QanivaPresentationAssets] wrote {path}");
             var result = root;
             return result;
+        }
+
+
+        // --- gown cloth --------------------------------------------------------
+
+        private static Transform FindBone(Transform root, string suffix)
+        {
+            foreach (var t in root.GetComponentsInChildren<Transform>())
+            {
+                if (t.name.EndsWith(suffix)) return t;
+            }
+            return null;
+        }
+
+        private static CapsuleCollider Capsule(Transform bone, Transform toward, float radius)
+        {
+            if (bone == null) return null;
+            var go = new GameObject("ClothCollider");
+            go.transform.SetParent(bone, false);
+            var c = go.AddComponent<CapsuleCollider>();
+            c.radius = radius;
+            float len = toward != null ? Vector3.Distance(bone.position, toward.position) : 0.25f;
+            c.height = len + radius * 2f;
+            c.direction = 1; // Y (bone axis for Mixamo rigs)
+            c.center = new Vector3(0f, len * 0.5f, 0f);
+            c.isTrigger = true;
+            return c;
+        }
+
+        private static void SetupGownCloth(GameObject model)
+        {
+            SkinnedMeshRenderer gown = null;
+            foreach (var r in model.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                if (r.name == "Gown") gown = r;
+            }
+            if (gown == null || gown.sharedMesh == null)
+            {
+                Debug.LogWarning("[QanivaPresentationAssets] no Gown renderer — cloth skipped");
+                return;
+            }
+            var cloth = gown.gameObject.AddComponent<Cloth>();
+            var verts = gown.sharedMesh.vertices;
+            // pin the top of the gown (above the armpit line), free below; mesh space is the
+            // T-pose rest space of the FBX (Y up after import).
+            float top = float.MinValue, bottom = float.MaxValue;
+            foreach (var v in verts) { top = Mathf.Max(top, v.y); bottom = Mathf.Min(bottom, v.y); }
+            float pinLine = top - (top - bottom) * 0.22f;
+            var coeffs = new ClothSkinningCoefficient[verts.Length];
+            for (int i = 0; i < verts.Length; i++)
+            {
+                float t = Mathf.InverseLerp(pinLine, bottom, verts[i].y);
+                coeffs[i].maxDistance = verts[i].y > pinLine ? 0f : Mathf.Lerp(0.02f, 0.16f, t);
+                coeffs[i].collisionSphereDistance = 0f;
+            }
+            cloth.coefficients = coeffs;
+            cloth.stretchingStiffness = 0.95f;
+            cloth.bendingStiffness = 0.5f;
+            cloth.damping = 0.5f;
+            cloth.worldVelocityScale = 0.4f;
+            cloth.worldAccelerationScale = 0.6f;
+            cloth.selfCollisionDistance = 0f;
+            var root = model.transform;
+            var caps = new System.Collections.Generic.List<CapsuleCollider>();
+            void Add(string a, string b, float r) { var c = Capsule(FindBone(root, a), FindBone(root, b), r); if (c != null) caps.Add(c); }
+            Add("mixamorig:Hips", "mixamorig:Spine1", 0.16f);
+            Add("mixamorig:Spine1", "mixamorig:Neck", 0.16f);
+            Add("mixamorig:LeftUpLeg", "mixamorig:LeftLeg", 0.085f);
+            Add("mixamorig:RightUpLeg", "mixamorig:RightLeg", 0.085f);
+            Add("mixamorig:LeftLeg", "mixamorig:LeftFoot", 0.065f);
+            Add("mixamorig:RightLeg", "mixamorig:RightFoot", 0.065f);
+            Add("mixamorig:LeftArm", "mixamorig:LeftForeArm", 0.055f);
+            Add("mixamorig:RightArm", "mixamorig:RightForeArm", 0.055f);
+            Add("mixamorig:LeftForeArm", "mixamorig:LeftHand", 0.045f);
+            Add("mixamorig:RightForeArm", "mixamorig:RightHand", 0.045f);
+            cloth.capsuleColliders = caps.ToArray();
+            Debug.Log($"[QanivaPresentationAssets] gown cloth: {verts.Length} verts, {caps.Count} colliders");
         }
 
         // --- environment ---------------------------------------------------

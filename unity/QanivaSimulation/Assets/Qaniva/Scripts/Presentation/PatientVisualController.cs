@@ -57,7 +57,7 @@ namespace Qaniva.Presentation
         {
             _rigged = GetComponentInChildren<SkinnedMeshRenderer>() != null;
 
-            _chest = FindDeep(transform, "Chest");
+            _chest = FindDeep(transform, "Chest") ?? FindDeep(transform, "mixamorig:Spine2");
             if (_chest != null)
             {
                 _chestBaseScale = _chest.localScale;

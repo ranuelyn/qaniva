@@ -100,3 +100,5 @@ art/*.blend
 art/*.blend1
 # Unity test-runner temp scene (left behind when a batchmode test run is killed)
 unity/QanivaSimulation/Assets/InitTestScene*
+art/mixamo-upload/
+Mixamo/

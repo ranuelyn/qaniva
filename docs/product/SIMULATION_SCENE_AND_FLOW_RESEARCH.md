@@ -123,3 +123,21 @@ export. Unity lays it down with the 180° roll (this model faces −Y). It
 replaces the Quaternius-based patient as `adult_rigged_v1`; the Quaternius
 pipeline stays available as a CC0 fallback. **Licence of the supplied model is
 the owner's to confirm** (see `Art/Patients/LICENSE-hospital-patient.txt`).
+
+## Addendum (2026-09-03) — Mixamo auto-rig + Unity Cloth gown
+
+Free Sketchfab search (public API, rigged/animated filters) found no usable
+rigged patient; the owner's linked store models are unrigged. Path taken: the
+owner's Hospital Patient mesh (merged, textured, T-pose —
+`art/mixamo-upload/`) was auto-rigged on **Mixamo** (65-bone `mixamorig`
+skeleton, quality skin weights incl. the gown, eyes and lashes). Pipeline:
+`scripts/prepare-mixamo-patient.py` (split the gown into its own mesh,
+decimate, contract material names) → `scripts/pose-mixamo-patient.py`
+(facing-aware settle of the arm chain against the body's back plane, torso
+lean, bake) → `QanivaPresentationAssets` builds the prefab with textured URP
+materials and a **Cloth** component on the gown (shoulders pinned, hem free,
+capsule colliders on hips/torso/thighs/calves/arms/forearms) so the gown
+drapes instead of following bones. `PatientVisualController` breathes via
+`mixamorig:Spine2`. Result on device: gown rests on the body, neck seam gone,
+eyes/lashes correct. Next: Mixamo clips (Breathing Idle, sitting, pain) on an
+Animator driven by `presentationProfile`/`PatientVisualState`.
