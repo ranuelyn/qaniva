@@ -27,6 +27,18 @@ Dosya `art/patient-pose-studio.blend` (git'e girmez). İçinde:
 
 Kolaylıklar: `N` panel → Item → kemik rotasyonlarını sayısal gir · `Alt+R` seçili kemiğin rotasyonunu sıfırlar · yatak wire kutuları `Object Mode`'da gizlenebilir.
 
+## 2b. Otomatik "şilteye oturtma" (elle poz vermek istemiyorsan)
+
+```bash
+/Applications/Blender.app/Contents/MacOS/Blender -b art/patient-pose-studio.blend --python scripts/settle-patient-on-bed.py
+```
+
+Kol zincirini (UpperArm → LowerArm → Hand) ve bacakları (Calf → topuk) küçük
+adımlarla döndürüp dirsek/bilek/parmak ucu ve topuğu şilte üstünün ~2–6 cm
+üzerine oturtur, yönü kendisi bulur, sonucu aynı .blend'e kaydeder ve ölçüleri
+basar (`L: elbow 5.9 cm, wrist 4.3 cm, fingertips 3.3 cm …`). Deterministiktir;
+istediğin kadar tekrar çalıştırabilirsin, ardından 3. adım.
+
 ## 3. Bake + Unity'ye export
 
 ```bash
