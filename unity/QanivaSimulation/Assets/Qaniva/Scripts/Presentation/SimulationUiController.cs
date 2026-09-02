@@ -56,8 +56,27 @@ namespace Qaniva.Presentation
         private VisualElement _completionPanel;
         private Label _completionDetail;
 
+        private VisualElement _actionArea;
         private float _lastSubmitTime = -999f;
         private bool _inputLocked;
+
+        public bool SheetCollapsed => _actionArea != null && _actionArea.ClassListContains("sheet-collapsed");
+
+        private void ToggleSheet()
+        {
+            if (_actionArea == null)
+            {
+                return;
+            }
+            if (SheetCollapsed)
+            {
+                _actionArea.RemoveFromClassList("sheet-collapsed");
+            }
+            else
+            {
+                _actionArea.AddToClassList("sheet-collapsed");
+            }
+        }
 
         public VisualElement Root => _document != null ? _document.rootVisualElement : null;
 
@@ -107,6 +126,30 @@ namespace Qaniva.Presentation
             };
             root.Q<Button>("exit-button").clicked += () => _controller.RequestExit();
 
+            // Action sheet: the grabber and a tap on the already-active category
+            // both collapse/expand the decision rows so the patient can take the
+            // whole screen. Pure presentation state; engine untouched.
+            _actionArea = root.Q<VisualElement>("action-area");
+            var handle = root.Q<Button>("sheet-handle");
+            if (handle != null)
+            {
+                var bar = new VisualElement { pickingMode = PickingMode.Ignore };
+                bar.AddToClassList("sheet-handle-bar");
+                handle.Add(bar);
+                handle.clicked += ToggleSheet;
+            }
+            // Re-tapping the active category only ever EXPANDS (a collapsed sheet
+            // must reopen from the dock); collapsing is the grabber's explicit job.
+            void ExpandSheet()
+            {
+                if (SheetCollapsed)
+                {
+                    ToggleSheet();
+                }
+            }
+            _actions.ActiveCategoryReselected += ExpandSheet;
+            _actions.CategoryChanged += ExpandSheet;
+
             ApplySafeArea(root);
 
             _controller.SimulationStarted += OnSimulationStarted;
@@ -148,6 +191,7 @@ namespace Qaniva.Presentation
             _timeline.Render(_controller.GetTimeline());
             _vitals.Render(_controller.CurrentSnapshot);
             _actions.ResetCategory();
+            _actionArea?.RemoveFromClassList("sheet-collapsed");
             _actions.Render(_controller.GetActionAvailability());
         }
 

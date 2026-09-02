@@ -46,7 +46,7 @@ namespace Qaniva.Presentation
             foreach (var e in timeline)
             {
                 var label = new Label(
-                    $"#{e.Seq}  {e.SimTimeSec / 60:00}:{e.SimTimeSec % 60:00}  {e.Label}  [{e.Classification}]")
+                    $"{e.SimTimeSec / 60:00}:{e.SimTimeSec % 60:00}   {e.Label}   ·  {VitalsPresenter.Humanize(e.Classification)}")
                 {
                     name = $"timeline-{e.Seq}",
                 };

@@ -1,21 +1,40 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements">
   <!--
-    Qaniva in-simulation interaction UI (MVP foundation, not final UX).
+    Qaniva in-simulation interaction UI.
     Every value rendered here comes from the engine via SimulationBridgeController:
     vitals/state from SimulationSnapshotView, the action list from
     GetActionAvailability(), history from GetTimeline(). The UI never computes
     clinical truth. See docs/architecture/simulation-ui.md.
+
+    Layout model: the scene owns the screen; a compact ACTION SHEET rises from
+    the bottom (grabber + quiet utilities, category dock, decision rows). The
+    sheet collapses to its dock so the patient stays dominant.
   -->
   <ui:VisualElement name="root" class="root">
 
-    <!-- A. safe-area top spacer (adjusted at runtime) + vitals -->
+    <!-- A. safe-area top spacer (adjusted at runtime) + vitals strip -->
     <ui:VisualElement name="safe-top" class="safe-top" />
     <ui:VisualElement name="vitals-bar" class="vitals-bar">
-      <ui:Label name="vital-hr" class="vital" text="HR --" />
-      <ui:Label name="vital-bp" class="vital" text="BP --/--" />
-      <ui:Label name="vital-spo2" class="vital" text="SpO2 --" />
-      <ui:Label name="vital-rr" class="vital" text="RR --" />
-      <ui:Label name="sim-clock" class="vital clock" text="00:00" />
+      <ui:VisualElement class="vital-tile">
+        <ui:Label class="vital-caption" text="HR" />
+        <ui:Label name="vital-hr" class="vital" text="--" />
+      </ui:VisualElement>
+      <ui:VisualElement class="vital-tile">
+        <ui:Label class="vital-caption" text="BP" />
+        <ui:Label name="vital-bp" class="vital" text="--/--" />
+      </ui:VisualElement>
+      <ui:VisualElement class="vital-tile">
+        <ui:Label class="vital-caption" text="SpO2" />
+        <ui:Label name="vital-spo2" class="vital" text="--" />
+      </ui:VisualElement>
+      <ui:VisualElement class="vital-tile">
+        <ui:Label class="vital-caption" text="RR" />
+        <ui:Label name="vital-rr" class="vital" text="--" />
+      </ui:VisualElement>
+      <ui:VisualElement class="vital-tile vital-tile-clock">
+        <ui:Label class="vital-caption" text="Elapsed" />
+        <ui:Label name="sim-clock" class="vital clock" text="00:00" />
+      </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="status-bar" class="status-bar">
       <ui:Label name="patient-status" class="patient-status" text="" />
@@ -30,8 +49,7 @@
       <ui:Button name="result-view-button" class="result-view-button hidden" text="Open result" />
     </ui:VisualElement>
 
-    <!-- F. full-screen result viewer (generic: ECG now, imaging later).
-         Pan = native ScrollView touch drag; zoom = simple +/- controls. -->
+    <!-- F. full-screen result viewer (generic: ECG now, imaging later). -->
     <ui:VisualElement name="result-viewer" class="result-viewer hidden">
       <ui:Label name="result-viewer-title" class="result-viewer-title" text="" />
       <ui:Label name="result-viewer-note" class="result-viewer-note" text="" />
@@ -58,17 +76,19 @@
 
     <!-- N. case log (engine timeline), collapsed by default -->
     <ui:VisualElement name="timeline-panel" class="timeline-panel hidden">
-      <ui:ScrollView name="timeline-scroll" class="timeline-scroll" />
+      <ui:Label class="timeline-title" text="Case log" />
+      <ui:ScrollView name="timeline-scroll" class="timeline-scroll" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" />
     </ui:VisualElement>
 
-    <!-- C+D. action navigation: category tabs + action list -->
+    <!-- C+D. action sheet: grabber + utilities, category dock, decision rows -->
     <ui:VisualElement name="action-area" class="action-area">
-      <ui:VisualElement name="category-tabs" class="category-tabs" />
-      <ui:ScrollView name="action-list" class="action-list" />
-      <ui:VisualElement name="footer" class="footer">
-        <ui:Button name="toggle-timeline" class="footer-button" text="Case log" />
-        <ui:Button name="exit-button" class="footer-button exit" text="Exit" />
+      <ui:VisualElement name="sheet-header" class="sheet-header">
+        <ui:Button name="toggle-timeline" class="utility-button" text="Case log" />
+        <ui:Button name="sheet-handle" class="sheet-handle" text="" />
+        <ui:Button name="exit-button" class="utility-button exit" text="Exit" />
       </ui:VisualElement>
+      <ui:VisualElement name="category-tabs" class="category-tabs" />
+      <ui:ScrollView name="action-list" class="action-list" vertical-scroller-visibility="Hidden" horizontal-scroller-visibility="Hidden" />
     </ui:VisualElement>
 
     <ui:VisualElement name="safe-bottom" class="safe-bottom" />

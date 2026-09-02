@@ -7,18 +7,19 @@ using Qaniva.Simulation.Core;
 namespace Qaniva.Presentation
 {
     /// <summary>
-    /// Renders category tabs + the action list from the engine's canonical
+    /// Renders the category dock + the decision rows from the engine's canonical
     /// <see cref="ActionAvailabilityView"/> projection.
     ///
     /// Presentation-only responsibilities: grouping action TYPES into the product's
-    /// five navigation categories (Patient/Examine/Orders/Treat/More) and drawing
-    /// hidden/disabled/enabled states. It performs NO availability logic of its own
-    /// — an action is a button exactly when the engine says Visible, and tappable
-    /// exactly when the engine says Enabled.
+    /// five navigation categories (Patient/Examine/Orders/Treat/More), splitting an
+    /// authored label into title/secondary lines, and translating the engine's
+    /// machine-worded disabled reason into display copy. It performs NO
+    /// availability logic of its own — an action is a row exactly when the engine
+    /// says Visible, and tappable exactly when the engine says Enabled.
     ///
     /// Element naming contract (used by the E2E UI driver and tests):
-    ///   tabs    -> "tab-&lt;Category&gt;"   e.g. tab-Treat
-    ///   actions -> "action-&lt;actionId&gt;" e.g. action-give_atropine
+    ///   tabs    -> "tab-&lt;Category&gt;"   e.g. tab-Treat        (Button)
+    ///   actions -> "action-&lt;actionId&gt;" e.g. action-give_atropine (Button)
     /// </summary>
     public sealed class ActionListPresenter
     {
@@ -43,6 +44,14 @@ namespace Qaniva.Presentation
         private IReadOnlyList<ActionAvailabilityView> _current = Array.Empty<ActionAvailabilityView>();
         private string _activeCategory = "Examine";
 
+        /// <summary>Raised when the user taps the already-active category — the
+        /// controller uses it to collapse/expand the sheet.</summary>
+        public event Action ActiveCategoryReselected;
+
+        /// <summary>Raised when a DIFFERENT category is chosen — the controller
+        /// expands the sheet so the newly chosen rows are actually visible.</summary>
+        public event Action CategoryChanged;
+
         public ActionListPresenter(VisualElement root, Action<string> onSubmit)
         {
             _tabs = root.Q<VisualElement>("category-tabs");
@@ -58,6 +67,46 @@ namespace Qaniva.Presentation
 
         public static string CategoryFor(string actionType) =>
             CategoryByType.TryGetValue(actionType, out var c) ? c : "More";
+
+        /// <summary>Display copy for the engine's disabled reason. The engine's
+        /// wording is machine-oriented ("already performed", "requires: expr");
+        /// the row shows a short clinical status instead. Unknown reasons pass
+        /// through unchanged so nothing is hidden.</summary>
+        public static string StatusFor(string disabledReason)
+        {
+            if (string.IsNullOrEmpty(disabledReason))
+            {
+                return "Unavailable";
+            }
+            if (disabledReason == "already performed")
+            {
+                return "Done";
+            }
+            if (disabledReason.StartsWith("requires:", StringComparison.Ordinal))
+            {
+                return "Not yet available";
+            }
+            return disabledReason;
+        }
+
+        /// <summary>Splits "Epinephrine 0.5 mg IM — anterolateral thigh" into a
+        /// title and a secondary descriptor line. Labels without a dash stay whole.</summary>
+        public static (string title, string secondary) SplitLabel(string label)
+        {
+            if (string.IsNullOrEmpty(label))
+            {
+                return ("", "");
+            }
+            foreach (var separator in new[] { " — ", " – ", " - " })
+            {
+                int i = label.IndexOf(separator, StringComparison.Ordinal);
+                if (i > 0 && i < label.Length - separator.Length)
+                {
+                    return (label.Substring(0, i).Trim(), label.Substring(i + separator.Length).Trim());
+                }
+            }
+            return (label, "");
+        }
 
         /// <summary>Re-render tabs + list from a fresh engine projection.</summary>
         public void Render(IReadOnlyList<ActionAvailabilityView> availability)
@@ -79,7 +128,13 @@ namespace Qaniva.Presentation
 
         public void SelectCategory(string category)
         {
+            if (category == _activeCategory)
+            {
+                ActiveCategoryReselected?.Invoke();
+                return;
+            }
             _activeCategory = category;
+            CategoryChanged?.Invoke();
             RenderTabs(CategoryOrder
                 .Where(c => _current.Any(a => a.Visible && CategoryFor(a.Type) == c))
                 .ToList());
@@ -113,28 +168,48 @@ namespace Qaniva.Presentation
                     continue; // HIDDEN, or belongs to another tab
                 }
 
-                var button = new Button { name = $"action-{action.ActionId}", text = action.Label };
-                button.AddToClassList("action-button");
+                // The row IS a Button (name contract + real click semantics); its
+                // text is empty and the content is composed from child labels.
+                var row = new Button { name = $"action-{action.ActionId}", text = "" };
+                row.AddToClassList("action-row");
+
+                var (title, secondary) = SplitLabel(action.Label);
+                var copy = new VisualElement { pickingMode = PickingMode.Ignore };
+                copy.AddToClassList("action-row-copy");
+                var titleLabel = new Label(title) { pickingMode = PickingMode.Ignore };
+                titleLabel.AddToClassList("action-row-title");
+                copy.Add(titleLabel);
+                if (!string.IsNullOrEmpty(secondary))
+                {
+                    var secondaryLabel = new Label(secondary) { pickingMode = PickingMode.Ignore };
+                    secondaryLabel.AddToClassList("action-row-secondary");
+                    copy.Add(secondaryLabel);
+                }
+                row.Add(copy);
 
                 if (action.Enabled)
                 {
+                    var chevron = new Label("›") { pickingMode = PickingMode.Ignore };
+                    chevron.AddToClassList("action-row-chevron");
+                    row.Add(chevron);
+
                     string capturedId = action.ActionId;
-                    button.clicked += () => _onSubmit(capturedId);
+                    row.clicked += () => _onSubmit(capturedId);
                 }
                 else
                 {
-                    // VISIBLE + DISABLED: engine-worded reason, no interaction.
-                    button.SetEnabled(false);
-                    button.AddToClassList("action-button-disabled");
+                    // VISIBLE + DISABLED: engine-worded reason → inline status, no interaction.
+                    row.SetEnabled(false);
+                    row.AddToClassList("action-row-disabled");
+                    if (action.DisabledReason == "already performed")
+                    {
+                        row.AddToClassList("action-row-done");
+                    }
+                    var status = new Label(StatusFor(action.DisabledReason)) { pickingMode = PickingMode.Ignore };
+                    status.AddToClassList("action-row-status");
+                    row.Add(status);
                 }
-                _list.Add(button);
-
-                if (!action.Enabled && !string.IsNullOrEmpty(action.DisabledReason))
-                {
-                    var reason = new Label(action.DisabledReason);
-                    reason.AddToClassList("action-disabled-reason");
-                    _list.Add(reason);
-                }
+                _list.Add(row);
             }
         }
     }
