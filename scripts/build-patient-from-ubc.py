@@ -61,19 +61,22 @@ hair_mesh.name='Hair'
 # --- gown: a loose shrink-wrapped tube over the torso (armature-deformed) ---
 bpy.context.view_layer.objects.active=body
 if bpy.context.object and bpy.context.object.mode!='OBJECT': bpy.ops.object.mode_set(mode='OBJECT')
-bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=0.36, depth=0.95, location=(0,0.0,1.02))
+bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=0.42, depth=0.98, location=(0,0.0,1.00))
 gownmesh=bpy.context.active_object; gownmesh.name='GownMesh'
-bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='SELECT'); bpy.ops.mesh.subdivide(number_cuts=14); bpy.ops.object.mode_set(mode='OBJECT')
-sw=gownmesh.modifiers.new('Shrink','SHRINKWRAP'); sw.target=body; sw.wrap_method='NEAREST_SURFACEPOINT'; sw.offset=0.022
-sm=gownmesh.modifiers.new('Smooth','SMOOTH'); sm.factor=0.6; sm.iterations=6
+bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='SELECT'); bpy.ops.mesh.subdivide(number_cuts=10); bpy.ops.object.mode_set(mode='OBJECT')
+sw=gownmesh.modifiers.new('Shrink','SHRINKWRAP'); sw.target=body; sw.wrap_method='NEAREST_SURFACEPOINT'; sw.offset=0.03
+sm=gownmesh.modifiers.new('Smooth','SMOOTH'); sm.factor=0.5; sm.iterations=10
 bpy.context.view_layer.objects.active=gownmesh; gownmesh.select_set(True)
 bpy.ops.object.modifier_apply(modifier='Shrink'); bpy.ops.object.modifier_apply(modifier='Smooth')
 # remove cap faces (top/bottom) so it reads as a garment, not a tube
 bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='DESELECT'); bpy.ops.object.mode_set(mode='OBJECT')
 for pgon in gownmesh.data.polygons:
-    pgon.select = abs(pgon.normal.z) > 0.85
+    c=pgon.center
+    pgon.select = (pgon.normal.z < -0.85) or (pgon.normal.z > 0.6 and (c.x*c.x+c.y*c.y) < 0.13*0.13)
 bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.delete(type='FACE'); bpy.ops.object.mode_set(mode='OBJECT')
 gownmesh.data.materials.append(gown)
+sol=gownmesh.modifiers.new('Thick','SOLIDIFY'); sol.thickness=0.008; sol.offset=1.0
+bpy.context.view_layer.objects.active=gownmesh; bpy.ops.object.modifier_apply(modifier='Thick')
 for pgon in gownmesh.data.polygons: pgon.use_smooth=True
 # deform with the armature (automatic weights from the body's bones)
 bpy.ops.object.select_all(action='DESELECT'); gownmesh.select_set(True); arm.select_set(True); bpy.context.view_layer.objects.active=arm
@@ -99,10 +102,10 @@ for name,frac in (('Spine',0.35),('Chest',0.35),('UpperChest',0.30)):
 rot_world('Head','X',-TORSO_BEND*0.55)
 # arms: down to the sides, then slightly back into the body plane so they rest on the bed
 rot_world('UpperArm.L','Y', 82); rot_world('UpperArm.R','Y',-82)
-rot_world('UpperArm.L','X', TORSO_BEND*0.8); rot_world('UpperArm.R','X', TORSO_BEND*0.8)
+rot_world('UpperArm.L','X', TORSO_BEND*0.5); rot_world('UpperArm.R','X', TORSO_BEND*0.5)
 rot_world('UpperArm.L','Z', 6);  rot_world('UpperArm.R','Z', -6)
 # slight elbow bend, forearms toward the hips
-rot_world('LowerArm.L','X', 10); rot_world('LowerArm.R','X', 10)
+rot_world('LowerArm.L','X', 3); rot_world('LowerArm.R','X', 3)
 # hands: palms down, fingers relaxed (slightly curled)
 rot_local('Hand.L','Y', 75); rot_local('Hand.R','Y', -75)
 rot_local('Hand.L','X', 12); rot_local('Hand.R','X', 12)

@@ -330,28 +330,71 @@ namespace Qaniva.EditorTools
             var root = new GameObject("BedsideMonitor");
 
             // Rolling stand + body + screen. Screen faces -Z (toward the camera).
+            // Lower than a wall unit so it sits below the vitals strip in the frame.
             Box("StandBase", root.transform, new Vector3(0f, 0.03f, 0f), new Vector3(0.42f, 0.06f, 0.42f), "PlasticDark");
-            Cyl("StandPole", root.transform, new Vector3(0f, 0.68f, 0f), 0.028f, 1.3f, "Metal");
-            Box("Body", root.transform, new Vector3(0f, 1.42f, 0.015f), new Vector3(0.55f, 0.44f, 0.09f), "PlasticLight");
+            Cyl("StandPole", root.transform, new Vector3(0f, 0.52f, 0f), 0.028f, 0.98f, "Metal");
+            Box("Body", root.transform, new Vector3(0f, 1.16f, 0.015f), new Vector3(0.58f, 0.50f, 0.09f), "PlasticLight");
+            Box("Screen", root.transform, new Vector3(0f, 1.16f, -0.035f), new Vector3(0.53f, 0.44f, 0.012f), "ScreenDark");
 
-            Box("Screen", root.transform, new Vector3(0f, 1.42f, -0.035f), new Vector3(0.50f, 0.38f, 0.012f), "ScreenDark");
+            // Waveform strip (emissive unlit texture) across the top of the screen.
+            var strip = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            strip.name = "EcgStrip";
+            strip.transform.SetParent(root.transform, false);
+            strip.transform.localPosition = new Vector3(0f, 1.30f, -0.045f);
+            strip.transform.localScale = new Vector3(0.48f, 0.10f, 1f);
+            strip.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
+            UnityEngine.Object.DestroyImmediate(strip.GetComponent<Collider>());
+            var stripMatPath = $"{MaterialsDir}/EcgStrip.mat";
+            var stripMat = AssetDatabase.LoadAssetAtPath<Material>(stripMatPath);
+            if (stripMat == null)
+            {
+                stripMat = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+                AssetDatabase.CreateAsset(stripMat, stripMatPath);
+            }
+            const string stripTexPath = "Assets/Qaniva/Art/Props/ecg_strip.png";
+            AssetDatabase.ImportAsset(stripTexPath, ImportAssetOptions.ForceSynchronousImport);
+            var stripTex = AssetDatabase.LoadAssetAtPath<Texture2D>(stripTexPath);
+            if (stripTex == null)
+            {
+                Debug.LogWarning("[QanivaPresentationAssets] ecg_strip.png not found — monitor waveform will be blank");
+            }
+            else
+            {
+                stripMat.SetTexture("_BaseMap", stripTex);
+                stripMat.mainTexture = stripTex;
+                stripMat.SetColor("_BaseColor", Color.white);
+            }
+            EditorUtility.SetDirty(stripMat);
+            strip.GetComponent<Renderer>().sharedMaterial = stripMat;
+            // Back-to-back twin so the strip reads regardless of the quad's facing.
+            var strip2 = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            strip2.name = "EcgStripBack";
+            strip2.transform.SetParent(root.transform, false);
+            strip2.transform.localPosition = new Vector3(0f, 1.30f, -0.0445f);
+            strip2.transform.localScale = new Vector3(0.48f, 0.10f, 1f);
+            strip2.transform.localEulerAngles = Vector3.zero;
+            UnityEngine.Object.DestroyImmediate(strip2.GetComponent<Collider>());
+            strip2.GetComponent<Renderer>().sharedMaterial = stripMat;
 
+            // Clinical color coding (monitor convention): HR green, SpO2 cyan, NIBP red-orange, RR yellow.
             var green = new Color(0.35f, 0.95f, 0.55f);
             var cyan = new Color(0.45f, 0.85f, 0.95f);
+            var red = new Color(0.98f, 0.35f, 0.30f);
+            var yellow = new Color(0.98f, 0.85f, 0.30f);
             var label = new Color(0.65f, 0.70f, 0.72f);
             const float zFace = -0.045f; // just in front of the screen face
 
             // Labels sit under the (unscaled) monitor root — never under the scaled
             // Screen box, which would distort TextMesh glyphs non-uniformly.
-            Text("HrLabel", root.transform, new Vector3(-0.14f, 1.555f, zFace), "NABIZ", 0.035f, label);
-            Text("HrValue", root.transform, new Vector3(-0.14f, 1.475f, zFace), "--", 0.095f, green);
-            Text("Spo2Label", root.transform, new Vector3(0.14f, 1.555f, zFace), "SpO2", 0.035f, label);
-            Text("Spo2Value", root.transform, new Vector3(0.14f, 1.475f, zFace), "--", 0.095f, cyan);
-            Text("BpLabel", root.transform, new Vector3(-0.14f, 1.385f, zFace), "TA", 0.035f, label);
-            Text("BpValue", root.transform, new Vector3(-0.14f, 1.315f, zFace), "--/--", 0.062f, green);
-            Text("RrLabel", root.transform, new Vector3(0.14f, 1.385f, zFace), "SS", 0.035f, label);
-            Text("RrValue", root.transform, new Vector3(0.14f, 1.315f, zFace), "--", 0.075f, cyan);
-            Text("ClockValue", root.transform, new Vector3(0f, 1.255f, zFace), "00:00", 0.032f, label);
+            Text("HrLabel", root.transform, new Vector3(-0.15f, 1.215f, zFace), "NABIZ", 0.03f, label);
+            Text("HrValue", root.transform, new Vector3(-0.15f, 1.145f, zFace), "--", 0.085f, green);
+            Text("Spo2Label", root.transform, new Vector3(0.15f, 1.215f, zFace), "SpO2", 0.03f, label);
+            Text("Spo2Value", root.transform, new Vector3(0.15f, 1.145f, zFace), "--", 0.085f, cyan);
+            Text("BpLabel", root.transform, new Vector3(-0.15f, 1.06f, zFace), "TA", 0.03f, label);
+            Text("BpValue", root.transform, new Vector3(-0.15f, 1.0f, zFace), "--/--", 0.058f, red);
+            Text("RrLabel", root.transform, new Vector3(0.15f, 1.06f, zFace), "SS", 0.03f, label);
+            Text("RrValue", root.transform, new Vector3(0.15f, 1.0f, zFace), "--", 0.07f, yellow);
+            Text("ClockValue", root.transform, new Vector3(0f, 0.955f, zFace), "00:00", 0.028f, label);
 
             root.AddComponent<BedsideMonitorView>();
 
@@ -412,7 +455,7 @@ namespace Qaniva.EditorTools
             var monitor = (GameObject)PrefabUtility.InstantiatePrefab(
                 AssetDatabase.LoadAssetAtPath<GameObject>($"{PropsDir}/BedsideMonitor.prefab"));
             monitor.transform.SetParent(root.transform, false);
-            monitor.transform.localPosition = new Vector3(0.62f, 0f, 2.00f);
+            monitor.transform.localPosition = new Vector3(0.66f, 0f, 2.05f);
             // Face the presentation camera: the screen normal is -Z, the camera sits
             // front-left and above ((0.02, 1.92, -2.18)), so yaw slightly left and
             // tilt the face up toward it — the vitals must be readable in-frame.
