@@ -66,3 +66,29 @@ scripting rather than the MCP asset tools.
 - Clinical status is unchanged: translated content remains
   `mvp_demo_approved`, clinical validation pending — the Turkish wording itself
   is part of what the reviewing clinician should check.
+
+## Addendum (2026-09-02, second pass) — pose, camera, edge rails
+
+**Lying-patient asset search.** Searched for ready "hospital patient lying" rigs
+with a clean license: CGTrader/TurboSquid/Free3D listings are mostly paid or
+license-unclear; Meshy "CC0" library is AI-generated and unrigged; Sketchfab
+downloads need OAuth. Decision: keep the CC0 Quaternius rig and **pose it
+properly in Blender** (reproducible, license-clean): arms adducted and rotated
+back into the mattress plane, elbows slightly bent, palms down with relaxed
+fingers, slight external leg rotation, plantar-flexed feet, torso and head on
+the raised backrest; a shrink-wrapped gown mesh replaces the painted torso
+region. Iterated through eight headless previews (`CapturePreview`) until the
+figure read as "lying", not "standing on its back".
+
+**Camera.** Matches the Full Code reference frames' principle rather than the
+first pass: from the **foot end, centred and elevated** (−0.38, 1.98, −2.55 →
+(0.02, 0.72, 0.62), FOV 45) so the whole patient sits in the middle third and
+the monitor on the far wall faces the viewer.
+
+**Edge rails.** Category navigation moved from a bottom sheet to **rotated
+tabs on both screen edges** (left: Hasta, Muayene; right: İstemler, Tedavi,
+Diğer) — the thumb-reach principle behind Full Code's side tabs, with Qaniva's
+own styling (ink pills, teal active). A category opens a side panel of
+decision rows from its own edge; re-tapping or ✕ closes it so the patient owns
+the scene. Utilities (Vaka günlüğü, Çık) are a floating pill bar at the
+bottom. Element names (`tab-*`, `action-*`) are unchanged for the driver/tests.
