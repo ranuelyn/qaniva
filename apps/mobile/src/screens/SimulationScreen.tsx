@@ -6,6 +6,8 @@ import type { SimulationMode } from '@qaniva/contracts';
 import { Body, Caption, PrimaryButton, Screen, Wordmark } from '@/components/ui';
 import { useUnitySimulation } from '@/unity/useUnitySimulation';
 import { analytics } from '@/analytics';
+import { catalogCase } from '@/cases/catalog';
+import { cryptoRandomId, randomSeed } from '@/lib/ids';
 import { colors, radius, spacing, typography } from '@/theme/tokens';
 import type { ScreenProps } from '@/navigation/types';
 
@@ -35,7 +37,16 @@ const FAILURE_MESSAGES: Record<string, { title: string; body: string }> = {
  * launch; E2E launches (HomeScreen autostart) may pass an e2e mode.
  */
 export function SimulationScreen({ navigation, route }: ScreenProps<'Simulation'>) {
-  const { caseId, caseVersion, attemptId, seed, title, mode } = route.params;
+  // The production deep link (qaniva://simulate/:caseId) may arrive without the
+  // attempt identity the in-app path always supplies — mint it once here so the
+  // bridge contract (uuid attemptId, numeric seed/version) always holds.
+  const minted = useRef({ attemptId: cryptoRandomId(), seed: randomSeed() });
+  const { caseId, mode } = route.params;
+  const catalogEntry = catalogCase(caseId);
+  const caseVersion = route.params.caseVersion ?? catalogEntry?.manifest.version ?? 1;
+  const attemptId = route.params.attemptId ?? minted.current.attemptId;
+  const seed = route.params.seed ?? minted.current.seed;
+  const title = route.params.title || (catalogEntry?.manifest.title ?? caseId);
   const sim = useUnitySimulation();
   const insets = useSafeAreaInsets();
   const [showDetails, setShowDetails] = useState(false);

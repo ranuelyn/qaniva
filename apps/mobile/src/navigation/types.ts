@@ -23,10 +23,11 @@ export type RootStackParamList = {
   CaseDetail: { caseId: string; caseVersion: number; title: string };
   Simulation: {
     caseId: string;
-    caseVersion: number;
-    attemptId: string;
-    seed: number;
-    title: string;
+    /** Optional for the deep-link route; the screen mints/derives missing values. */
+    caseVersion?: number;
+    attemptId?: string;
+    seed?: number;
+    title?: string;
     /** Runtime mode; omitted (= 'interactive') for every user launch. */
     mode?: string;
   };
