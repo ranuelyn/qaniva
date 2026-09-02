@@ -96,3 +96,5 @@ qaniva-simulation-redesign-demo.zip
 qaniva-turkish-scene-captures.zip
 # Owner-supplied third-party patient model (licence: see docs) — not committed
 Hospital Patient.zip
+art/*.blend
+art/*.blend1

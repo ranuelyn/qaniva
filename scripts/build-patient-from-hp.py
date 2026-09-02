@@ -82,6 +82,24 @@ rot_world('LowerArm.L','X', 6); rot_world('LowerArm.R','X', 6)
 for name,frac in (('Spine',0.35),('Chest',0.35),('UpperChest',0.30)): rot_world(name,'X',TORSO_BEND*frac)  # this model faces -Y: +X = lean back = semi-recumbent when lying
 rot_world('Head','X', -TORSO_BEND*0.5)
 rot_world('Thigh.L','Z',4); rot_world('Thigh.R','Z',-4)
+STUDIO = os.environ.get('QANIVA_POSE_STUDIO')  # path of the .blend to write instead of baking/exporting
+if STUDIO:
+    bpy.ops.object.mode_set(mode='OBJECT')
+    # Bed proxies at Qaniva's environment dimensions (metres). Patient lies with head toward +Y here.
+    def box(name, loc, size, rot=(0,0,0)):
+        bpy.ops.mesh.primitive_cube_add(location=loc); b=bpy.context.active_object; b.name=name
+        b.scale=(size[0]/2,size[1]/2,size[2]/2); b.rotation_euler=rot; b.display_type='WIRE'; return b
+    box('Bed_Mattress', (0,0.0,-0.06), (0.90,2.10,0.12))
+    box('Bed_Backrest', (0,0.78,0.16), (0.90,0.62,0.10), (math.radians(32),0,0))
+    box('Bed_RailL', (-0.50,0.10,0.14), (0.04,1.50,0.22)); box('Bed_RailR', (0.50,0.10,0.14), (0.04,1.50,0.22))
+    # Lay the rig on its back: this model faces -Y standing; X-90 turns the face up, feet toward -Y.
+    arm.rotation_euler=(math.radians(-90),0,0); arm.location=(0,-0.85,0.02)
+    for o in meshes: o.hide_select=False
+    bpy.context.view_layer.objects.active=arm; arm.select_set(True)
+    scene=bpy.context.scene; scene.render.engine='BLENDER_WORKBENCH'
+    bpy.ops.wm.save_as_mainfile(filepath=STUDIO)
+    print(f"STUDIO saved {STUDIO}")
+    sys.exit(0)
 bpy.ops.object.mode_set(mode='OBJECT')
 for o in meshes:
     bpy.context.view_layer.objects.active=o
