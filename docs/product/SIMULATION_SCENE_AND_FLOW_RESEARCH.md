@@ -1,0 +1,68 @@
+# Simulation scene, flow and asset research (2026-09-02)
+
+Inputs: owner-supplied Full Code reference stills (four App Store frames), the
+Full Code App Store listing and fullcodemedical.com, Body Interact public help
+pages, prior competitive benchmark (`COMPETITIVE_VISUAL_BENCHMARK.md`), and
+asset-source checks. **Nothing is copied**: layouts, wording, artwork and
+branding stay Qaniva's; what follows is principle extraction.
+
+## What the Full Code reference frames actually do (composition analysis)
+
+| Element | Observation | Qaniva translation (this sprint) |
+| --- | --- | --- |
+| Camera | Elevated three-quarter view from the **foot end**, slightly to one side; the bed runs diagonally toward the back wall; ~50° vertical FOV feel | Presentation camera moved to the foot-left, elevated (−1.05, 1.78, −1.95) looking at the torso, FOV 50 |
+| Patient | **Semi-recumbent** (head of bed raised ~30°), face and chest readable, legs visible to the feet, gown, bare feet, IV/oxygen props | Torso bones posed up (Spine/Chest/Head ≈32° total), bed gets a raised backrest section; feet remain in frame |
+| Monitor | **Wall/arm-mounted at the head-right, turned to the viewer**, waveform + four numeric vitals in clinical color coding | Bedside monitor moved to head-right and yawed toward the new camera; the top vitals strip stays the primary readout |
+| Header | Case number + chief complaint + compact vitals row, hamburger | Qaniva keeps the humanized vitals tiles + status strip (no case number, no hamburger) |
+| Category rails | Vertical side tabs (Patient/Exam/Stabilize/Differential left; Investigate/Intervene/Communicate/Hand-off right) | **Not copied** — Qaniva's bottom action sheet + underline dock is deliberately different and thumb-reachable |
+| People | Attending/nurse portrait bubbles with speech callouts | Not adopted (no NPC layer in MVP) |
+| Bottom bar | Log · back · forward · sound round buttons | Qaniva: quiet Case log / Exit text utilities inside the sheet header |
+
+Take-aways applied: the **angle** and **pose** are what make Full Code's scene
+read as "a patient in a room" instead of "a mannequin on a slab"; the monitor
+must face the viewer; the lower third belongs to interaction.
+
+## Flow / entry principles (Full Code, Body Interact)
+
+- Next-patient-first home; case library by specialty; short intro; simulation;
+  score → debrief with critical/recommended/unnecessary/harmful buckets;
+  replay loop. Qaniva already implements this loop (Home → Cases → Briefing →
+  Simulation → Results) and keeps its own timing/causality/evidence identity.
+- Body Interact: patient-first canvas, compact bottom tools, staged feedback
+  (Timeline → Performance → take-home messages). Qaniva's Results order matches
+  in spirit (outcome → critical → causality → timeline → evidence).
+- Localization: Full Code is English-only (App Store listing). **Qaniva ships
+  Turkish as its product language** (see below) — a real differentiator for
+  the Turkish medical-education market.
+
+## Ready-made 3D human asset (licensing-clean options)
+
+| Source | License | Fit | Decision |
+| --- | --- | --- | --- |
+| Quaternius — Universal Base Characters (Standard) | CC0 | 6 rigged humanoids (~13k tris), FBX/glTF, hairstyles; needs gown material + lying pose | **Selected** — downloaded to the working scratchpad; integration tracked in QAN-020/021 (rig retarget to Qaniva's bone-name contract: Spine/Chest/Neck/Head, Skin material) |
+| Sketchfab CC0 rigged humans | CC0 / CC-BY per model | Variable quality; API download requires OAuth | Fallback |
+| Poly Pizza (Google Poly archive) | CC0 / CC-BY | Low-poly stylized | Not clinical enough |
+| Mixamo | Adobe terms (login) | Good rigs | Rejected (login/terms) |
+| Meshy / TurboSquid / CGTrader "free" | mixed, often non-CC | — | Rejected for provenance |
+
+The Blender MCP add-on installed on this machine predates the Sketchfab/Poly
+Pizza commands, so asset retrieval is done via direct download + Blender
+scripting rather than the MCP asset tools.
+
+## Turkish product language — decisions
+
+- Product language is Turkish everywhere the learner reads: RN shell (all
+  screens), Unity simulation UI (dock, rows, statuses, vitals captions, viewer,
+  case log), and the **case content itself** (titles, briefings, action labels,
+  result narratives, criteria labels, terminal states, debrief, references).
+- Engine identifiers (action ids, state enums, flags, evidence ids) are never
+  translated — they are contracts. Display mapping lives in presenters
+  (`VitalsPresenter.Humanize`, RN `*_TR` maps).
+- Clinical terminology follows Turkish ED usage: adrenalin (not epinefrin),
+  PKG (primer perkütan koroner girişim), AKS, NSAİİ, TA/SS/NABIZ captions,
+  damar yolu, kateter laboratuvarı, triyaj kategorisi.
+- Golden replays are unaffected (they hash state/score, not labels); the two
+  tests that asserted English display strings were updated.
+- Clinical status is unchanged: translated content remains
+  `mvp_demo_approved`, clinical validation pending — the Turkish wording itself
+  is part of what the reviewing clinician should check.
