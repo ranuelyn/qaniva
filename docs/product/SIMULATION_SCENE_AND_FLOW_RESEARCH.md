@@ -92,3 +92,19 @@ own styling (ink pills, teal active). A category opens a side panel of
 decision rows from its own edge; re-tapping or ✕ closes it so the patient owns
 the scene. Utilities (Vaka günlüğü, Çık) are a floating pill bar at the
 bottom. Element names (`tab-*`, `action-*`) are unchanged for the driver/tests.
+
+## Addendum (2026-09-02, third pass) — pose fit, gown, monitor, Sketchfab check
+
+- **Owner-suggested Sketchfab models** (Patient, Female Patient With Gown, Patient
+  Monitor, stretcher trolley, …) were checked via the public API: all but one are
+  **Standard/Editorial licence and not downloadable**; the only downloadable one
+  ("Patient hurt holding his stomach", CC-BY, 10k faces) still requires a
+  Sketchfab API token to fetch. They remain **direction references** (a proper
+  gown silhouette, a waveform monitor); nothing from them is used.
+- **Pose fit:** arms lowered less into the mattress plane so forearms rest on
+  the sheet instead of sinking; gown mesh rebuilt as a looser shrink-wrap with
+  closed shoulders, a rounded neckline and thickness (≈40k tris total).
+- **Monitor:** rebuilt in the reference style — lower stand (screen at ~1.16 m
+  so it clears the vitals strip), an emissive ECG waveform strip across the
+  top, and monitor-convention colours (HR green, SpO2 cyan, NIBP red, RR
+  yellow); labels NABIZ / SpO2 / TA / SS.
