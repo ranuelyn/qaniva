@@ -412,11 +412,11 @@ namespace Qaniva.EditorTools
             var monitor = (GameObject)PrefabUtility.InstantiatePrefab(
                 AssetDatabase.LoadAssetAtPath<GameObject>($"{PropsDir}/BedsideMonitor.prefab"));
             monitor.transform.SetParent(root.transform, false);
-            monitor.transform.localPosition = new Vector3(0.82f, 0f, 1.30f);
+            monitor.transform.localPosition = new Vector3(0.62f, 0f, 2.00f);
             // Face the presentation camera: the screen normal is -Z, the camera sits
             // front-left and above ((0.02, 1.92, -2.18)), so yaw slightly left and
             // tilt the face up toward it — the vitals must be readable in-frame.
-            monitor.transform.localEulerAngles = new Vector3(6f, -28f, 0f);
+            monitor.transform.localEulerAngles = new Vector3(10f, 12f, 0f);
 
             // IV pole, left of the bed head.
             var iv = new GameObject("IvPole");
@@ -474,10 +474,10 @@ namespace Qaniva.EditorTools
             // person (face + torso + legs), the bed runs diagonally, the monitor sits
             // at the head-right turned toward the viewer, the lower third stays clear
             // for the action sheet. Iterated with CapturePreview.
-            camGo.transform.localPosition = new Vector3(-1.12f, 1.86f, -2.12f);
+            camGo.transform.localPosition = new Vector3(-0.38f, 1.98f, -2.55f);
             var cam = camGo.AddComponent<Camera>();
-            camGo.transform.LookAt(root.transform.TransformPoint(new Vector3(0.06f, 0.60f, 0.55f)));
-            cam.fieldOfView = 53f;
+            camGo.transform.LookAt(root.transform.TransformPoint(new Vector3(0.02f, 0.72f, 0.62f)));
+            cam.fieldOfView = 45f;
             cam.nearClipPlane = 0.1f;
             cam.farClipPlane = 40f;
             cam.clearFlags = CameraClearFlags.SolidColor;

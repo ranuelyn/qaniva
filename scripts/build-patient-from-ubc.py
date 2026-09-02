@@ -58,7 +58,29 @@ for m in hair_mesh.data.materials:
     if m: m.name='Hair'
 hair_mesh.name='Hair'
 
-# --- pose: semi-recumbent torso, arms down at the sides, slight head lift ---
+# --- gown: a loose shrink-wrapped tube over the torso (armature-deformed) ---
+bpy.context.view_layer.objects.active=body
+if bpy.context.object and bpy.context.object.mode!='OBJECT': bpy.ops.object.mode_set(mode='OBJECT')
+bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=0.36, depth=0.95, location=(0,0.0,1.02))
+gownmesh=bpy.context.active_object; gownmesh.name='GownMesh'
+bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='SELECT'); bpy.ops.mesh.subdivide(number_cuts=14); bpy.ops.object.mode_set(mode='OBJECT')
+sw=gownmesh.modifiers.new('Shrink','SHRINKWRAP'); sw.target=body; sw.wrap_method='NEAREST_SURFACEPOINT'; sw.offset=0.022
+sm=gownmesh.modifiers.new('Smooth','SMOOTH'); sm.factor=0.6; sm.iterations=6
+bpy.context.view_layer.objects.active=gownmesh; gownmesh.select_set(True)
+bpy.ops.object.modifier_apply(modifier='Shrink'); bpy.ops.object.modifier_apply(modifier='Smooth')
+# remove cap faces (top/bottom) so it reads as a garment, not a tube
+bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='DESELECT'); bpy.ops.object.mode_set(mode='OBJECT')
+for pgon in gownmesh.data.polygons:
+    pgon.select = abs(pgon.normal.z) > 0.85
+bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.delete(type='FACE'); bpy.ops.object.mode_set(mode='OBJECT')
+gownmesh.data.materials.append(gown)
+for pgon in gownmesh.data.polygons: pgon.use_smooth=True
+# deform with the armature (automatic weights from the body's bones)
+bpy.ops.object.select_all(action='DESELECT'); gownmesh.select_set(True); arm.select_set(True); bpy.context.view_layer.objects.active=arm
+bpy.ops.object.parent_set(type='ARMATURE_AUTO')
+others.append(gownmesh)
+
+# --- pose: semi-recumbent, arms resting on the mattress, relaxed hands and legs ---
 bpy.context.view_layer.objects.active=arm
 bpy.ops.object.mode_set(mode='POSE')
 pb=arm.pose.bones
@@ -67,14 +89,31 @@ def rot_world(name, axis, deg):
     R=Matrix.Translation(head) @ Matrix.Rotation(math.radians(deg),4,axis) @ Matrix.Translation(-head)
     b.matrix = R @ b.matrix
     bpy.context.view_layer.update()
-# flexion about the body's left-right axis (+X in armature space, character faces -Y? Quaternius faces -Y (rot z=180)).
+def rot_local(name, axis, deg):
+    b=pb[name]; b.rotation_mode='XYZ'
+    R=Matrix.Rotation(math.radians(deg),4,axis)
+    b.matrix_basis = b.matrix_basis @ R
+    bpy.context.view_layer.update()
 for name,frac in (('Spine',0.35),('Chest',0.35),('UpperChest',0.30)):
     rot_world(name,'X',TORSO_BEND*frac)
-rot_world('Head','X',-TORSO_BEND*0.45)
-# arms: from T-pose down to the sides (rotate about the depth axis Y at the shoulder)
-rot_world('UpperArm.L','Y', 84)
-rot_world('UpperArm.R','Y',-84)
-rot_world('LowerArm.L','Y', 6); rot_world('LowerArm.R','Y',-6)
+rot_world('Head','X',-TORSO_BEND*0.55)
+# arms: down to the sides, then slightly back into the body plane so they rest on the bed
+rot_world('UpperArm.L','Y', 82); rot_world('UpperArm.R','Y',-82)
+rot_world('UpperArm.L','X', TORSO_BEND*0.8); rot_world('UpperArm.R','X', TORSO_BEND*0.8)
+rot_world('UpperArm.L','Z', 6);  rot_world('UpperArm.R','Z', -6)
+# slight elbow bend, forearms toward the hips
+rot_world('LowerArm.L','X', 10); rot_world('LowerArm.R','X', 10)
+# hands: palms down, fingers relaxed (slightly curled)
+rot_local('Hand.L','Y', 75); rot_local('Hand.R','Y', -75)
+rot_local('Hand.L','X', 12); rot_local('Hand.R','X', 12)
+for side in ('l','r'):
+    for f in ('index','middle','ring','pinky'):
+        for seg in ('01','02','03'):
+            n=f'{f}_{seg}_{side}'
+            if n in pb: rot_local(n,'Z', 14 if side=='l' else -14)
+# legs: a little external rotation and relaxed feet
+rot_world('Thigh.L','Z', 5); rot_world('Thigh.R','Z', -5)
+rot_world('Foot.L','X', 18); rot_world('Foot.R','X', 18)
 # bake pose as rest so the export is a static, posed character
 bpy.ops.object.mode_set(mode='OBJECT')
 for o in [body,hair_mesh]+others:
